@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Выпустить сертификат — MOEX Цифровая Платформа</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ===== HEADER ===== */
+.header { display: flex; align-items: center; height: 56px; background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+.header-logo { display: flex; align-items: center; gap: 8px; margin-right: 24px; }
+.header-logo-icon { width: 40px; height: 28px; display: flex; align-items: center; }
+.header-logo-icon svg { width: 100%; height: 100%; }
+.header-logo-text { font-size: 10px; font-weight: 700; line-height: 1.2; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.02em; }
+.header-verify-btn { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; margin-right: auto; transition: all 0.15s; }
+.header-verify-btn:hover { background: #f5f5f5; border-color: #ccc; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.header-icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #333; transition: background 0.15s; }
+.header-icon-btn:hover { background: #f5f5f5; }
+.header-lang { font-size: 13px; font-weight: 500; color: #666; padding: 6px 10px; border: 1px solid #e5e5e5; border-radius: 8px; margin-right: 8px; }
+.header-notif-btn { position: relative; }
+.header-notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: #cc0000; border-radius: 50%; border: 1.5px solid #fff; }
+.header-user { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-left: 4px; }
+.header-user:hover { background: #f5f5f5; }
+.header-user svg { width: 20px; height: 20px; color: #666; }
+.header-user-info { display: flex; flex-direction: column; }
+.header-user-name { font-weight: 600; font-size: 13px; }
+.header-user-org { font-size: 11px; color: #999; }
+
+/* ===== LAYOUT ===== */
+.layout { display: flex; min-height: calc(100vh - 56px); }
+
+/* ===== SIDEBAR ===== */
+.sidebar { width: 180px; min-width: 180px; background: #fff; border-right: 1px solid #e5e5e5; padding: 16px 0; display: flex; flex-direction: column; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; font-weight: 500; color: #333; transition: background 0.15s; position: relative; }
+.sidebar-item:hover { background: #f9f9f9; }
+.sidebar-item.active { color: #1a1a1a; font-weight: 600; }
+.sidebar-item svg { width: 18px; height: 18px; color: #666; flex-shrink: 0; }
+.sidebar-collapse { margin-top: auto; padding: 12px 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #666; }
+.sidebar-collapse:hover { background: #f9f9f9; }
+.sidebar-collapse svg { width: 18px; height: 18px; }
+
+/* ===== MAIN ===== */
+.main { flex: 1; padding: 20px 28px 40px; overflow-y: auto; max-width: 1200px; }
+
+/* ===== BREADCRUMBS ===== */
+.breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #999; margin-bottom: 24px; }
+.breadcrumbs a { color: #CC0000; transition: opacity 0.15s; }
+.breadcrumbs a:hover { opacity: 0.7; }
+.breadcrumbs-sep { color: #ccc; }
+
+/* ===== PAGE TITLE ===== */
+.page-title { font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+.page-subtitle { font-size: 14px; color: #666; margin-bottom: 28px; line-height: 1.5; }
+
+/* ===== ACTION CARDS ===== */
+.action-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+.action-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 24px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+.action-card:hover { border-color: #CC0000; box-shadow: 0 4px 16px rgba(204,0,0,0.08); transform: translateY(-2px); }
+.action-card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.action-card-icon svg { width: 22px; height: 22px; }
+.action-card-icon.icon-create { background: #fff0f0; color: #CC0000; }
+.action-card-icon.icon-replace { background: #f0f4ff; color: #3366CC; }
+.action-card-icon.icon-change { background: #fff8e6; color: #CC8800; }
+.action-card-icon.icon-update { background: #e8f8f0; color: #00994D; }
+.action-card-title { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; line-height: 1.3; }
+.action-card-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 16px; }
+.action-card-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #CC0000; background: #fff0f0; transition: all 0.15s; }
+.action-card:hover .action-card-btn { background: #CC0000; color: #fff; }
+.action-card-btn svg { width: 14px; height: 14px; }
+
+/* ===== EXPANDED SECTION (per card) ===== */
+.action-expanded { display: none; background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 24px; margin-bottom: 16px; animation: slideDown 0.25s ease; }
+.action-expanded.visible { display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.action-expanded-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.action-expanded-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+.action-expanded-close { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #999; transition: all 0.15s; }
+.action-expanded-close:hover { background: #f5f5f5; color: #333; }
+.action-expanded-close svg { width: 18px; height: 18px; }
+
+/* Filter row */
+.filter-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.filter-label { font-size: 13px; color: #333; white-space: nowrap; }
+.filter-input { padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px; font-family: inherit; width: 140px; color: #333; outline: none; transition: border-color 0.15s; }
+.filter-input:focus { border-color: #999; }
+.filter-btn { padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; background: #1a1a1a; color: #fff; transition: background 0.15s; cursor: pointer; border: none; }
+.filter-btn:hover { background: #333; }
+.filter-help { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1.5px solid #ccc; color: #999; font-size: 12px; font-weight: 700; cursor: help; }
+
+/* Action buttons */
+.action-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.action-btn-primary { padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: inherit; background: #CC0000; color: #fff; transition: background 0.15s; cursor: pointer; border: none; }
+.action-btn-primary:hover { background: #b30000; }
+.action-btn-outline { padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: inherit; background: #fff; color: #333; border: 1px solid #e0e0e0; transition: all 0.15s; cursor: pointer; }
+.action-btn-outline:hover { border-color: #ccc; background: #f9f9f9; }
+
+/* ===== SECTION HEADERS ===== */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.section-title { font-size: 20px; font-weight: 700; color: #1a1a1a; }
+.section-links { display: flex; gap: 16px; }
+.section-link { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #333; transition: color 0.15s; }
+.section-link:hover { color: #CC0000; }
+.section-link svg { width: 14px; height: 14px; color: #999; }
+
+/* ===== TABLE ===== */
+.table-wrap { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; overflow: hidden; margin-bottom: 24px; }
+.table-scroll { overflow-x: auto; }
+.cert-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+.cert-table thead { background: #fafafa; }
+.cert-table th { padding: 14px 18px; font-size: 12px; font-weight: 700; color: #333; text-align: left; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid #e5e5e5; white-space: nowrap; }
+.cert-table td { padding: 14px 18px; font-size: 13px; color: #333; border-bottom: 1px solid #f0f0f0; }
+.cert-table tbody tr:hover { background: #fafafa; }
+.table-empty { padding: 40px 18px; font-size: 14px; color: #999; text-align: center; }
+
+/* Pagination */
+.table-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-top: 1px solid #f0f0f0; flex-wrap: wrap; gap: 12px; }
+.pagination { display: flex; align-items: center; gap: 4px; }
+.pagination-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 13px; color: #999; border: 1px solid #e5e5e5; background: #fff; transition: all 0.15s; cursor: pointer; }
+.pagination-btn:hover { border-color: #ccc; color: #333; }
+.pagination-btn.disabled { opacity: 0.4; cursor: default; }
+.pagination-info { font-size: 13px; color: #666; margin: 0 8px; }
+.pagination-select { padding: 6px 10px; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 13px; font-family: inherit; color: #333; background: #fff; cursor: pointer; outline: none; }
+
+/* ===== LEGEND ===== */
+.legend { font-size: 12px; color: #666; line-height: 1.8; }
+.legend-title { font-weight: 600; color: #333; margin-bottom: 4px; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-item svg { width: 14px; height: 14px; color: #666; flex-shrink: 0; }
+
+/* ===== RESPONSIVE ===== */
+body { overflow-x: hidden; }
+
+@media (max-width: 1024px) {
+  .action-cards { grid-template-columns: 1fr 1fr; }
+  .main { padding: 16px 20px 32px; }
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .header { padding: 0 16px; }
+  .header-verify-btn span { display: none; }
+  .main { padding: 16px; max-width: 100%; }
+  .action-cards { grid-template-columns: 1fr; }
+  .filter-row { flex-direction: column; align-items: flex-start; }
+  .filter-input { width: 100%; }
+}
+@media (max-width: 480px) {
+  .header { height: 48px; padding: 0 12px; }
+  .header-logo-text { display: none; }
+  .layout { min-height: calc(100vh - 48px); }
+  .main { padding: 12px; }
+  .page-title { font-size: 20px; }
+  .action-card { padding: 18px; }
+  .action-card-title { font-size: 14px; }
+  .section-title { font-size: 17px; }
+  .section-links { flex-direction: column; gap: 8px; }
+}
+
+/* scrollbar */
+.main::-webkit-scrollbar { width: 6px; }
+.main::-webkit-scrollbar-track { background: transparent; }
+.main::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+.main::-webkit-scrollbar-thumb:hover { background: #ccc; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="header-logo">
+    <div class="header-logo-text">ЦИФРОВАЯ<br>ПЛАТФОРМА</div>
+  </a>
+  <div class="header-right">
+    <a href="#" class="header-icon-btn" title="Поиск">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M12 12l4 4"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn" title="Поддержка">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10V8a6 6 0 0112 0v2"/><path d="M1 11v2a2 2 0 002 2h1v-6H3a2 2 0 00-2 2zM17 11v2a2 2 0 01-2 2h-1v-6h1a2 2 0 012 2z"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn" title="Корзина">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1h2.5l1.2 2M4.7 3h12L14 11H5.5z"/><circle cx="7" cy="15" r="1.5" fill="currentColor"/><circle cx="13" cy="15" r="1.5" fill="currentColor"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn header-notif-btn" title="Уведомления">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 6.5a4.5 4.5 0 10-9 0c0 5-2 6.5-2 6.5h13s-2-1.5-2-6.5M10.3 15a1.5 1.5 0 01-2.6 0"/></svg>
+      <span class="header-notif-dot"></span>
+    </a>
+    <a href="#" class="header-lang">RU</a>
+    <a href="#" class="header-user">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="4"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>
+      <div class="header-user-info">
+        <span class="header-user-name">Иванов И.И.</span>
+        <span class="header-user-org">ОАО «Газпром»</span>
+      </div>
+    </a>
+    <a href="login.html" class="header-icon-btn" title="Выйти">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 2H3a1 1 0 00-1 1v12a1 1 0 001 1h3.5"/><path d="M12 12.5l4-3.5-4-3.5"/><path d="M16 9H7"/></svg>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l7-5 7 5v8a1 1 0 01-1 1H3a1 1 0 01-1-1V7z"/><path d="M7 16V10h4v6"/></svg>
+        Главная
+      </a>
+      <a href="#" class="sidebar-item active">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>
+        Услуги и сервисы
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6M6 12h3"/></svg>
+        Документы
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6"/></svg>
+        Финансовые документы
+      </a>
+    </nav>
+    <a href="#" class="sidebar-collapse">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4L6 9l6 5"/></svg>
+      Свернуть
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumbs">
+      <a href="index.html">Главная</a>
+      <span class="breadcrumbs-sep">/</span>
+      <span>Выпустить сертификат</span>
+    </div>
+
+    <!-- PAGE TITLE -->
+    <h1 class="page-title">Управление сертификатами УНЭП</h1>
+    <p class="page-subtitle">Выберите действие для работы с сертификатами вашей организации</p>
+
+    <!-- ACTION CARDS -->
+    <div class="action-cards">
+      <!-- Card 1: Первичное создание -->
+      <div class="action-card" onclick="toggleExpanded('create')">
+        <div class="action-card-icon icon-create">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4v14M4 11h14"/></svg>
+        </div>
+        <div class="action-card-title">Первичное создание</div>
+        <div class="action-card-desc">Создание нового сертификата при первичном изготовлении, утрате или окончании действия рабочего ключа</div>
+        <span class="action-card-btn">
+          Перейти
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+        </span>
+      </div>
+
+      <!-- Card 2: Плановая замена -->
+      <div class="action-card" onclick="toggleExpanded('replace')">
+        <div class="action-card-icon icon-replace">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 1l3 3-3 3"/><path d="M20 4H8a4 4 0 00-4 4"/><path d="M5 21l-3-3 3-3"/><path d="M2 18h12a4 4 0 004-4"/></svg>
+        </div>
+        <div class="action-card-title">Плановая замена</div>
+        <div class="action-card-desc">Создание нового сертификата при плановой или внеплановой замене действующего сертификата</div>
+        <span class="action-card-btn">
+          Перейти
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+        </span>
+      </div>
+
+      <!-- Card 3: Изменение данных -->
+      <div class="action-card" onclick="toggleExpanded('change')">
+        <div class="action-card-icon icon-change">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3H5a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-7"/><path d="M18.4 3.6a2 2 0 00-2.8 0L9 10.2V13h2.8l6.6-6.6a2 2 0 000-2.8z"/></svg>
+        </div>
+        <div class="action-card-title">Изменение данных</div>
+        <div class="action-card-desc">Создание нового сертификата в связи с внесением изменений в текущий сертификат</div>
+        <span class="action-card-btn">
+          Перейти
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+        </span>
+      </div>
+
+      <!-- Card 4: Обновление сертификатов -->
+      <div class="action-card" onclick="toggleExpanded('update')">
+        <div class="action-card-icon icon-update">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4v6h6"/><path d="M3.5 14a8 8 0 1014.3-4.8"/><path d="M1 10A8 8 0 017.7 3.3"/></svg>
+        </div>
+        <div class="action-card-title">Обновление сертификатов</div>
+        <div class="action-card-desc">Обновление сертификатов контрагентов в локальном справочнике пользователя</div>
+        <span class="action-card-btn">
+          Перейти
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- EXPANDED: Первичное создание -->
+    <div class="action-expanded" id="expanded-create">
+      <div class="action-expanded-header">
+        <div class="action-expanded-title">Первичное создание сертификата</div>
+        <button class="action-expanded-close" onclick="closeExpanded('create')">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Заявления на первичное создание СКПЭП</span>
+        <span class="filter-label">с</span>
+        <input type="date" class="filter-input" value="2025-02-11">
+        <span class="filter-label">по</span>
+        <input type="date" class="filter-input" value="2026-02-11">
+        <button class="filter-btn">Найти</button>
+        <span class="filter-help" title="Справка">?</span>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="cert-table">
+            <thead><tr><th>Владелец сертификата</th><th>Дата поступления заявления в УЦ</th><th>Тип ключа</th><th>Статус обработки заявления</th></tr></thead>
+            <tbody><tr><td colspan="4" class="table-empty">Нет данных</td></tr></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="pagination">
+            <button class="pagination-btn disabled">«</button>
+            <button class="pagination-btn disabled">‹</button>
+            <span class="pagination-info">0 по 0 из 0</span>
+            <button class="pagination-btn disabled">›</button>
+            <button class="pagination-btn disabled">»</button>
+          </div>
+          <select class="pagination-select"><option>15</option><option>30</option><option>50</option></select>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-title">Условные обозначения</div>
+        <div class="legend-item"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v12M1 7h12"/></svg> Сформировать запрос на создание СКПЭП</div>
+        <div class="legend-item"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 2h8a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M5 6h4M5 8h4"/></svg> Скачать счет за создание СКПЭП</div>
+        <div class="legend-item"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v8M3 9l4 4 4-4"/></svg> Загрузить архив для формирования профиля справочника</div>
+      </div>
+    </div>
+
+    <!-- EXPANDED: Плановая замена -->
+    <div class="action-expanded" id="expanded-replace">
+      <div class="action-expanded-header">
+        <div class="action-expanded-title">Плановая / внеплановая замена сертификата</div>
+        <button class="action-expanded-close" onclick="closeExpanded('replace')">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Запросы на создание нового СКПЭП</span>
+        <span class="filter-label">с</span>
+        <input type="date" class="filter-input" value="2025-02-11">
+        <span class="filter-label">по</span>
+        <input type="date" class="filter-input" value="2026-02-11">
+        <button class="filter-btn">Найти</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="cert-table">
+            <thead><tr><th>Владелец сертификата</th><th>Дата поступления заявления в УЦ</th><th>Тип ключа</th><th>Статус обработки заявления</th></tr></thead>
+            <tbody><tr><td colspan="4" class="table-empty">Нет данных</td></tr></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="pagination">
+            <button class="pagination-btn disabled">«</button>
+            <button class="pagination-btn disabled">‹</button>
+            <span class="pagination-info">0 по 0 из 0</span>
+            <button class="pagination-btn disabled">›</button>
+            <button class="pagination-btn disabled">»</button>
+          </div>
+          <select class="pagination-select"><option>15</option><option>30</option><option>50</option></select>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="action-btn-primary">Сформировать запрос на создание нового СКПЭП</button>
+        <button class="action-btn-outline">Загрузить запрос на создание нового СКПЭП</button>
+      </div>
+    </div>
+
+    <!-- EXPANDED: Изменение данных -->
+    <div class="action-expanded" id="expanded-change">
+      <div class="action-expanded-header">
+        <div class="action-expanded-title">Изменение данных сертификата</div>
+        <button class="action-expanded-close" onclick="closeExpanded('change')">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Запросы на создание нового СКПЭП</span>
+        <span class="filter-label">с</span>
+        <input type="date" class="filter-input" value="2025-02-11">
+        <span class="filter-label">по</span>
+        <input type="date" class="filter-input" value="2026-02-11">
+        <button class="filter-btn">Найти</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="cert-table">
+            <thead><tr><th>Владелец сертификата</th><th>Дата поступления заявления в УЦ</th><th>Тип ключа</th><th>Статус обработки заявления</th></tr></thead>
+            <tbody><tr><td colspan="4" class="table-empty">Нет данных</td></tr></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="pagination">
+            <button class="pagination-btn disabled">«</button>
+            <button class="pagination-btn disabled">‹</button>
+            <span class="pagination-info">0 по 0 из 0</span>
+            <button class="pagination-btn disabled">›</button>
+            <button class="pagination-btn disabled">»</button>
+          </div>
+          <select class="pagination-select"><option>15</option><option>30</option><option>50</option></select>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="action-btn-primary" disabled style="opacity:0.4;cursor:default;">Создать заявление на внесение изменений в СКПЭП</button>
+      </div>
+    </div>
+
+    <!-- EXPANDED: Обновление -->
+    <div class="action-expanded" id="expanded-update">
+      <div class="action-expanded-header">
+        <div class="action-expanded-title">Обновление сертификатов контрагентов</div>
+        <button class="action-expanded-close" onclick="closeExpanded('update')">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="cert-table">
+            <thead><tr><th>Имя профиля</th><th>DN рабочего сертификата</th><th>Тип ключа</th><th>Ключ действителен по</th><th>Доверенность действует по</th></tr></thead>
+            <tbody><tr><td colspan="5" class="table-empty">Нет данных</td></tr></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="pagination">
+            <button class="pagination-btn disabled">«</button>
+            <button class="pagination-btn disabled">‹</button>
+            <span class="pagination-info">0 по 0 из 0</span>
+            <button class="pagination-btn disabled">›</button>
+            <button class="pagination-btn disabled">»</button>
+          </div>
+          <select class="pagination-select"><option>15</option><option>30</option><option>50</option></select>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="action-btn-outline">Обновление для ГОСТ</button>
+        <button class="action-btn-outline">Обновление для RSA</button>
+      </div>
+      <div class="legend" style="margin-top:16px;">
+        <div class="legend-title">Условные обозначения</div>
+        <div class="legend-item"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 4v6h6"/><path d="M3.5 10a5 5 0 119-3"/></svg> Обновить сертификаты профиля</div>
+      </div>
+    </div>
+
+    <!-- MY CERTIFICATES TABLE -->
+    <div class="section-header">
+      <span class="section-title">Мои сертификаты</span>
+      <div class="section-links">
+        <a href="#" class="section-link">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 2h8a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M5 6h4M5 8h4"/></svg>
+          Инструкция создания ключа ГОСТ
+        </a>
+        <a href="#" class="section-link">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 2h8a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M5 6h4M5 8h4"/></svg>
+          Инструкция создания ключа RSA
+        </a>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table class="cert-table">
+          <thead>
+            <tr>
+              <th>Владелец сертификата</th>
+              <th>Ключ действителен по</th>
+              <th>Полномочие</th>
+              <th>Доверенность действует по</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" class="table-empty">Нет данных</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <div class="pagination">
+          <button class="pagination-btn disabled">«</button>
+          <button class="pagination-btn disabled">‹</button>
+          <span class="pagination-info">0 по 0 из 0</span>
+          <button class="pagination-btn disabled">›</button>
+          <button class="pagination-btn disabled">»</button>
+        </div>
+        <select class="pagination-select"><option>15</option><option>30</option><option>50</option></select>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function toggleExpanded(id) {
+  const el = document.getElementById('expanded-' + id);
+  const isVisible = el.classList.contains('visible');
+
+  // Close all
+  document.querySelectorAll('.action-expanded').forEach(e => e.classList.remove('visible'));
+
+  // Toggle clicked
+  if (!isVisible) {
+    el.classList.add('visible');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function closeExpanded(id) {
+  document.getElementById('expanded-' + id).classList.remove('visible');
+}
+
+// Auto-open section from URL hash
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.replace('#', '');
+  if (hash) {
+    toggleExpanded(hash);
+  }
+});
+</script>
+
+</body>
+</html>
