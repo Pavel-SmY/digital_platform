@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOEX Цифровая Платформа — Главная</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ===== HEADER ===== */
+.header { display: flex; align-items: center; height: 56px; background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+.header-logo { display: flex; align-items: center; gap: 8px; margin-right: 24px; }
+.header-logo-icon { width: 40px; height: 28px; display: flex; align-items: center; }
+.header-logo-icon svg { width: 100%; height: 100%; }
+.header-logo-text { font-size: 10px; font-weight: 700; line-height: 1.2; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.02em; }
+.header-company { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; margin-right: 12px; }
+.header-company svg { width: 16px; height: 16px; color: #999; }
+.header-services-btn { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; }
+.header-services-btn svg { width: 16px; height: 16px; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.header-lang { font-size: 13px; font-weight: 500; color: #666; padding: 6px 10px; border: 1px solid #e5e5e5; border-radius: 8px; margin-right: 8px; }
+.header-icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #333; transition: background 0.15s; }
+.header-icon-btn:hover { background: #f5f5f5; }
+.header-notif-btn { position: relative; }
+.header-notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: #cc0000; border-radius: 50%; border: 1.5px solid #fff; }
+.header-user { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-left: 4px; }
+.header-user:hover { background: #f5f5f5; }
+.header-user svg { width: 20px; height: 20px; color: #666; }
+
+/* ===== LAYOUT ===== */
+.layout { display: flex; min-height: calc(100vh - 56px); }
+
+/* ===== SIDEBAR ===== */
+.sidebar { width: 180px; min-width: 180px; background: #fff; border-right: 1px solid #e5e5e5; padding: 16px 0; display: flex; flex-direction: column; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; font-weight: 500; color: #333; transition: background 0.15s; position: relative; }
+.sidebar-item:hover { background: #f9f9f9; }
+.sidebar-item.active { color: #1a1a1a; font-weight: 600; }
+.sidebar-item svg { width: 18px; height: 18px; color: #666; flex-shrink: 0; }
+.sidebar-badge { background: #f0f0f0; color: #333; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 10px; margin-left: 4px; }
+.sidebar-item-chevron { margin-left: auto; }
+.sidebar-item-chevron svg { width: 14px; height: 14px; }
+.sidebar-collapse { margin-top: auto; padding: 12px 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #666; }
+.sidebar-collapse:hover { background: #f9f9f9; }
+.sidebar-collapse svg { width: 18px; height: 18px; }
+
+/* ===== MAIN CONTENT ===== */
+.main { flex: 1; padding: 20px 28px 40px; overflow-y: auto; max-width: 1200px; }
+
+/* ===== NOTIFICATION CARDS (top row) ===== */
+.notif-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.notif-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 16px 18px; display: flex; align-items: flex-start; justify-content: space-between; transition: box-shadow 0.15s, border-color 0.15s; }
+.notif-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.notif-card-text { font-size: 13px; color: #333; line-height: 1.4; }
+.notif-card-badge { background: #f0f0f0; color: #333; font-size: 12px; font-weight: 600; min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 12px; padding: 0 8px; flex-shrink: 0; margin-left: 12px; }
+
+/* ===== BANNER + QUICK ACTIONS ===== */
+.banner-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+.banner { border-radius: 16px; overflow: hidden; position: relative; height: 200px; background: linear-gradient(135deg, #e8e0f0 0%, #f0e8e8 50%, #e0e8f0 100%); cursor: pointer; }
+.banner-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+.banner-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 24px; background: linear-gradient(transparent, rgba(0,0,0,0.5)); color: #fff; }
+.banner-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.banner-desc { font-size: 12px; opacity: 0.9; line-height: 1.4; }
+.banner-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 2; }
+.banner-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
+.banner-dot.active { background: #fff; }
+.quick-actions { display: flex; flex-direction: column; gap: 0; justify-content: center; background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 4px 8px; }
+.quick-action { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; color: #333; transition: background 0.15s; border-bottom: 1px solid #f0f0f0; }
+.quick-action:last-child { border-bottom: none; }
+.quick-action:hover { background: #f5f5f5; }
+.quick-action svg { width: 18px; height: 18px; color: #c00; flex-shrink: 0; }
+
+/* ===== SECTION HEADERS ===== */
+.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.section-title { font-size: 20px; font-weight: 700; color: #1a1a1a; }
+.section-arrow { display: inline-flex; align-items: center; justify-content: center; color: #c00; cursor: pointer; transition: opacity 0.15s; }
+.section-arrow:hover { opacity: 0.7; }
+.section-arrow svg { width: 20px; height: 20px; }
+
+/* ===== CONNECTED SERVICES (Подключенные услуги) ===== */
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+.services-grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+.service-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 18px 20px; transition: box-shadow 0.15s, border-color 0.15s; }
+.service-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.service-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f0f0f0; }
+.service-card-name { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.service-card-org { font-size: 12px; color: #999; font-weight: 500; }
+.service-card-link { margin-left: auto; color: #999; cursor: pointer; display: flex; align-items: center; }
+.service-card-link:hover { color: #333; }
+.service-card-link svg { width: 16px; height: 16px; }
+.service-card-stats { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 14px; }
+.service-stat { font-size: 13px; color: #333; }
+.service-stat-label { color: #333; }
+.service-stat-value { color: #c00; font-weight: 600; margin-left: 4px; cursor: pointer; }
+.service-stat-value:hover { text-decoration: underline; }
+.service-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.service-action-btn { padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 500; color: #333; background: #f5f5f5; transition: all 0.15s; }
+.service-action-btn:hover { background: #eaeaea; }
+
+/* ===== RECOMMENDED SERVICES ===== */
+.recommended-section { margin-bottom: 32px; }
+.recommended-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.recommended-left { display: flex; flex-direction: column; }
+.recommended-card-big { border-radius: 16px; overflow: hidden; position: relative; flex: 1; min-height: 340px; background: linear-gradient(135deg, #f0e0e0, #ffe0e0); cursor: pointer; }
+.recommended-card-big-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+.recommended-card-big-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; background: linear-gradient(transparent, rgba(0,0,0,0.45)); color: #fff; }
+.recommended-card-big-tags { display: flex; gap: 8px; margin-bottom: auto; position: absolute; top: 16px; left: 16px; }
+.recommended-tag { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #f0f0f0; color: #333; cursor: pointer; transition: background 0.15s; }
+.recommended-tag:hover { background: #e5e5e5; }
+.recommended-card-big h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.recommended-card-big p { font-size: 12px; opacity: 0.9; line-height: 1.4; }
+.recommended-right { display: flex; flex-direction: column; gap: 16px; }
+.recommended-card-sm { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px; flex: 1; transition: box-shadow 0.15s, border-color 0.15s; cursor: pointer; }
+.recommended-card-sm:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.recommended-card-sm-tags { display: flex; gap: 8px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; }
+.recommended-card-sm h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #1a1a1a; }
+.recommended-card-sm p { font-size: 12px; color: #666; line-height: 1.5; }
+
+/* ===== NEWS ===== */
+.news-section { margin-bottom: 32px; }
+.news-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 12px; }
+.news-grid-row { display: contents; }
+.news-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 18px; cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; }
+.news-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.news-card-title { font-size: 13px; font-weight: 500; color: #333; margin-bottom: 8px; line-height: 1.4; }
+.news-card-date { font-size: 12px; color: #999; }
+.news-card-featured { grid-row: span 2; display: flex; flex-direction: column; }
+.news-card-featured-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; background: #e5e5e5; margin-bottom: 12px; }
+.news-card-featured .news-card-title { font-size: 14px; font-weight: 600; }
+
+/* ===== EVENTS ===== */
+.events-section { margin-bottom: 32px; }
+.events-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.event-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 18px; display: grid; grid-template-columns: 1fr 120px; gap: 16px; cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; }
+.event-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.event-card-info { display: flex; flex-direction: column; }
+.event-card-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; line-height: 1.4; }
+.event-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; margin-bottom: 4px; }
+.event-meta svg { width: 14px; height: 14px; color: #999; flex-shrink: 0; }
+.event-register-btn { padding: 6px 16px; border: none; border-radius: 8px; font-size: 12px; font-weight: 500; color: #333; background: #f5f5f5; margin-top: 12px; align-self: flex-start; transition: all 0.15s; }
+.event-register-btn:hover { background: #eaeaea; }
+.event-card-img { width: 120px; height: 120px; border-radius: 10px; object-fit: cover; background: linear-gradient(135deg, #f0e0e0, #ffe0e0); }
+
+/* ===== PLACEHOLDER IMAGES ===== */
+.placeholder-banner { width: 100%; height: 100%; background: linear-gradient(135deg, #d4e0ff 0%, #f0d4d4 30%, #e8d8e8 60%, #d4e8e0 100%); position: relative; overflow: hidden; }
+.placeholder-banner::before { content: ''; position: absolute; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(200,0,0,0.2), transparent); top: -40px; right: 40px; }
+.placeholder-banner::after { content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(200,0,0,0.15), transparent); bottom: 20px; left: 30%; }
+.placeholder-recommended { width: 100%; height: 100%; background: linear-gradient(135deg, #f5e0e0 0%, #ffe8e8 50%, #ffd8d8 100%); position: relative; overflow: hidden; }
+.placeholder-recommended::before { content: ''; position: absolute; width: 180px; height: 180px; border-radius: 12px; background: rgba(200,0,0,0.12); top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(15deg); }
+.placeholder-recommended::after { content: ''; position: absolute; width: 100px; height: 100px; border-radius: 8px; background: rgba(200,0,0,0.08); top: 30%; left: 30%; transform: rotate(-10deg); }
+.placeholder-news { width: 100%; height: 100%; background: linear-gradient(135deg, #e8e0e0, #f0e8e8); border-radius: 8px; position: relative; overflow: hidden; }
+.placeholder-news::before { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, transparent 40%, rgba(200,0,0,0.05) 50%, transparent 60%); }
+.placeholder-event { width: 100%; height: 100%; background: linear-gradient(135deg, #ffe0e0, #ffd0d0); border-radius: 10px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.placeholder-event::before { content: ''; position: absolute; width: 60px; height: 60px; border-radius: 8px; background: rgba(200,0,0,0.15); transform: rotate(15deg); }
+.placeholder-event::after { content: ''; position: absolute; width: 40px; height: 40px; border-radius: 50%; background: rgba(200,0,0,0.1); top: 15px; right: 15px; }
+
+/* scrollbar */
+.main::-webkit-scrollbar { width: 6px; }
+.main::-webkit-scrollbar-track { background: transparent; }
+.main::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+.main::-webkit-scrollbar-thumb:hover { background: #ccc; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="#" class="header-logo">
+    <div class="header-logo-icon">
+      <svg viewBox="0 0 80 28" fill="none">
+        <rect x="0" y="0" width="28" height="28" rx="4" fill="#CC0000"/>
+        <text x="4" y="19" font-size="14" font-weight="800" fill="#fff" font-family="Inter,sans-serif">M</text>
+      </svg>
+    </div>
+    <div class="header-logo-text">ЦИФРОВАЯ<br>ПЛАТФОРМА</div>
+  </a>
+  <a href="#" class="header-company">
+    ОАО «Газпром»
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
+  </a>
+  <a href="#" class="header-services-btn">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+    Услуги
+  </a>
+  <div class="header-right">
+    <a href="#" class="header-lang">RU</a>
+    <a href="#" class="header-icon-btn" title="Поиск">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M12 12l4 4"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn" title="Поддержка">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10V8a6 6 0 0112 0v2"/><path d="M1 11v2a2 2 0 002 2h1v-6H3a2 2 0 00-2 2zM17 11v2a2 2 0 01-2 2h-1v-6h1a2 2 0 012 2z"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn header-notif-btn" title="Уведомления">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 6.5a4.5 4.5 0 10-9 0c0 5-2 6.5-2 6.5h13s-2-1.5-2-6.5M10.3 15a1.5 1.5 0 01-2.6 0"/></svg>
+      <span class="header-notif-dot"></span>
+    </a>
+    <a href="#" class="header-user">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="4"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>
+      Иванов И.И.
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-item active">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l7-5 7 5v8a1 1 0 01-1 1H3a1 1 0 01-1-1V7z"/><path d="M7 16V10h4v6"/></svg>
+        Главная
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6M6 12h3"/></svg>
+        Документы
+        <span class="sidebar-badge">6</span>
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>
+        Услуги
+        <span class="sidebar-badge">8</span>
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h12v12H3z"/><path d="M3 7h12M7 7v8"/></svg>
+        Запросы
+        <span class="sidebar-badge">6</span>
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="6" r="3"/><path d="M3 16c0-3 2.7-5 6-5s6 2 6 5"/></svg>
+        Сотрудники
+        <span class="sidebar-item-chevron">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5l3 3 3-3"/></svg>
+        </span>
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6"/></svg>
+        Фин. документы
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h14v10H2z"/><path d="M2 7h14"/></svg>
+        Новости
+      </a>
+    </nav>
+    <a href="#" class="sidebar-collapse">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4L6 9l6 5"/></svg>
+      Свернуть
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- NOTIFICATION CARDS -->
+    <div class="notif-row">
+      <a href="#" class="notif-card">
+        <span class="notif-card-text">Документы<br>на подписание</span>
+        <span class="notif-card-badge">5</span>
+      </a>
+      <a href="#" class="notif-card">
+        <span class="notif-card-text">Запросы</span>
+        <span class="notif-card-badge">1</span>
+      </a>
+      <a href="#" class="notif-card">
+        <span class="notif-card-text">Обновление<br>сертификатов</span>
+        <span class="notif-card-badge">1</span>
+      </a>
+      <a href="#" class="notif-card">
+        <span class="notif-card-text">Обновление<br>доверенностей</span>
+        <span class="notif-card-badge">1</span>
+      </a>
+    </div>
+
+    <!-- BANNER + QUICK ACTIONS -->
+    <div class="banner-section">
+      <a href="#" class="banner">
+        <div class="placeholder-banner"></div>
+        <div class="banner-overlay">
+          <div class="banner-title">Система учета инсайдеров</div>
+          <div class="banner-desc">Следите за сделками лучших инвесторов<br>на Московской Бирже</div>
+        </div>
+        <div class="banner-dots">
+          <span class="banner-dot active"></span>
+          <span class="banner-dot"></span>
+          <span class="banner-dot"></span>
+          <span class="banner-dot"></span>
+        </div>
+      </a>
+      <div class="quick-actions">
+        <a href="#" class="quick-action">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M7 8l2 2 4-4"/></svg>
+          Подать документ
+        </a>
+        <a href="#" class="quick-action">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="6" r="3"/><path d="M3 16c0-3 2.7-5 6-5s6 2 6 5"/><path d="M13 3l3 3-3 3"/></svg>
+          Зарегистрировать клиента
+        </a>
+        <a href="#" class="quick-action">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="12" height="12" rx="2"/><path d="M7 9h4M9 7v4"/></svg>
+          Выпустить сертификат
+        </a>
+        <a href="#" class="quick-action">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h12v12H3z"/><path d="M7 7l4 4M11 7l-4 4"/></svg>
+          Добавить внебиржевую сделку
+        </a>
+        <a href="#" class="quick-action">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13l4-4 3 3 5-5"/><path d="M11 7h3v3"/></svg>
+          Отправить отчетность
+        </a>
+      </div>
+    </div>
+
+    <!-- ПОДКЛЮЧЕННЫЕ УСЛУГИ -->
+    <div class="section-header">
+      <span class="section-title">Подключенные услуги</span>
+      <a href="#" class="section-arrow">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg>
+      </a>
+    </div>
+
+    <div class="services-grid">
+      <!-- Compliance Tool -->
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-card-name">Compliance Tool</span>
+          <span class="service-card-org">МБ</span>
+          <a href="#" class="service-card-link">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11L11 5"/><path d="M5 5h6v6"/></svg>
+          </a>
+        </div>
+        <div class="service-card-stats">
+          <span class="service-stat"><span class="service-stat-label">Стратегии</span><a href="#" class="service-stat-value">54</a></span>
+        </div>
+        <div class="service-card-actions">
+          <button class="service-action-btn">Добавить стратегию</button>
+        </div>
+      </div>
+
+      <!-- Букбилдер -->
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-card-name">Букбилдер</span>
+          <span class="service-card-org">НРД</span>
+          <a href="#" class="service-card-link">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11L11 5"/><path d="M5 5h6v6"/></svg>
+          </a>
+        </div>
+        <div class="service-card-stats">
+          <span class="service-stat"><span class="service-stat-label">Операции</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Уведомления</span><a href="#" class="service-stat-value">54</a></span>
+        </div>
+        <div class="service-card-actions">
+          <button class="service-action-btn">Маркировать</button>
+        </div>
+      </div>
+
+      <!-- Банк клиент -->
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-card-name">Банк клиент</span>
+          <span class="service-card-org">НРД</span>
+          <a href="#" class="service-card-link">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
+          </a>
+        </div>
+        <div class="service-card-stats">
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+        </div>
+        <div class="service-card-actions">
+          <button class="service-action-btn">Маркировать</button>
+          <button class="service-action-btn">Заменить обеспечение</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="services-grid-2col">
+      <!-- Корпоративные действия -->
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-card-name">Корпоративные действия</span>
+          <span class="service-card-org">НРД</span>
+        </div>
+        <div class="service-card-stats">
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+        </div>
+        <div class="service-card-actions">
+          <button class="service-action-btn">Маркировать</button>
+          <button class="service-action-btn">Заменить обеспечение</button>
+        </div>
+      </div>
+
+      <!-- Букбилдер (2) -->
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-card-name">Букбилдер</span>
+          <span class="service-card-org">НРД</span>
+          <a href="#" class="service-card-link">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
+          </a>
+        </div>
+        <div class="service-card-stats">
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+          <span class="service-stat"><span class="service-stat-label">Событие</span><a href="#" class="service-stat-value">54</a></span>
+        </div>
+        <div class="service-card-actions">
+          <button class="service-action-btn">Маркировать</button>
+          <button class="service-action-btn">Заменить обеспечение</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- РЕКОМЕНДОВАННЫЕ УСЛУГИ -->
+    <div class="recommended-section">
+      <div class="section-header">
+        <span class="section-title">Рекомендованные услуги</span>
+        <a href="#" class="section-arrow">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg>
+        </a>
+      </div>
+
+      <div class="recommended-grid">
+        <div class="recommended-left">
+          <a href="#" class="recommended-card-big">
+            <div class="placeholder-recommended"></div>
+            <div class="recommended-card-big-tags">
+              <span class="recommended-tag">Финансирование</span>
+              <span class="recommended-tag">Рынок капитала</span>
+              <span class="recommended-tag">Облигации</span>
+            </div>
+            <div class="recommended-card-big-content">
+              <h3>Биржевые облигации</h3>
+              <p>Биржевые облигации – удобный инструмент, позволяющий привлечь долговой капитал на биржевом рынке</p>
+            </div>
+          </a>
+        </div>
+        <div class="recommended-right">
+          <a href="#" class="recommended-card-sm">
+            <div class="recommended-card-sm-tags">
+              <span class="recommended-tag">Финансирование</span>
+              <span class="recommended-tag">Рынок капитала</span>
+              <span class="recommended-tag">Акции</span>
+            </div>
+            <h4>IPO на MOEX</h4>
+            <p>Первичное публичное размещение акций – новый этап жизненного цикла компании, демонстрирующий ее успехи в построении бизнеса</p>
+          </a>
+          <a href="#" class="recommended-card-sm">
+            <div class="recommended-card-sm-tags">
+              <span class="recommended-tag">Взаимодействие с инвесторами</span>
+              <span class="recommended-tag">Обучение</span>
+              <span class="recommended-tag">Рынок капитала</span>
+            </div>
+            <h4>MOEX IR-сервисы</h4>
+            <p>IR-сервисы MOEX оказывают положительный эффект на всех этапах выхода компании на финансовый рынок</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- НОВОСТИ -->
+    <div class="news-section">
+      <div class="section-header">
+        <span class="section-title">Новости</span>
+        <a href="#" class="section-arrow">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg>
+        </a>
+      </div>
+
+      <div class="news-grid">
+        <a href="#" class="news-card">
+          <div class="news-card-title">О порядке сбора заявок и заключения сделок при размещении облигаций ...</div>
+          <div class="news-card-date">Вчера 11:12</div>
+        </a>
+        <a href="#" class="news-card">
+          <div class="news-card-title">О порядке сбора заявок и заключения сделок при размещении облигаций ...</div>
+          <div class="news-card-date">Вчера 11:12</div>
+        </a>
+        <a href="#" class="news-card news-card-featured">
+          <div class="news-card-featured-img">
+            <div class="placeholder-news"></div>
+          </div>
+          <div class="news-card-title">О порядке сбора заявок и заключения сделок при размещении облигаций серии</div>
+          <div class="news-card-date">Вчера 11:12</div>
+        </a>
+        <a href="#" class="news-card">
+          <div class="news-card-title">О порядке сбора заявок и заключения сделок при размещении облигаций ...</div>
+          <div class="news-card-date">Вчера 11:12</div>
+        </a>
+        <a href="#" class="news-card">
+          <div class="news-card-title">О порядке сбора заявок и заключения сделок при размещении облигаций ...</div>
+          <div class="news-card-date">Вчера 11:12</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- МЕРОПРИЯТИЯ -->
+    <div class="events-section">
+      <div class="section-header">
+        <span class="section-title">Мероприятия</span>
+        <a href="#" class="section-arrow">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg>
+        </a>
+      </div>
+
+      <div class="events-grid">
+        <a href="#" class="event-card">
+          <div class="event-card-info">
+            <div class="event-card-title">Возможности Московской Биржи для привлечения инвестиций</div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="2" width="12" height="10" rx="1"/><path d="M1 5h12M4 1v3M10 1v3"/></svg>
+              28 июня, 10:00
+            </div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="7" cy="6" r="3"/><path d="M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
+              Офис Московской Биржи, ул. Воздвиженка, д. 4/7, зал Моховая
+            </div>
+            <button class="event-register-btn">Записаться</button>
+          </div>
+          <div class="event-card-img">
+            <div class="placeholder-event"></div>
+          </div>
+        </a>
+
+        <a href="#" class="event-card">
+          <div class="event-card-info">
+            <div class="event-card-title">Возможности Московской Биржи для привлечения инвестиций</div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="2" width="12" height="10" rx="1"/><path d="M1 5h12M4 1v3M10 1v3"/></svg>
+              28 июня, 10:00
+            </div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="7" cy="6" r="3"/><path d="M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
+              Офис Московской Биржи, ул. Воздвиженка, д. 4/7, зал Моховая
+            </div>
+            <button class="event-register-btn">Записаться</button>
+          </div>
+          <div class="event-card-img">
+            <div class="placeholder-event"></div>
+          </div>
+        </a>
+
+        <a href="#" class="event-card">
+          <div class="event-card-info">
+            <div class="event-card-title">Возможности Московской Биржи для привлечения инвестиций</div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="2" width="12" height="10" rx="1"/><path d="M1 5h12M4 1v3M10 1v3"/></svg>
+              28 июня, 10:00
+            </div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="7" cy="6" r="3"/><path d="M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
+              Офис Московской Биржи, ул. Воздвиженка, д. 4/7, зал Моховая
+            </div>
+            <button class="event-register-btn">Записаться</button>
+          </div>
+          <div class="event-card-img">
+            <div class="placeholder-event"></div>
+          </div>
+        </a>
+
+        <a href="#" class="event-card">
+          <div class="event-card-info">
+            <div class="event-card-title">Возможности Московской Биржи для привлечения инвестиций</div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="2" width="12" height="10" rx="1"/><path d="M1 5h12M4 1v3M10 1v3"/></svg>
+              28 июня, 10:00
+            </div>
+            <div class="event-meta">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="7" cy="6" r="3"/><path d="M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
+              Офис Московской Биржи, ул. Воздвиженка, д. 4/7, зал Моховая
+            </div>
+            <button class="event-register-btn">Записаться</button>
+          </div>
+          <div class="event-card-img">
+            <div class="placeholder-event"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
