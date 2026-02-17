@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрация через Госуслуги — MOEX</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f7fa; color: #1a1a1a; font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* ===== PAGE ===== */
+.reg-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+.reg-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.reg-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.reg-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.reg-header-logo-text {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: #333;
+}
+.reg-header-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+}
+.reg-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.reg-header-step {
+  font-size: 12px;
+  color: #999;
+  font-weight: 500;
+}
+.reg-back-link {
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+.reg-back-link:hover { color: #333; }
+
+/* ===== PROGRESS ===== */
+.reg-progress {
+  background: #e5e5e5;
+  height: 3px;
+  flex-shrink: 0;
+}
+.reg-progress-bar {
+  height: 100%;
+  background: #0065B1;
+  transition: width 0.5s ease;
+}
+
+/* ===== MAIN ===== */
+.reg-main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* ===== STEPS ===== */
+.reg-step {
+  display: none;
+  width: 100%;
+  max-width: 520px;
+}
+.reg-step.active { display: block; }
+
+/* ===== CARD ===== */
+.reg-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* ===== ESIA DATA BADGE ===== */
+.reg-esia-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EBF3FE;
+  color: #0065B1;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.reg-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #1a1a1a;
+  line-height: 1.3;
+}
+.reg-card-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* ===== FORM ===== */
+.reg-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.reg-form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.reg-field {
+  position: relative;
+}
+.reg-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 6px;
+}
+.reg-field label .required {
+  color: #E53935;
+  margin-left: 2px;
+}
+.reg-field input,
+.reg-field select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a1a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.reg-field input:focus,
+.reg-field select:focus {
+  border-color: #0065B1;
+}
+.reg-field input:disabled,
+.reg-field select:disabled {
+  background: #f5f5f5;
+  color: #888;
+  cursor: not-allowed;
+  border-color: #e8e8e8;
+}
+.reg-field input.error {
+  border-color: #E53935;
+}
+.reg-field-hint {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+.reg-field-error {
+  font-size: 12px;
+  color: #E53935;
+  margin-top: 4px;
+  display: none;
+}
+.reg-field-error.visible { display: block; }
+
+/* ===== LOCKED FIELD (from ESIA) ===== */
+.reg-field-locked {
+  position: relative;
+}
+.reg-field-locked input {
+  padding-right: 38px;
+}
+.reg-field-lock-icon {
+  position: absolute;
+  top: 32px;
+  right: 12px;
+  color: #0065B1;
+  display: flex;
+  align-items: center;
+}
+
+/* ===== SECTION DIVIDER ===== */
+.reg-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+  padding-top: 8px;
+  margin-bottom: 16px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 20px;
+  grid-column: 1 / -1;
+}
+
+/* ===== CHECKBOX ===== */
+.reg-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
+.reg-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: #0065B1;
+}
+.reg-checkbox a {
+  color: #0065B1;
+  text-decoration: none;
+}
+
+/* ===== BUTTONS ===== */
+.reg-btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.reg-btn-primary {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  background: #0065B1;
+  color: #fff;
+  transition: all 0.2s;
+}
+.reg-btn-primary:hover { background: #004E8C; }
+.reg-btn-primary:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+.reg-btn-outline {
+  padding: 13px 24px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  background: #fff;
+  color: #333;
+  transition: all 0.2s;
+}
+.reg-btn-outline:hover { border-color: #bbb; background: #fafafa; }
+
+/* ===== SUCCESS SCREEN ===== */
+.reg-success-center {
+  text-align: center;
+  padding: 24px 0;
+}
+.reg-success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #E8F7EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.reg-success-center h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.reg-success-center p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.reg-success-details {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.reg-success-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13px;
+}
+.reg-success-row:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+.reg-success-label { color: #888; }
+.reg-success-value { font-weight: 500; color: #1a1a1a; }
+.reg-success-value.verified {
+  color: #27AE60;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ===== LOADING ===== */
+.reg-loading-center {
+  text-align: center;
+  padding: 48px 32px;
+}
+.reg-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e5e5e5;
+  border-top-color: #0065B1;
+  border-radius: 50%;
+  animation: reg-spin 0.8s linear infinite;
+  margin: 0 auto 24px;
+}
+@keyframes reg-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== FOOTER ===== */
+.reg-footer {
+  text-align: center;
+  padding: 16px 20px;
+  font-size: 11px;
+  color: #aaa;
+  flex-shrink: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .reg-form-grid { grid-template-columns: 1fr; }
+  .reg-card { padding: 24px 20px; }
+  .reg-card h2 { font-size: 18px; }
+  .reg-btn-row { flex-direction: column; }
+  .reg-header { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="reg-page">
+
+  <!-- Header -->
+  <header class="reg-header">
+    <div class="reg-header-left">
+      <a href="login.html" class="reg-header-logo">
+        <svg width="44" height="24" viewBox="0 0 44 24" fill="none">
+          <rect width="44" height="24" rx="4" fill="#CC0000"/>
+          <text x="4" y="17" font-size="13" font-weight="800" fill="#fff" font-family="Inter,sans-serif">MOEX</text>
+        </svg>
+        <span class="reg-header-logo-text">МОСКОВСКАЯ<br>БИРЖА</span>
+      </a>
+      <span class="reg-header-title">| Регистрация через Госуслуги</span>
+    </div>
+    <div class="reg-header-right">
+      <span class="reg-header-step" id="stepLabel">Шаг 1 из 2</span>
+      <a href="login.html" class="reg-back-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Отмена
+      </a>
+    </div>
+  </header>
+
+  <!-- Progress -->
+  <div class="reg-progress">
+    <div class="reg-progress-bar" id="regProgressBar" style="width: 50%"></div>
+  </div>
+
+  <!-- Main -->
+  <div class="reg-main">
+
+    <!-- STEP 1: Personal data (partially pre-filled from ESIA) -->
+    <div class="reg-step active" id="regStep1">
+      <div class="reg-card">
+        <div class="reg-esia-badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2L3 4.5v3c0 3.83 2.13 7.41 5 8.5 2.87-1.09 5-4.67 5-8.5v-3L8 2z" fill="#0065B1"/>
+            <path d="M7 10l-1.5-1.5.7-.7.8.8 2.3-2.3.7.7L7 10z" fill="#fff"/>
+          </svg>
+          Данные подтверждены через Госуслуги
+        </div>
+
+        <h2>Регистрация на платформе</h2>
+        <p class="reg-card-subtitle">Персональные данные получены из ЕСИА. Заполните дополнительные поля для завершения регистрации.</p>
+
+        <form id="regForm1">
+          <div class="reg-form-grid">
+            <!-- Locked fields from ESIA -->
+            <div class="reg-field reg-field-locked">
+              <label>Фамилия</label>
+              <input type="text" value="Иванов" disabled>
+              <span class="reg-field-lock-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" stroke="#0065B1" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+            </div>
+            <div class="reg-field reg-field-locked">
+              <label>Имя</label>
+              <input type="text" value="Иван" disabled>
+              <span class="reg-field-lock-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" stroke="#0065B1" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+            </div>
+            <div class="reg-field reg-field-locked">
+              <label>Отчество</label>
+              <input type="text" value="Иванович" disabled>
+              <span class="reg-field-lock-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" stroke="#0065B1" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+            </div>
+            <div class="reg-field reg-field-locked">
+              <label>ИНН</label>
+              <input type="text" value="7707083893" disabled>
+              <span class="reg-field-lock-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" stroke="#0065B1" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+            </div>
+            <div class="reg-field reg-field-locked full-width">
+              <label>Email</label>
+              <input type="email" value="ivanov@mail.ru" disabled>
+              <span class="reg-field-lock-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" stroke="#0065B1" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+            </div>
+
+            <!-- Section: Additional data -->
+            <div class="reg-section-title">Дополнительные данные</div>
+
+            <div class="reg-field">
+              <label>Организация / Компания<span class="required">*</span></label>
+              <input type="text" id="regCompany" placeholder="ООО «Название»" required>
+              <div class="reg-field-error" id="regCompanyError">Укажите организацию</div>
+            </div>
+            <div class="reg-field">
+              <label>Должность<span class="required">*</span></label>
+              <input type="text" id="regPosition" placeholder="Например: Финансовый директор" required>
+              <div class="reg-field-error" id="regPositionError">Укажите должность</div>
+            </div>
+            <div class="reg-field">
+              <label>Контактный телефон<span class="required">*</span></label>
+              <input type="tel" id="regPhone" placeholder="+7 (___) ___-__-__" required>
+              <div class="reg-field-error" id="regPhoneError">Укажите номер телефона</div>
+            </div>
+            <div class="reg-field">
+              <label>Роль на платформе<span class="required">*</span></label>
+              <select id="regRole" required>
+                <option value="">Выберите роль</option>
+                <option value="participant">Участник торгов</option>
+                <option value="broker">Брокер / Управляющий</option>
+                <option value="investor">Инвестор</option>
+                <option value="registrar">Регистратор</option>
+                <option value="other">Другое</option>
+              </select>
+              <div class="reg-field-error" id="regRoleError">Выберите роль</div>
+            </div>
+          </div>
+
+          <label class="reg-checkbox full-width">
+            <input type="checkbox" id="regAgree" required>
+            <span>Я ознакомился и принимаю <a href="#">Условия использования</a> Цифровой Платформы MOEX и даю <a href="#">согласие на обработку персональных данных</a></span>
+          </label>
+
+          <div class="reg-btn-row">
+            <button type="button" class="reg-btn-outline" onclick="window.location.href='login.html'">Отмена</button>
+            <button type="submit" class="reg-btn-primary" id="regNextBtn">Далее</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- STEP 2: Loading — creating account -->
+    <div class="reg-step" id="regStep2">
+      <div class="reg-card">
+        <div class="reg-loading-center">
+          <div class="reg-spinner"></div>
+          <h2>Создаём учётную запись</h2>
+          <p>Регистрируем вас на Цифровой Платформе MOEX...<br>Это займёт несколько секунд</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Success -->
+    <div class="reg-step" id="regStep3">
+      <div class="reg-card">
+        <div class="reg-success-center">
+          <div class="reg-success-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+              <path d="M13 18l4 4 8-8" stroke="#27AE60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2>Регистрация завершена!</h2>
+          <p>Ваша учётная запись на Цифровой Платформе MOEX успешно создана. Данные верифицированы через Госуслуги.</p>
+
+          <div class="reg-success-details">
+            <div class="reg-success-row">
+              <span class="reg-success-label">ФИО</span>
+              <span class="reg-success-value">Иванов Иван Иванович</span>
+            </div>
+            <div class="reg-success-row">
+              <span class="reg-success-label">Email</span>
+              <span class="reg-success-value">ivanov@mail.ru</span>
+            </div>
+            <div class="reg-success-row">
+              <span class="reg-success-label">Организация</span>
+              <span class="reg-success-value" id="successCompany">—</span>
+            </div>
+            <div class="reg-success-row">
+              <span class="reg-success-label">Роль</span>
+              <span class="reg-success-value" id="successRole">—</span>
+            </div>
+            <div class="reg-success-row">
+              <span class="reg-success-label">Верификация</span>
+              <span class="reg-success-value verified">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#27AE60"/><path d="M5 7l1.5 1.5L9 5.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                ЕСИА (Госуслуги)
+              </span>
+            </div>
+          </div>
+
+          <button class="reg-btn-primary" id="goToDashboard" style="width:100%">Войти на Платформу</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="reg-footer">
+    Данные верифицированы через Единую систему идентификации и аутентификации (ЕСИА)
+  </div>
+
+</div>
+
+<script>
+// ==== STEP MANAGEMENT ====
+function showRegStep(step) {
+  document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
+  const stepLabels = { 1: 'Шаг 1 из 2', 2: 'Шаг 2 из 2', 3: 'Готово' };
+  const progressMap = { 1: 50, 2: 75, 3: 100 };
+
+  document.getElementById('regStep' + step).classList.add('active');
+  document.getElementById('stepLabel').textContent = stepLabels[step] || '';
+  document.getElementById('regProgressBar').style.width = progressMap[step] + '%';
+}
+
+// ==== STEP 1: Form validation & submission ====
+const regForm1 = document.getElementById('regForm1');
+
+regForm1.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  // Reset errors
+  document.querySelectorAll('.reg-field-error').forEach(el => el.classList.remove('visible'));
+  document.querySelectorAll('.reg-field input, .reg-field select').forEach(el => el.classList.remove('error'));
+
+  const company = document.getElementById('regCompany');
+  const position = document.getElementById('regPosition');
+  const phone = document.getElementById('regPhone');
+  const role = document.getElementById('regRole');
+  const agree = document.getElementById('regAgree');
+
+  let hasError = false;
+
+  if (!company.value.trim()) {
+    document.getElementById('regCompanyError').classList.add('visible');
+    company.classList.add('error');
+    hasError = true;
+  }
+  if (!position.value.trim()) {
+    document.getElementById('regPositionError').classList.add('visible');
+    position.classList.add('error');
+    hasError = true;
+  }
+  if (!phone.value.trim()) {
+    document.getElementById('regPhoneError').classList.add('visible');
+    phone.classList.add('error');
+    hasError = true;
+  }
+  if (!role.value) {
+    document.getElementById('regRoleError').classList.add('visible');
+    role.classList.add('error');
+    hasError = true;
+  }
+  if (!agree.checked) {
+    hasError = true;
+    agree.focus();
+  }
+
+  if (hasError) return;
+
+  // Store data for success screen
+  const roleText = role.options[role.selectedIndex].text;
+  document.getElementById('successCompany').textContent = company.value.trim();
+  document.getElementById('successRole').textContent = roleText;
+
+  // Go to loading
+  showRegStep(2);
+
+  // Simulate account creation
+  setTimeout(() => {
+    showRegStep(3);
+  }, 2200);
+});
+
+// ==== STEP 3: Go to dashboard ====
+document.getElementById('goToDashboard').addEventListener('click', () => {
+  window.location.href = 'index.html';
+});
+</script>
+
+</body>
+</html>

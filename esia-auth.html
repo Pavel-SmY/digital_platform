@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход через Госуслуги — MOEX</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f7fa; color: #1a1a1a; font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* ===== STEPS CONTAINER ===== */
+.esia-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+.esia-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.esia-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.esia-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+.esia-header-logo svg { flex-shrink: 0; }
+.esia-header-logo-text {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: #333;
+}
+.esia-header-arrow {
+  display: flex;
+  align-items: center;
+  color: #bbb;
+}
+.esia-header-partner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+.esia-header-partner-badge {
+  background: #0065B1;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.03em;
+}
+.esia-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.esia-back-link {
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+.esia-back-link:hover { color: #333; }
+
+/* ===== PROGRESS BAR ===== */
+.esia-progress {
+  background: #e5e5e5;
+  height: 3px;
+  flex-shrink: 0;
+}
+.esia-progress-bar {
+  height: 100%;
+  background: #0065B1;
+  transition: width 0.6s ease;
+  width: 0%;
+}
+
+/* ===== MAIN CONTENT ===== */
+.esia-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* ===== STEP SCREENS ===== */
+.esia-step {
+  display: none;
+  width: 100%;
+  max-width: 440px;
+}
+.esia-step.active { display: block; }
+
+/* ===== CARD ===== */
+.esia-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.esia-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.esia-card-icon.blue { background: #EBF3FE; }
+.esia-card-icon.green { background: #E8F7EE; }
+.esia-card-icon.red { background: #FFF1F0; }
+.esia-card-icon.orange { background: #FFF4E5; }
+
+.esia-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+  line-height: 1.3;
+}
+.esia-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.esia-card p:last-child { margin-bottom: 0; }
+
+/* ===== FORM FIELDS ===== */
+.esia-field {
+  position: relative;
+  margin-bottom: 16px;
+}
+.esia-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 6px;
+}
+.esia-field input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a1a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.esia-field input:focus {
+  border-color: #0065B1;
+}
+.esia-field input.error {
+  border-color: #E53935;
+}
+.esia-field-error {
+  font-size: 12px;
+  color: #E53935;
+  margin-top: 4px;
+  display: none;
+}
+.esia-field-error.visible { display: block; }
+
+.esia-field-password {
+  position: relative;
+}
+.esia-field-password .esia-toggle-pw {
+  position: absolute;
+  top: 28px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+.esia-field-password .esia-toggle-pw:hover { color: #666; }
+
+/* ===== BUTTONS ===== */
+.esia-btn-primary {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  background: #0065B1;
+  color: #fff;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.esia-btn-primary:hover { background: #004E8C; }
+.esia-btn-primary:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.esia-btn-outline {
+  width: 100%;
+  padding: 13px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  background: #fff;
+  color: #333;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.esia-btn-outline:hover { border-color: #bbb; background: #fafafa; }
+
+.esia-link {
+  display: inline-block;
+  font-size: 13px;
+  color: #0065B1;
+  text-decoration: none;
+  margin-top: 16px;
+  transition: opacity 0.15s;
+}
+.esia-link:hover { opacity: 0.7; }
+
+/* ===== LOADING SCREEN ===== */
+.esia-loading-center {
+  text-align: center;
+  padding: 48px 32px;
+}
+.esia-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e5e5e5;
+  border-top-color: #0065B1;
+  border-radius: 50%;
+  animation: esia-spin 0.8s linear infinite;
+  margin: 0 auto 24px;
+}
+@keyframes esia-spin {
+  to { transform: rotate(360deg); }
+}
+.esia-loading-center h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+.esia-loading-center p {
+  font-size: 14px;
+  color: #888;
+}
+
+/* ===== CONSENT SCREEN ===== */
+.esia-consent-list {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+.esia-consent-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
+.esia-consent-list li:last-child { border-bottom: none; }
+.esia-consent-list li svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.esia-consent-note {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+.esia-consent-note a {
+  color: #0065B1;
+  text-decoration: none;
+}
+
+/* ===== SUCCESS SCREEN ===== */
+.esia-success-center {
+  text-align: center;
+  padding: 32px;
+}
+.esia-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #E8F7EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.esia-success-center h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+.esia-success-center p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+}
+.esia-user-info {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.esia-user-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+}
+.esia-user-info-row:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+.esia-user-info-label {
+  color: #888;
+}
+.esia-user-info-value {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* ===== ERROR SCREEN ===== */
+.esia-error-center {
+  text-align: center;
+  padding: 32px;
+}
+.esia-error-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #FFF1F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+/* ===== NEW USER SCREEN ===== */
+.esia-new-user-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFF4E5;
+  color: #B86E00;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+/* ===== FOOTER ===== */
+.esia-footer {
+  text-align: center;
+  padding: 16px 20px;
+  font-size: 11px;
+  color: #aaa;
+  flex-shrink: 0;
+}
+.esia-footer a { color: #0065B1; text-decoration: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .esia-card { padding: 24px 20px; }
+  .esia-card h2 { font-size: 18px; }
+  .esia-header { padding: 0 16px; }
+  .esia-header-partner { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="esia-page">
+
+  <!-- Header -->
+  <header class="esia-header">
+    <div class="esia-header-left">
+      <a href="login.html" class="esia-header-logo">
+        <svg width="40" height="22" viewBox="0 0 40 22" fill="none">
+          <rect width="40" height="22" rx="4" fill="#0065B1"/>
+          <text x="4" y="16" font-size="12" font-weight="800" fill="#fff" font-family="Inter,sans-serif">ESIA</text>
+        </svg>
+      </a>
+      <svg class="esia-header-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div class="esia-header-partner">
+        <span class="esia-header-partner-badge">MOEX</span>
+        <span>Цифровая Платформа</span>
+      </div>
+    </div>
+    <div class="esia-header-right">
+      <a href="login.html" class="esia-back-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Отмена
+      </a>
+    </div>
+  </header>
+
+  <!-- Progress -->
+  <div class="esia-progress">
+    <div class="esia-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Main content -->
+  <div class="esia-main">
+
+    <!-- STEP 1: Login form (Госуслуги) -->
+    <div class="esia-step active" id="step1">
+      <div class="esia-card">
+        <div class="esia-card-icon blue">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M14 3L5 7.5v5c0 6.38 3.84 12.35 9 13.5 5.16-1.15 9-7.12 9-13.5v-5L14 3z" fill="#0065B1"/>
+            <path d="M12.5 17.5l-3-3 1.4-1.4 1.6 1.6 4.6-4.6 1.4 1.4-6 6z" fill="#fff"/>
+          </svg>
+        </div>
+        <h2>Вход через Госуслуги</h2>
+        <p>Введите данные вашей учётной записи на портале Госуслуг (ЕСИА) для входа на Цифровую Платформу MOEX</p>
+
+        <form id="esiaLoginForm" autocomplete="off">
+          <div class="esia-field">
+            <label for="esiaLogin">Телефон, email или СНИЛС</label>
+            <input type="text" id="esiaLogin" placeholder="+7 (___) ___-__-__ / email@example.ru" required>
+            <div class="esia-field-error" id="esiaLoginError">Введите телефон, email или СНИЛС</div>
+          </div>
+
+          <div class="esia-field esia-field-password">
+            <label for="esiaPassword">Пароль</label>
+            <input type="password" id="esiaPassword" placeholder="Пароль от Госуслуг" required>
+            <button type="button" class="esia-toggle-pw" id="esiaTogglePw">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 10s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/>
+                <circle cx="10" cy="10" r="3"/>
+              </svg>
+            </button>
+            <div class="esia-field-error" id="esiaPasswordError">Введите пароль</div>
+          </div>
+
+          <button type="submit" class="esia-btn-primary" id="esiaSubmitBtn">Войти</button>
+        </form>
+
+        <a href="#" class="esia-link">Восстановить пароль на Госуслугах</a>
+      </div>
+    </div>
+
+    <!-- STEP 2: Loading / Checking -->
+    <div class="esia-step" id="step2">
+      <div class="esia-card">
+        <div class="esia-loading-center">
+          <div class="esia-spinner"></div>
+          <h2>Проверяем учётную запись</h2>
+          <p>Идёт проверка данных через портал Госуслуг...<br>Пожалуйста, подождите</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Consent screen -->
+    <div class="esia-step" id="step3">
+      <div class="esia-card">
+        <div class="esia-card-icon blue">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="4" y="6" width="20" height="16" rx="3" stroke="#0065B1" stroke-width="2" fill="none"/>
+            <path d="M4 11h20" stroke="#0065B1" stroke-width="2"/>
+            <circle cx="9" cy="16" r="1.5" fill="#0065B1"/>
+            <path d="M13 16h7" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2>Предоставление данных</h2>
+        <p><strong>Цифровая Платформа MOEX</strong> запрашивает доступ к вашим данным из учётной записи Госуслуг:</p>
+
+        <ul class="esia-consent-list">
+          <li>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#EBF3FE"/><path d="M6 9l2 2 4-4" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Фамилия, имя, отчество</span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#EBF3FE"/><path d="M6 9l2 2 4-4" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Контактный телефон</span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#EBF3FE"/><path d="M6 9l2 2 4-4" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Адрес электронной почты</span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#EBF3FE"/><path d="M6 9l2 2 4-4" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>СНИЛС</span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#EBF3FE"/><path d="M6 9l2 2 4-4" stroke="#0065B1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>ИНН</span>
+          </li>
+        </ul>
+
+        <p class="esia-consent-note">
+          Нажимая «Разрешить», вы соглашаетесь с <a href="#">политикой обработки персональных данных</a> и <a href="#">пользовательским соглашением</a> Цифровой Платформы MOEX.
+        </p>
+
+        <button class="esia-btn-primary" id="consentAllow">Разрешить</button>
+        <button class="esia-btn-outline" id="consentDeny">Отклонить</button>
+      </div>
+    </div>
+
+    <!-- STEP 4a: Loading redirect back -->
+    <div class="esia-step" id="step4">
+      <div class="esia-card">
+        <div class="esia-loading-center">
+          <div class="esia-spinner"></div>
+          <h2>Передаём данные</h2>
+          <p>Перенаправляем вас на Цифровую Платформу MOEX...<br>Это займёт несколько секунд</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5a: Success — existing user -->
+    <div class="esia-step" id="step5">
+      <div class="esia-card">
+        <div class="esia-success-center">
+          <div class="esia-success-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M12 16l3 3 7-7" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2>Авторизация успешна</h2>
+          <p>Ваша учётная запись подтверждена через Госуслуги</p>
+
+          <div class="esia-user-info">
+            <div class="esia-user-info-row">
+              <span class="esia-user-info-label">ФИО</span>
+              <span class="esia-user-info-value">Иванов Иван Иванович</span>
+            </div>
+            <div class="esia-user-info-row">
+              <span class="esia-user-info-label">Email</span>
+              <span class="esia-user-info-value">ivanov@mail.ru</span>
+            </div>
+            <div class="esia-user-info-row">
+              <span class="esia-user-info-label">Телефон</span>
+              <span class="esia-user-info-value">+7 (900) 123-45-67</span>
+            </div>
+            <div class="esia-user-info-row">
+              <span class="esia-user-info-label">ИНН</span>
+              <span class="esia-user-info-value">7707083893</span>
+            </div>
+          </div>
+
+          <button class="esia-btn-primary" id="goToPlatform">Перейти на Платформу</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5b: New user — needs registration -->
+    <div class="esia-step" id="step6">
+      <div class="esia-card">
+        <div class="esia-success-center">
+          <div class="esia-new-user-badge">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#B86E00" stroke-width="1.5"/><path d="M8 5v3" stroke="#B86E00" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11" r="0.75" fill="#B86E00"/></svg>
+            Новый пользователь
+          </div>
+          <h2>Завершите регистрацию</h2>
+          <p>Ваши данные подтверждены через Госуслуги, но учётная запись на Цифровой Платформе MOEX ещё не создана. Для завершения регистрации потребуется указать дополнительные сведения.</p>
+
+          <div class="esia-user-info">
+            <div class="esia-user-info-row">
+              <span class="esia-user-info-label">ФИО</span>
+              <span class="esia-user-info-value">Иванов Иван Иванович</span>
+            </div>
+            <div class="esia-user-info-row">
+              <span class="esia-user-info-label">Email</span>
+              <span class="esia-user-info-value">ivanov@mail.ru</span>
+            </div>
+            <div class="esia-user-info-row">
+              <span class="esia-user-info-label">СНИЛС</span>
+              <span class="esia-user-info-value">***-***-*** **</span>
+            </div>
+          </div>
+
+          <button class="esia-btn-primary" id="goToRegister">Продолжить регистрацию</button>
+          <button class="esia-btn-outline" id="cancelRegister" onclick="window.location.href='login.html'">Вернуться ко входу</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP ERROR: Auth failed -->
+    <div class="esia-step" id="stepError">
+      <div class="esia-card">
+        <div class="esia-error-center">
+          <div class="esia-error-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M11 11l10 10M21 11l-10 10" stroke="#E53935" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2>Ошибка авторизации</h2>
+          <p>Не удалось выполнить вход через Госуслуги. Проверьте данные учётной записи или повторите попытку позже.</p>
+
+          <button class="esia-btn-primary" id="retryBtn" onclick="goToStep(1)">Попробовать снова</button>
+          <button class="esia-btn-outline" onclick="window.location.href='login.html'">Вернуться ко входу</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="esia-footer">
+    Авторизация обеспечивается через Единую систему идентификации и аутентификации (ЕСИА) &middot;
+    <a href="#">esia.gosuslugi.ru</a>
+  </div>
+
+</div>
+
+<script>
+// ==== STEP MANAGEMENT ====
+const steps = {
+  1: { el: 'step1', progress: 25 },
+  2: { el: 'step2', progress: 50 },
+  3: { el: 'step3', progress: 75 },
+  4: { el: 'step4', progress: 90 },
+  5: { el: 'step5', progress: 100 },
+  6: { el: 'step6', progress: 100 },
+  'error': { el: 'stepError', progress: 0 }
+};
+
+function goToStep(stepId) {
+  // Hide all steps
+  document.querySelectorAll('.esia-step').forEach(s => s.classList.remove('active'));
+  // Show target step
+  const step = steps[stepId];
+  if (step) {
+    document.getElementById(step.el).classList.add('active');
+    document.getElementById('progressBar').style.width = step.progress + '%';
+  }
+}
+
+// ==== STEP 1: Login form ====
+const esiaLoginForm = document.getElementById('esiaLoginForm');
+const esiaLogin = document.getElementById('esiaLogin');
+const esiaPassword = document.getElementById('esiaPassword');
+const esiaTogglePw = document.getElementById('esiaTogglePw');
+
+// Toggle password
+esiaTogglePw.addEventListener('click', () => {
+  esiaPassword.type = esiaPassword.type === 'password' ? 'text' : 'password';
+});
+
+// Submit form
+esiaLoginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const login = esiaLogin.value.trim();
+  const pw = esiaPassword.value.trim();
+
+  // Reset errors
+  document.getElementById('esiaLoginError').classList.remove('visible');
+  document.getElementById('esiaPasswordError').classList.remove('visible');
+  esiaLogin.classList.remove('error');
+  esiaPassword.classList.remove('error');
+
+  let hasError = false;
+  if (!login) {
+    document.getElementById('esiaLoginError').classList.add('visible');
+    esiaLogin.classList.add('error');
+    hasError = true;
+  }
+  if (!pw) {
+    document.getElementById('esiaPasswordError').classList.add('visible');
+    esiaPassword.classList.add('error');
+    hasError = true;
+  }
+  if (hasError) return;
+
+  // Go to loading
+  goToStep(2);
+
+  // Simulate auth check
+  setTimeout(() => {
+    // Check credentials:
+    // "existing" user: login=test, password=test → goes to consent → success (existing user)
+    // "new" user: login=new, password=new → goes to consent → new user registration
+    // anything else → error
+    if ((login === 'test' && pw === 'test') || (login === 'new' && pw === 'new')) {
+      // Show consent screen
+      goToStep(3);
+      // Store user type for later
+      window._esiaUserType = (login === 'new') ? 'new' : 'existing';
+    } else {
+      goToStep('error');
+    }
+  }, 2000);
+});
+
+// ==== STEP 3: Consent ====
+document.getElementById('consentAllow').addEventListener('click', () => {
+  goToStep(4);
+
+  // Simulate redirect
+  setTimeout(() => {
+    if (window._esiaUserType === 'new') {
+      goToStep(6); // New user → registration needed
+    } else {
+      goToStep(5); // Existing user → success
+    }
+  }, 1800);
+});
+
+document.getElementById('consentDeny').addEventListener('click', () => {
+  window.location.href = 'login.html';
+});
+
+// ==== STEP 5: Go to platform ====
+document.getElementById('goToPlatform').addEventListener('click', () => {
+  window.location.href = 'index.html';
+});
+
+// ==== STEP 6: Go to registration ====
+document.getElementById('goToRegister').addEventListener('click', () => {
+  window.location.href = 'esia-register.html';
+});
+
+// Init progress
+document.getElementById('progressBar').style.width = '25%';
+</script>
+
+</body>
+</html>
