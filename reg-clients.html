@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрация клиента — MOEX Цифровая Платформа</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ===== HEADER ===== */
+.header { display: flex; align-items: center; height: 56px; background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+.header-logo { display: flex; align-items: center; gap: 8px; margin-right: 24px; }
+.header-logo-text { font-size: 10px; font-weight: 700; line-height: 1.2; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.02em; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.header-icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #333; transition: background 0.15s; }
+.header-icon-btn:hover { background: #f5f5f5; }
+.header-lang { font-size: 13px; font-weight: 500; color: #666; padding: 6px 10px; border: 1px solid #e5e5e5; border-radius: 8px; margin-right: 8px; }
+.header-notif-btn { position: relative; }
+.header-notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: #cc0000; border-radius: 50%; border: 1.5px solid #fff; }
+.header-user { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-left: 4px; }
+.header-user:hover { background: #f5f5f5; }
+.header-user svg { width: 20px; height: 20px; color: #666; }
+.header-user-info { display: flex; flex-direction: column; }
+.header-user-name { font-weight: 600; font-size: 13px; }
+.header-user-org { font-size: 11px; color: #999; }
+
+/* ===== LAYOUT ===== */
+.layout { display: flex; min-height: calc(100vh - 56px); }
+.sidebar { width: 180px; min-width: 180px; background: #fff; border-right: 1px solid #e5e5e5; padding: 16px 0; display: flex; flex-direction: column; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; font-weight: 500; color: #333; transition: background 0.15s; }
+.sidebar-item:hover { background: #f9f9f9; }
+.sidebar-item.active { color: #1a1a1a; font-weight: 600; }
+.sidebar-item svg { width: 18px; height: 18px; color: #666; flex-shrink: 0; }
+.sidebar-collapse { margin-top: auto; padding: 12px 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #666; }
+.sidebar-collapse:hover { background: #f9f9f9; }
+.sidebar-collapse svg { width: 18px; height: 18px; }
+.main { flex: 1; padding: 20px 28px 40px; overflow-y: auto; max-width: 1200px; }
+
+/* ===== BREADCRUMBS ===== */
+.breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #999; margin-bottom: 24px; }
+.breadcrumbs a { color: #CC0000; transition: opacity 0.15s; }
+.breadcrumbs a:hover { opacity: 0.7; }
+.breadcrumbs-sep { color: #ccc; }
+
+/* ===== PAGE HEADER ===== */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
+.page-title { font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.page-subtitle { font-size: 14px; color: #666; line-height: 1.5; }
+
+/* ===== TABS ===== */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid #e5e5e5; margin-bottom: 28px; }
+.tab { padding: 12px 20px; font-size: 14px; font-weight: 500; color: #666; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+.tab:hover { color: #333; }
+.tab.active { color: #CC0000; border-bottom-color: #CC0000; font-weight: 600; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ===== FORM ===== */
+.general-data { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+.general-data-title { font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #1a1a1a; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.wide { grid-column: span 3; }
+.form-label { font-size: 12px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.03em; }
+.form-input, .form-textarea, .form-select { padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; color: #333; outline: none; transition: border-color 0.15s; background: #fff; }
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: #CC0000; }
+.form-input::placeholder { color: #bbb; }
+.form-textarea { resize: vertical; min-height: 60px; }
+.form-select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23999' stroke-width='1.5'%3E%3Cpath d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.online-reg { display: flex; align-items: flex-start; gap: 10px; padding: 16px; background: #fff8f8; border: 1px solid #ffe0e0; border-radius: 10px; margin-top: 4px; }
+.online-reg input[type="checkbox"] { width: 18px; height: 18px; accent-color: #CC0000; margin-top: 2px; flex-shrink: 0; }
+.online-reg-text { font-size: 13px; color: #333; }
+.online-reg-text strong { font-weight: 600; color: #CC0000; }
+.online-reg-desc { font-size: 12px; color: #666; line-height: 1.5; margin-top: 4px; font-style: italic; }
+
+/* ===== SECTIONS ===== */
+.reg-section { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s; }
+.reg-section:hover { border-color: #ddd; }
+.reg-section-header { display: flex; align-items: center; gap: 12px; padding: 18px 24px; cursor: pointer; user-select: none; transition: background 0.15s; }
+.reg-section-header:hover { background: #fafafa; }
+.reg-section-chevron { width: 20px; height: 20px; color: #999; transition: transform 0.25s; flex-shrink: 0; }
+.reg-section.open .reg-section-chevron { transform: rotate(180deg); }
+.reg-section-title { font-size: 14px; font-weight: 600; color: #1a1a1a; flex: 1; }
+.reg-section-badge { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #999; }
+.reg-section-badge-count { background: #f0f0f0; color: #333; font-weight: 600; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+.reg-section-badge-count.has-records { background: #CC0000; color: #fff; }
+.reg-section-body { display: none; padding: 0 24px 20px; }
+.reg-section.open .reg-section-body { display: block; }
+.section-table-wrap { border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+.section-table { width: 100%; border-collapse: collapse; }
+.section-table thead { background: #fafafa; }
+.section-table th { padding: 10px 14px; font-size: 11px; font-weight: 600; color: #666; text-align: left; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+.section-table td { padding: 10px 14px; font-size: 13px; color: #333; border-bottom: 1px solid #f5f5f5; }
+.section-table tbody tr:hover { background: #fafafa; }
+.section-table-empty { padding: 24px 14px; font-size: 13px; color: #bbb; text-align: center; }
+.table-actions { display: flex; gap: 4px; }
+.table-action-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; transition: all 0.15s; cursor: pointer; border: none; background: none; }
+.table-action-btn:hover { background: #f0f0f0; color: #333; }
+.table-action-btn.delete:hover { background: #fff0f0; color: #CC0000; }
+.table-action-btn svg { width: 14px; height: 14px; }
+.add-record-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px dashed #CC0000; border-radius: 10px; font-size: 13px; font-weight: 500; color: #CC0000; background: #fff; cursor: pointer; transition: all 0.15s; }
+.add-record-btn:hover { background: #fff0f0; border-style: solid; }
+.add-record-btn svg { width: 16px; height: 16px; }
+
+/* ===== ACTION BAR ===== */
+.action-bar { display: flex; align-items: center; gap: 12px; padding: 20px 0; margin-top: 8px; border-top: 1px solid #e5e5e5; flex-wrap: wrap; }
+.btn-primary { padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 600; font-family: inherit; background: #CC0000; color: #fff; transition: background 0.15s; cursor: pointer; border: none; }
+.btn-primary:hover { background: #b30000; }
+.btn-outline { padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 500; font-family: inherit; background: #fff; color: #333; border: 1px solid #e0e0e0; transition: all 0.15s; cursor: pointer; }
+.btn-outline:hover { border-color: #ccc; background: #f9f9f9; }
+.btn-secondary { padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 500; font-family: inherit; background: #f5f5f5; color: #333; border: none; transition: all 0.15s; cursor: pointer; }
+.btn-secondary:hover { background: #eaeaea; }
+.action-bar-right { margin-left: auto; display: flex; gap: 12px; align-items: flex-start; }
+.ep-hint { font-size: 11px; color: #999; margin-top: 4px; }
+.ep-wrap { display: flex; flex-direction: column; align-items: flex-end; }
+
+/* ===== UPLOAD ===== */
+.upload-area { border: 2px dashed #e0e0e0; border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 20px; transition: all 0.2s; cursor: pointer; }
+.upload-area:hover { border-color: #CC0000; background: #fff8f8; }
+.upload-area svg { width: 36px; height: 36px; color: #CC0000; margin-bottom: 12px; }
+.upload-area-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 4px; }
+.upload-area-desc { font-size: 13px; color: #999; }
+
+/* ===== HELP PANEL ===== */
+.help-panel { background: #f8f9ff; border: 1px solid #e0e5f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.help-panel-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 14px; }
+.help-panel-title svg { width: 18px; height: 18px; color: #3366CC; }
+.help-panel-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.help-group-title { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.help-panel-links { display: flex; flex-direction: column; gap: 6px; }
+.help-panel-link { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #3366CC; transition: opacity 0.15s; }
+.help-panel-link:hover { opacity: 0.7; }
+.help-panel-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ===== MODAL ===== */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; justify-content: center; align-items: flex-start; padding: 40px 20px; overflow-y: auto; }
+.modal-overlay.visible { display: flex; }
+.modal { background: #fff; border-radius: 16px; width: 100%; max-width: 720px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: modalIn 0.2s ease; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid #f0f0f0; }
+.modal-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+.modal-close { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #999; transition: all 0.15s; cursor: pointer; border: none; background: none; }
+.modal-close:hover { background: #f5f5f5; color: #333; }
+.modal-close svg { width: 18px; height: 18px; }
+.modal-body { padding: 24px; max-height: 60vh; overflow-y: auto; }
+.modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.modal-form-group { display: flex; flex-direction: column; gap: 5px; }
+.modal-form-group.full-width { grid-column: span 2; }
+.modal-form-label { font-size: 12px; font-weight: 500; color: #555; }
+.modal-form-group.required .modal-form-label::after { content: ' *'; color: #CC0000; }
+.modal-form-input, .modal-form-select { padding: 9px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px; font-family: inherit; color: #333; outline: none; transition: border-color 0.15s; background: #fff; }
+.modal-form-input:focus, .modal-form-select:focus { border-color: #CC0000; }
+.modal-form-input::placeholder { color: #bbb; }
+.modal-form-select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10' fill='none' stroke='%23999' stroke-width='1.5'%3E%3Cpath d='M2.5 3.75l2.5 2.5 2.5-2.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+.modal-form-group.error .modal-form-input, .modal-form-group.error .modal-form-select { border-color: #CC0000; }
+.modal-form-error { font-size: 11px; color: #CC0000; display: none; }
+.modal-form-group.error .modal-form-error { display: block; }
+.modal-form-checkboxes { display: flex; flex-direction: column; gap: 6px; }
+.modal-form-checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #333; }
+.modal-form-checkbox-item input { width: 16px; height: 16px; accent-color: #CC0000; }
+.conditional-field { display: none; }
+.conditional-field.visible { display: flex; }
+.modal-section-divider { grid-column: span 2; border-top: 1px solid #f0f0f0; margin: 4px 0; }
+.modal-section-title { grid-column: span 2; font-size: 13px; font-weight: 600; color: #666; margin-top: 4px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid #f0f0f0; }
+.modal-btn-save { padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; background: #CC0000; color: #fff; border: none; cursor: pointer; transition: background 0.15s; }
+.modal-btn-save:hover { background: #b30000; }
+.modal-btn-cancel { padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: inherit; background: #f5f5f5; color: #333; border: none; cursor: pointer; transition: background 0.15s; }
+.modal-btn-cancel:hover { background: #eaeaea; }
+
+/* ===== RESPONSIVE ===== */
+body { overflow-x: hidden; }
+@media (max-width: 1024px) {
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .form-group.wide { grid-column: span 2; }
+  .main { padding: 16px 20px 32px; }
+  .help-panel-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .header { padding: 0 16px; }
+  .main { padding: 16px; max-width: 100%; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.wide { grid-column: span 1; }
+  .modal-form-grid { grid-template-columns: 1fr; }
+  .modal-form-group.full-width { grid-column: span 1; }
+  .modal-section-divider, .modal-section-title { grid-column: span 1; }
+  .tabs { overflow-x: auto; }
+  .tab { white-space: nowrap; padding: 12px 14px; font-size: 13px; }
+  .action-bar { flex-direction: column; align-items: stretch; }
+  .action-bar-right { margin-left: 0; }
+}
+@media (max-width: 480px) {
+  .header { height: 48px; padding: 0 12px; }
+  .header-logo-text { display: none; }
+  .layout { min-height: calc(100vh - 48px); }
+  .main { padding: 12px; }
+  .page-title { font-size: 20px; }
+}
+.main::-webkit-scrollbar { width: 6px; }
+.main::-webkit-scrollbar-track { background: transparent; }
+.main::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+.main::-webkit-scrollbar-thumb:hover { background: #ccc; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="header-logo"><div class="header-logo-text">ЦИФРОВАЯ<br>ПЛАТФОРМА</div></a>
+  <div class="header-right">
+    <a href="#" class="header-icon-btn" title="Поиск"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M12 12l4 4"/></svg></a>
+    <a href="#" class="header-icon-btn" title="Поддержка"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10V8a6 6 0 0112 0v2"/><path d="M1 11v2a2 2 0 002 2h1v-6H3a2 2 0 00-2 2zM17 11v2a2 2 0 01-2 2h-1v-6h1a2 2 0 012 2z"/></svg></a>
+    <a href="#" class="header-icon-btn" title="Корзина"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1h2.5l1.2 2M4.7 3h12L14 11H5.5z"/><circle cx="7" cy="15" r="1.5" fill="currentColor"/><circle cx="13" cy="15" r="1.5" fill="currentColor"/></svg></a>
+    <a href="#" class="header-icon-btn header-notif-btn" title="Уведомления"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 6.5a4.5 4.5 0 10-9 0c0 5-2 6.5-2 6.5h13s-2-1.5-2-6.5M10.3 15a1.5 1.5 0 01-2.6 0"/></svg><span class="header-notif-dot"></span></a>
+    <a href="#" class="header-lang">RU</a>
+    <a href="#" class="header-user"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="4"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg><div class="header-user-info"><span class="header-user-name">Иванов И.И.</span><span class="header-user-org">ОАО «Газпром»</span></div></a>
+    <a href="login.html" class="header-icon-btn" title="Выйти"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 2H3a1 1 0 00-1 1v12a1 1 0 001 1h3.5"/><path d="M12 12.5l4-3.5-4-3.5"/><path d="M16 9H7"/></svg></a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-item"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l7-5 7 5v8a1 1 0 01-1 1H3a1 1 0 01-1-1V7z"/><path d="M7 16V10h4v6"/></svg>Главная</a>
+      <a href="#" class="sidebar-item active"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="6" r="3"/><path d="M3 16c0-3 2.7-5 6-5s6 2 6 5"/><path d="M13 3l3 3-3 3"/></svg>Регистрация</a>
+      <a href="#" class="sidebar-item"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6M6 12h3"/></svg>Документы</a>
+      <a href="#" class="sidebar-item"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>Услуги и сервисы</a>
+    </nav>
+    <a href="#" class="sidebar-collapse"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4L6 9l6 5"/></svg>Свернуть</a>
+  </aside>
+
+  <main class="main">
+    <div class="breadcrumbs"><a href="index.html">Главная</a><span class="breadcrumbs-sep">/</span><span>Единая регистрация клиентов</span></div>
+    <div class="page-header"><div><h1 class="page-title">Единая регистрация клиентов</h1><p class="page-subtitle">Регистрация новых клиентов на фондовом, валютном и срочном рынках</p></div></div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="registration">Регистрация клиентов</div>
+      <div class="tab" data-tab="reports">Отчеты по итогам регистрации</div>
+    </div>
+
+    <!-- TAB: Registration -->
+    <div class="tab-content active" id="tab-registration">
+
+      <!-- Help panel -->
+      <div class="help-panel">
+        <div class="help-panel-title"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="7"/><path d="M9 12v-3M9 6.5v0"/></svg>Справочные материалы</div>
+        <div class="help-panel-grid">
+          <div>
+            <div class="help-group-title">Документация</div>
+            <div class="help-panel-links">
+              <a href="https://fs.moex.com/files/10582/50842" class="help-panel-link" target="_blank"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 2h8a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M5 6h4M5 8h4"/></svg>Описание полей ЛКУ</a>
+              <a href="https://www.moex.com/a790" class="help-panel-link" target="_blank"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 2h8a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M5 6h4M5 8h4"/></svg>Технологические особенности регистрации</a>
+            </div>
+          </div>
+          <div>
+            <div class="help-group-title">Программное обеспечение</div>
+            <div class="help-panel-links">
+              <a href="#" class="help-panel-link"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v8M3 9l4 4 4-4"/><path d="M1 12h12"/></svg>MOEX Browser Plugin</a>
+              <a href="#" class="help-panel-link"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 3h8v8H3z"/><path d="M6 6h2v2H6z"/></svg>Настройка рабочего места для ЭП</a>
+            </div>
+          </div>
+          <div>
+            <div class="help-group-title">Примеры и шаблоны</div>
+            <div class="help-panel-links">
+              <a href="https://www.moex.com/a3361" class="help-panel-link" target="_blank"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v8M3 9l4 4 4-4"/><path d="M1 12h12"/></svg>Документы для организаций с собственным ПО</a>
+              <a href="#" class="help-panel-link"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 3h10v8H2z"/><path d="M5 6l2 2 2-2"/></svg>Примеры XML-файлов</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload -->
+      <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 24V10"/><path d="M12 16l6-6 6 6"/><path d="M6 26h24"/></svg>
+        <div class="upload-area-title">Загрузить из файла</div>
+        <div class="upload-area-desc">Перетащите XML-файл сюда или нажмите для выбора</div>
+        <input type="file" id="fileInput" accept=".xml" style="display:none">
+      </div>
+
+      <!-- General data -->
+      <div class="general-data">
+        <div class="general-data-title">Общие данные</div>
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Дата формирования файла</label><input type="date" class="form-input" value="2026-02-16"></div>
+          <div class="form-group"><label class="form-label">Уникод Участника</label><input type="text" class="form-input" placeholder="10 цифр" maxlength="10"></div>
+          <div class="form-group"><label class="form-label">Краткое наименование отправителя</label><input type="text" class="form-input" placeholder="Наименование организации"></div>
+          <div class="form-group wide"><label class="form-label">Текст примечания к файлу</label><textarea class="form-textarea" placeholder="Введите примечание (необязательно)"></textarea></div>
+          <div class="form-group wide"><div class="online-reg"><input type="checkbox" id="onlineReg"><div><div class="online-reg-text"><strong>Онлайн регистрация</strong></div><div class="online-reg-desc">Доступна для: добавления новых клиентов при наличии статуса онлайн регистрации; изменения статуса квалифицированного инвестора; изменения признака «Совершение кросс-сделок»; изменения «Категории уровня риска клиента» на срочном рынке</div></div></div></div>
+        </div>
+      </div>
+
+      <!-- 8 Sections -->
+      <div class="reg-section" id="section-broker">
+        <div class="reg-section-header" onclick="toggleSection('broker')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные об Участнике (Брокерская фирма / Управляющий / НПФ)</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-broker">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>ЕКК Управляющего</th><th>Краткий код</th><th>Квал. инвестор</th><th>ИНН</th><th></th></tr></thead><tbody id="tbody-broker"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('broker')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <div class="reg-section" id="section-funds">
+        <div class="reg-section-header" onclick="toggleSection('funds')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные о фондах Участника-Управляющего</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-funds">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>ЕКК Управляющего</th><th>ЕКК Фонда</th><th>Вид управления</th><th>Квал. инвестор</th><th></th></tr></thead><tbody id="tbody-funds"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('funds')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <div class="reg-section" id="section-trustees">
+        <div class="reg-section-header" onclick="toggleSection('trustees')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные об учредителях ДУ Участника-Управляющего</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-trustees">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>ЕКК Управляющего</th><th>ЕКК Учредителя ДУ</th><th>Тип клиента</th><th>ИИС</th><th></th></tr></thead><tbody id="tbody-trustees"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('trustees')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <div class="reg-section" id="section-own-clients">
+        <div class="reg-section-header" onclick="toggleSection('own-clients')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные о собственных клиентах Участника</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-own-clients">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>Тип клиента</th><th>ЕКК клиента</th><th>Кросс-сделки</th><th>ИНН</th><th></th></tr></thead><tbody id="tbody-own-clients"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('own-clients')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <div class="reg-section" id="section-client-manager">
+        <div class="reg-section-header" onclick="toggleSection('client-manager')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные о фондах Клиента-Управляющего</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-client-manager">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>ЕКК Клиента-Упр.</th><th>ЕКК Фонда</th><th>Вид управления</th><th>Квал. инвестор</th><th></th></tr></thead><tbody id="tbody-client-manager"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('client-manager')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <div class="reg-section" id="section-client-trustees">
+        <div class="reg-section-header" onclick="toggleSection('client-trustees')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные об учредителях ДУ Клиента-Управляющего</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-client-trustees">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>ЕКК Клиента-Упр.</th><th>ЕКК Учредителя ДУ</th><th>Тип клиента</th><th>ИИС</th><th></th></tr></thead><tbody id="tbody-client-trustees"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('client-trustees')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <div class="reg-section" id="section-sub-brokers">
+        <div class="reg-section-header" onclick="toggleSection('sub-brokers')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные о клиентах Клиента-Брокера</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-sub-brokers">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>ЕКК Брокера</th><th>ЕКК клиента</th><th>Тип клиента</th><th>Код клиента</th><th></th></tr></thead><tbody id="tbody-sub-brokers"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('sub-brokers')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <div class="reg-section" id="section-other">
+        <div class="reg-section-header" onclick="toggleSection('other')"><svg class="reg-section-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8l4 4 4-4"/></svg><div class="reg-section-title">Данные об иных лицах, участвующих в заключении сделки</div><div class="reg-section-badge"><span>Записей:</span><span class="reg-section-badge-count" id="count-other">0</span></div></div>
+        <div class="reg-section-body"><div class="section-table-wrap"><table class="section-table"><thead><tr><th>Тип операции</th><th>ЕКК субброкера</th><th>ЕКК клиента</th><th>Тип клиента</th><th>Код клиента</th><th></th></tr></thead><tbody id="tbody-other"><tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr></tbody></table></div><button class="add-record-btn" onclick="openModal('other')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>Добавить запись</button></div>
+      </div>
+
+      <!-- ACTION BAR -->
+      <div class="action-bar">
+        <button class="btn-outline" onclick="alert('Файл сохранен')">Сохранить</button>
+        <button class="btn-outline">Получить XML</button>
+        <div class="action-bar-right">
+          <button class="btn-secondary">Подписать</button>
+          <div class="ep-wrap">
+            <button class="btn-primary">Подписать ЭП, зашифровать и отправить</button>
+            <div class="ep-hint">Требуется MOEX Browser Plugin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Reports -->
+    <div class="tab-content" id="tab-reports">
+      <div class="general-data">
+        <div class="general-data-title">Отчеты по итогам регистрации клиента</div>
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr;"><div class="form-group"><label class="form-label">Дата с</label><input type="date" class="form-input" value="2026-01-16"></div><div class="form-group"><label class="form-label">Дата по</label><input type="date" class="form-input" value="2026-02-16"></div></div>
+        <div style="margin-top: 16px;"><button class="btn-primary">Найти отчеты</button></div>
+        <div class="section-table-wrap" style="margin-top: 20px;"><table class="section-table"><thead><tr><th>Дата отчета</th><th>Номер файла</th><th>Тип</th><th>Статус</th><th>Действия</th></tr></thead><tbody><tr><td colspan="5" class="section-table-empty">Нет данных за выбранный период</td></tr></tbody></table></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="modalTitle"></div><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l10 10M14 4L4 14"/></svg></button></div>
+    <div class="modal-body"><div class="modal-form-grid" id="modalForm"></div></div>
+    <div class="modal-footer"><button class="modal-btn-cancel" onclick="closeModal()">Отмена</button><button class="modal-btn-save" onclick="saveRecord()">Сохранить запись</button></div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const OP_TYPES = ['(A) Добавление нового клиента','(U) Изменение данных','(L) Добавление кратких кодов','(R) Удаление кратких кодов','(M) Привязка кодов к ЕКК','(D) Удаление клиента'];
+const MARKETS = ['(SE) Фондовый рынок','(CU) Валютный рынок','(FO) Срочный рынок','(CO) Товарный рынок'];
+const YES_NO = ['Да','Нет'];
+const CLIENT_TYPES = ['Физическое лицо / ИП','Юридическое лицо'];
+const DOC_TYPES = ['Паспорт РФ','Паспорт СССР','Свидетельство о рождении','Иной документ'];
+const MGMT_TYPES = ['Управляющий для ПИФ','Ипотечное покрытие','Пенсионные резервы НПФ','Пенсионные накопления НПФ','Пенсионные накопления ПФР','Военная ипотека'];
+const CROSS_DEALS = ['Кросс-сделки запрещены','Кросс-сделки разрешены'];
+const COUNTRIES = ['643 - Российская Федерация','840 - США','826 - Великобритания','276 - Германия','756 - Швейцария','156 - Китай','392 - Япония','000 - Без гражданства'];
+const LICENSES = ['Управляющий фондами','Управляющий для одного учредителя','Управляющий для группы учредителей','Брокерское обслуживание'];
+
+const SECTIONS = {
+  broker: {
+    title: 'Добавить запись: Участник (БФ / Управляющий / НПФ)',
+    tableCols: ['operationType','ekk','shortCode','qualInvestor','inn'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES.slice(0,5),required:true},
+      {key:'hasEKK',label:'ЕКК присвоен?',type:'select',options:YES_NO,required:true},
+      {key:'ekk',label:'ЕКК Управляющего',type:'text',placeholder:'До 12 символов',maxlength:12,required:true},
+      {key:'marketCode',label:'Краткий код: Рынок',type:'select',options:MARKETS,conditional:{field:'hasEKK',value:'Нет'}},
+      {key:'shortCode',label:'Краткий код: Код',type:'text',placeholder:'Код участника',conditional:{field:'hasEKK',value:'Нет'}},
+      {key:'_div1',type:'divider'},
+      {key:'qualInvestor',label:'Квалифицированный инвестор',type:'select',options:YES_NO,required:true},
+      {key:'inn',label:'ИНН',type:'text',placeholder:'10 цифр',maxlength:10,required:true},
+      {key:'_div2',type:'divider'},{key:'_title1',type:'section_title',label:'Лицензионная деятельность'},
+      {key:'licenses',label:'Лицензионная деятельность',type:'checkboxes',options:LICENSES,fullWidth:true,required:true}
+    ]
+  },
+  funds: {
+    title: 'Добавить запись: Фонды Управляющего',
+    tableCols: ['operationType','ekkManager','ekkFund','managementType','qualInvestor'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES,required:true},
+      {key:'ekkManager',label:'ЕКК Управляющего',type:'text',placeholder:'До 12 символов',maxlength:12},
+      {key:'managerMarket',label:'Код Управляющего: Рынок',type:'select',options:MARKETS},
+      {key:'managerCode',label:'Код Управляющего: Код',type:'text',placeholder:'Код'},
+      {key:'_div1',type:'divider'},{key:'_t1',type:'section_title',label:'Данные фонда'},
+      {key:'ekkFund',label:'ЕКК Фонда',type:'text',placeholder:'До 12 символов',maxlength:12,required:true},
+      {key:'fundMarket',label:'Код фонда: Рынок',type:'select',options:MARKETS},
+      {key:'fundCode',label:'Код фонда: Код',type:'text',placeholder:'Код'},
+      {key:'fundCodeName',label:'Наименование кода',type:'text',placeholder:'Наименование'},
+      {key:'qualInvestor',label:'Квалифицированный инвестор',type:'select',options:YES_NO,required:true},
+      {key:'managementType',label:'Вид управления',type:'select',options:MGMT_TYPES,required:true},
+      {key:'regNumber',label:'Гос. рег. номер выпуска',type:'text',placeholder:'До 20 символов',maxlength:20},
+      {key:'innNPF',label:'ИНН НПФ',type:'text',placeholder:'10 цифр',maxlength:10},
+      {key:'innPFR',label:'ИНН ПФР',type:'text',placeholder:'10 цифр',maxlength:10}
+    ]
+  },
+  trustees: {
+    title: 'Добавить запись: Учредители ДУ Участника',
+    tableCols: ['operationType','ekkManager','ekkTrustee','clientType','iis'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES,required:true},
+      {key:'ekkManager',label:'ЕКК Управляющего',type:'text',maxlength:12},
+      {key:'managerMarket',label:'Код Управляющего: Рынок',type:'select',options:MARKETS},
+      {key:'managerCode',label:'Код Управляющего: Код',type:'text'},
+      {key:'_div1',type:'divider'},{key:'_t1',type:'section_title',label:'Данные Учредителя ДУ'},
+      {key:'ekkTrustee',label:'ЕКК Учредителя ДУ',type:'text',maxlength:12,required:true},
+      {key:'trusteeMarket',label:'Код Учредителя ДУ: Рынок',type:'select',options:MARKETS},
+      {key:'trusteeCode',label:'Код Учредителя ДУ: Код',type:'text'},
+      {key:'qualInvestor',label:'Квалифицированный инвестор',type:'select',options:YES_NO,required:true},
+      {key:'clientType',label:'Тип клиента',type:'select',options:CLIENT_TYPES,required:true},
+      {key:'country',label:'Страна',type:'select',options:COUNTRIES,required:true},
+      {key:'documentType',label:'Тип документа',type:'select',options:DOC_TYPES,conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'documentData',label:'Данные документа',type:'text',placeholder:'Серия и номер',conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'iis',label:'Наличие договора ИИС',type:'select',options:YES_NO,conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'inn',label:'ИНН',type:'text',maxlength:10,conditional:{field:'clientType',value:'Юридическое лицо'},required:true}
+    ]
+  },
+  'own-clients': {
+    title: 'Добавить запись: Собственные клиенты Участника',
+    tableCols: ['operationType','clientType','ekkClient','crossDeals','inn'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES,required:true},
+      {key:'isNonResident',label:'Участник клиринга-нерезидент?',type:'select',options:YES_NO,required:true},
+      {key:'clientType',label:'Тип клиента',type:'select',options:CLIENT_TYPES,required:true},
+      {key:'ekkClient',label:'ЕКК клиента',type:'text',maxlength:12,required:true},
+      {key:'clientMarket',label:'Код клиента: Рынок',type:'select',options:MARKETS,required:true},
+      {key:'clientCode',label:'Код клиента: Код',type:'text',required:true},
+      {key:'clientCodeName',label:'Наименование кода',type:'text'},
+      {key:'kpd',label:'КПД',type:'text',placeholder:'Код получателя дохода'},
+      {key:'crossDeals',label:'Совершение кросс-сделок',type:'select',options:CROSS_DEALS,required:true},
+      {key:'iis',label:'Наличие договора ИИС',type:'select',options:YES_NO,conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'founderGroup',label:'Принадлежность к группе учредителей',type:'select',options:YES_NO,conditional:{field:'clientType',value:'Юридическое лицо'}},
+      {key:'_div1',type:'divider'},{key:'_t1',type:'section_title',label:'Идентификация'},
+      {key:'country',label:'Страна',type:'select',options:COUNTRIES,required:true},
+      {key:'documentType',label:'Тип документа',type:'select',options:DOC_TYPES,conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'documentData',label:'Данные документа',type:'text',conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'inn',label:'ИНН',type:'text',maxlength:10,required:true},
+      {key:'bankLicense',label:'Валютная банковская лицензия',type:'select',options:YES_NO,conditional:{field:'clientType',value:'Юридическое лицо'}},
+      {key:'insuranceLicense',label:'Лицензия на страхование',type:'select',options:YES_NO,conditional:{field:'clientType',value:'Юридическое лицо'}}
+    ]
+  },
+  'client-manager': {
+    title: 'Добавить запись: Фонды Клиента-Управляющего',
+    tableCols: ['operationType','ekkClientManager','ekkFund','managementType','qualInvestor'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES.filter(o=>!o.includes('(M)')),required:true},
+      {key:'ekkClientManager',label:'ЕКК Клиента-Управляющего',type:'text',maxlength:12},
+      {key:'clientManagerMarket',label:'Код Клиента-Упр.: Рынок',type:'select',options:MARKETS},
+      {key:'clientManagerCode',label:'Код Клиента-Упр.: Код',type:'text'},
+      {key:'_div1',type:'divider'},{key:'_t1',type:'section_title',label:'Данные фонда'},
+      {key:'ekkFund',label:'ЕКК Фонда',type:'text',maxlength:12,required:true},
+      {key:'fundMarket',label:'Код фонда: Рынок',type:'select',options:MARKETS},
+      {key:'fundCode',label:'Код фонда: Код',type:'text'},
+      {key:'fundCodeName',label:'Наименование кода',type:'text'},
+      {key:'qualInvestor',label:'Квалифицированный инвестор',type:'select',options:YES_NO,required:true},
+      {key:'managementType',label:'Вид управления',type:'select',options:MGMT_TYPES,required:true},
+      {key:'regNumber',label:'Гос. рег. номер выпуска',type:'text',maxlength:20},
+      {key:'innNPF',label:'ИНН НПФ',type:'text',maxlength:10}
+    ]
+  },
+  'client-trustees': {
+    title: 'Добавить запись: Учредители ДУ Клиента-Управляющего',
+    tableCols: ['operationType','ekkClientManager','ekkTrustee','clientType','iis'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES,required:true},
+      {key:'ekkClientManager',label:'ЕКК Клиента-Управляющего',type:'text',maxlength:12},
+      {key:'clientManagerMarket',label:'Код Клиента-Упр.: Рынок',type:'select',options:MARKETS},
+      {key:'clientManagerCode',label:'Код Клиента-Упр.: Код',type:'text'},
+      {key:'_div1',type:'divider'},{key:'_t1',type:'section_title',label:'Данные Учредителя ДУ'},
+      {key:'ekkTrustee',label:'ЕКК Учредителя ДУ',type:'text',maxlength:12,required:true},
+      {key:'trusteeMarket',label:'Код Учредителя ДУ: Рынок',type:'select',options:MARKETS},
+      {key:'trusteeCode',label:'Код Учредителя ДУ: Код',type:'text'},
+      {key:'qualInvestor',label:'Квалифицированный инвестор',type:'select',options:YES_NO,required:true},
+      {key:'clientType',label:'Тип клиента',type:'select',options:CLIENT_TYPES,required:true},
+      {key:'country',label:'Страна',type:'select',options:COUNTRIES,required:true},
+      {key:'documentType',label:'Тип документа',type:'select',options:DOC_TYPES,conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'documentData',label:'Данные документа',type:'text',conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'iis',label:'Наличие договора ИИС',type:'select',options:YES_NO,conditional:{field:'clientType',value:'Физическое лицо / ИП'}},
+      {key:'inn',label:'ИНН',type:'text',maxlength:10,conditional:{field:'clientType',value:'Юридическое лицо'}}
+    ]
+  },
+  'sub-brokers': {
+    title: 'Добавить запись: Клиенты Клиента-Брокера',
+    tableCols: ['operationType','ekkBroker','ekkClient','clientType','clientCode'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES.filter(o=>!o.includes('(M)')),required:true},
+      {key:'ekkBroker',label:'ЕКК Брокера',type:'text',maxlength:12,required:true},
+      {key:'brokerCode',label:'Код Брокера',type:'text'},
+      {key:'ekkClient',label:'ЕКК клиента',type:'text',maxlength:12,required:true},
+      {key:'clientMarket',label:'Код клиента: Рынок',type:'select',options:MARKETS},
+      {key:'clientCode',label:'Код клиента: Код',type:'text'},
+      {key:'clientCodeName',label:'Наименование кода',type:'text'},
+      {key:'clientType',label:'Тип клиента',type:'select',options:CLIENT_TYPES,required:true}
+    ]
+  },
+  other: {
+    title: 'Добавить запись: Иные лица',
+    tableCols: ['operationType','ekkSubbroker','ekkClient','clientType','clientCode'],
+    fields: [
+      {key:'operationType',label:'Тип операции',type:'select',options:OP_TYPES.filter(o=>!o.includes('(M)')),required:true},
+      {key:'ekkSubbroker',label:'ЕКК субброкера',type:'text',maxlength:12,required:true},
+      {key:'subbrokerCode',label:'Код субброкера',type:'text'},
+      {key:'ekkClient',label:'ЕКК клиента',type:'text',maxlength:12,required:true},
+      {key:'clientMarket',label:'Код клиента: Рынок',type:'select',options:MARKETS},
+      {key:'clientCode',label:'Код клиента: Код',type:'text'},
+      {key:'clientCodeName',label:'Наименование кода',type:'text'},
+      {key:'clientType',label:'Тип клиента',type:'select',options:CLIENT_TYPES,required:true}
+    ]
+  }
+};
+
+// Records storage
+const records = {};
+Object.keys(SECTIONS).forEach(k => records[k] = []);
+let currentSection = null;
+
+// ===== TABS =====
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== COLLAPSIBLE SECTIONS =====
+function toggleSection(id) {
+  document.getElementById('section-' + id).classList.toggle('open');
+}
+
+// ===== MODAL =====
+function openModal(sectionId) {
+  currentSection = sectionId;
+  const cfg = SECTIONS[sectionId];
+  document.getElementById('modalTitle').textContent = cfg.title;
+  const form = document.getElementById('modalForm');
+  form.innerHTML = '';
+
+  cfg.fields.forEach(f => {
+    if (f.type === 'divider') { form.innerHTML += '<div class="modal-section-divider"></div>'; return; }
+    if (f.type === 'section_title') { form.innerHTML += '<div class="modal-section-title">' + f.label + '</div>'; return; }
+
+    const isConditional = f.conditional;
+    const cls = ['modal-form-group'];
+    if (f.required) cls.push('required');
+    if (f.fullWidth || f.type === 'checkboxes') cls.push('full-width');
+    if (isConditional) cls.push('conditional-field');
+
+    let html = '<div class="' + cls.join(' ') + '"' + (isConditional ? ' data-depends="' + f.conditional.field + '" data-value="' + f.conditional.value + '"' : '') + '>';
+    html += '<label class="modal-form-label">' + f.label + '</label>';
+
+    if (f.type === 'text') {
+      html += '<input class="modal-form-input" data-key="' + f.key + '" type="text"' + (f.placeholder ? ' placeholder="' + f.placeholder + '"' : '') + (f.maxlength ? ' maxlength="' + f.maxlength + '"' : '') + '>';
+    } else if (f.type === 'select') {
+      html += '<select class="modal-form-select" data-key="' + f.key + '"><option value="">-- Выберите --</option>';
+      f.options.forEach(o => html += '<option value="' + o + '">' + o + '</option>');
+      html += '</select>';
+    } else if (f.type === 'checkboxes') {
+      html += '<div class="modal-form-checkboxes">';
+      f.options.forEach(o => html += '<label class="modal-form-checkbox-item"><input type="checkbox" data-key="' + f.key + '" value="' + o + '">' + o + '</label>');
+      html += '</div>';
+    }
+    html += '<div class="modal-form-error">Обязательное поле</div></div>';
+    form.innerHTML += html;
+  });
+
+  // Attach conditional logic
+  form.querySelectorAll('.modal-form-select, .modal-form-input').forEach(el => {
+    el.addEventListener('change', handleConditionalFields);
+  });
+
+  document.getElementById('modalOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+  currentSection = null;
+}
+
+function handleConditionalFields() {
+  const form = document.getElementById('modalForm');
+  form.querySelectorAll('.conditional-field').forEach(el => {
+    const dep = el.dataset.depends;
+    const val = el.dataset.value;
+    const sourceEl = form.querySelector('[data-key="' + dep + '"]');
+    if (sourceEl && sourceEl.value === val) {
+      el.classList.add('visible');
+    } else {
+      el.classList.remove('visible');
+    }
+  });
+}
+
+function saveRecord() {
+  const form = document.getElementById('modalForm');
+  let valid = true;
+
+  // Clear errors
+  form.querySelectorAll('.modal-form-group.error').forEach(g => g.classList.remove('error'));
+
+  // Validate required visible fields
+  form.querySelectorAll('.modal-form-group.required').forEach(group => {
+    if (group.classList.contains('conditional-field') && !group.classList.contains('visible')) return;
+    const input = group.querySelector('.modal-form-input, .modal-form-select');
+    if (input && !input.value) {
+      group.classList.add('error');
+      valid = false;
+    }
+    // checkboxes
+    const cbs = group.querySelectorAll('input[type="checkbox"]');
+    if (cbs.length > 0 && !Array.from(cbs).some(cb => cb.checked)) {
+      group.classList.add('error');
+      valid = false;
+    }
+  });
+
+  if (!valid) {
+    const firstErr = form.querySelector('.modal-form-group.error');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Collect data
+  const data = {};
+  form.querySelectorAll('[data-key]').forEach(el => {
+    if (el.type === 'checkbox') {
+      if (!data[el.dataset.key]) data[el.dataset.key] = [];
+      if (el.checked) data[el.dataset.key].push(el.value);
+    } else {
+      data[el.dataset.key] = el.value;
+    }
+  });
+
+  records[currentSection].push(data);
+  renderTable(currentSection);
+  closeModal();
+
+  // Open section if closed
+  const sec = document.getElementById('section-' + currentSection);
+  if (!sec.classList.contains('open')) sec.classList.add('open');
+}
+
+function deleteRecord(sectionId, idx) {
+  records[sectionId].splice(idx, 1);
+  renderTable(sectionId);
+}
+
+function renderTable(sectionId) {
+  const cfg = SECTIONS[sectionId];
+  const tbody = document.getElementById('tbody-' + sectionId);
+  const countEl = document.getElementById('count-' + sectionId);
+  const recs = records[sectionId];
+
+  countEl.textContent = recs.length;
+  countEl.classList.toggle('has-records', recs.length > 0);
+
+  if (recs.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="section-table-empty">Нет добавленных записей</td></tr>';
+    return;
+  }
+
+  let html = '';
+  recs.forEach((rec, i) => {
+    html += '<tr>';
+    cfg.tableCols.forEach(col => {
+      let val = rec[col] || '';
+      if (Array.isArray(val)) val = val.join(', ');
+      if (val.length > 30) val = val.substring(0, 28) + '...';
+      html += '<td>' + val + '</td>';
+    });
+    html += '<td><div class="table-actions">';
+    html += '<button class="table-action-btn delete" onclick="deleteRecord(\'' + sectionId + '\',' + i + ')" title="Удалить"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 4h10M5 4V3a1 1 0 011-1h2a1 1 0 011 1v1M11 4v7a1 1 0 01-1 1H4a1 1 0 01-1-1V4"/></svg></button>';
+    html += '</div></td></tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// Close modal on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
