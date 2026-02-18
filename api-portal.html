@@ -5,50 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>API Portal — MOEX Цифровая Платформа</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="header.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; overflow-x: hidden; }
 a { text-decoration: none; color: inherit; cursor: pointer; }
 button { cursor: pointer; font-family: inherit; border: none; background: none; }
 code, .code { font-family: 'JetBrains Mono', monospace; }
-
-/* ===== HEADER ===== */
-.header { display: flex; align-items: center; height: 56px; background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
-.header-logo { display: flex; align-items: center; gap: 8px; margin-right: 24px; }
-.header-logo-text { font-size: 10px; font-weight: 700; line-height: 1.2; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.02em; }
-.header-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
-.header-icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #333; transition: background 0.15s; }
-.header-icon-btn:hover { background: #f5f5f5; }
-.header-lang { font-size: 13px; font-weight: 500; color: #666; padding: 6px 10px; border: 1px solid #e5e5e5; border-radius: 8px; margin-right: 8px; }
-.header-notif-btn { position: relative; }
-.header-notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: #cc0000; border-radius: 50%; border: 1.5px solid #fff; }
-.header-user { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-left: 4px; }
-.header-user:hover { background: #f5f5f5; }
-.header-user svg { width: 20px; height: 20px; color: #666; }
-.header-user-info { display: flex; flex-direction: column; }
-.header-user-name { font-weight: 600; font-size: 13px; }
-.header-user-org { font-size: 11px; color: #999; }
-
-/* ===== LAYOUT ===== */
-.layout { display: flex; min-height: calc(100vh - 56px); }
-
-/* ===== SIDEBAR ===== */
-.sidebar { width: 220px; min-width: 220px; background: #fff; border-right: 1px solid #e5e5e5; padding: 16px 0; display: flex; flex-direction: column; }
-.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
-.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; font-weight: 500; color: #333; transition: background 0.15s; position: relative; }
-.sidebar-item:hover { background: #f9f9f9; }
-.sidebar-item.active { color: #CC0000; font-weight: 600; background: #fff5f5; }
-.sidebar-item.active::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: 3px; background: #CC0000; border-radius: 0 2px 2px 0; }
-.sidebar-item svg { width: 18px; height: 18px; color: #666; flex-shrink: 0; }
-.sidebar-item.active svg { color: #CC0000; }
-.sidebar-section-title { padding: 20px 20px 8px; font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.06em; }
-.sidebar-badge { background: #e8f5e9; color: #2e7d32; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: auto; }
-.sidebar-badge.beta { background: #fff3e0; color: #e65100; }
-.sidebar-badge.new { background: #e3f2fd; color: #1565c0; }
-.sidebar-divider { height: 1px; background: #f0f0f0; margin: 12px 20px; }
-.sidebar-collapse { margin-top: auto; padding: 12px 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #666; }
-.sidebar-collapse:hover { background: #f9f9f9; }
-.sidebar-collapse svg { width: 18px; height: 18px; }
 
 /* ===== MAIN ===== */
 .main { flex: 1; padding: 24px 32px 48px; overflow-y: auto; max-width: 1100px; }
@@ -213,8 +176,6 @@ code, .code { font-family: 'JetBrains Mono', monospace; }
   .main { padding: 20px 24px 36px; }
 }
 @media (max-width: 768px) {
-  .sidebar { display: none; }
-  .header { padding: 0 16px; }
   .main { padding: 16px; max-width: 100%; }
   .api-hero { padding: 28px 24px; border-radius: 16px; }
   .api-hero h1 { font-size: 24px; }
@@ -227,9 +188,6 @@ code, .code { font-family: 'JetBrains Mono', monospace; }
   .docs-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
-  .header { height: 48px; padding: 0 12px; }
-  .header-logo-text { display: none; }
-  .layout { min-height: calc(100vh - 48px); }
   .main { padding: 12px; }
   .api-hero { padding: 20px; }
   .api-hero h1 { font-size: 20px; }
@@ -246,102 +204,7 @@ code, .code { font-family: 'JetBrains Mono', monospace; }
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <a href="index.html" class="header-logo">
-    <div class="header-logo-text">ЦИФРОВАЯ<br>ПЛАТФОРМА</div>
-  </a>
-  <div class="header-right">
-    <a href="#" class="header-icon-btn" title="Поиск">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M12 12l4 4"/></svg>
-    </a>
-    <a href="#" class="header-icon-btn" title="Поддержка">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10V8a6 6 0 0112 0v2"/><path d="M1 11v2a2 2 0 002 2h1v-6H3a2 2 0 00-2 2zM17 11v2a2 2 0 01-2 2h-1v-6h1a2 2 0 012 2z"/></svg>
-    </a>
-    <a href="#" class="header-icon-btn header-notif-btn" title="Уведомления">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 6.5a4.5 4.5 0 10-9 0c0 5-2 6.5-2 6.5h13s-2-1.5-2-6.5M10.3 15a1.5 1.5 0 01-2.6 0"/></svg>
-      <span class="header-notif-dot"></span>
-    </a>
-    <a href="#" class="header-lang">RU</a>
-    <a href="#" class="header-user">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="4"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>
-      <div class="header-user-info">
-        <span class="header-user-name">Иванов И.И.</span>
-        <span class="header-user-org">ОАО «Газпром»</span>
-      </div>
-    </a>
-    <a href="login.html" class="header-icon-btn" title="Выйти">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 2H3a1 1 0 00-1 1v12a1 1 0 001 1h3.5"/><path d="M12 12.5l4-3.5-4-3.5"/><path d="M16 9H7"/></svg>
-    </a>
-  </div>
-</header>
-
 <div class="layout">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <nav class="sidebar-nav">
-      <a href="#" class="sidebar-item active">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h14v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/><path d="M2 4l7 5 7-5"/></svg>
-        Обзор API
-      </a>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>
-        Каталог API
-      </a>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6M6 12h3"/></svg>
-        Документация
-      </a>
-
-      <div class="sidebar-section-title">Рыночные данные</div>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13l4-4 3 3 5-5"/><path d="M11 7h3v3"/></svg>
-        Market Data API
-        <span class="sidebar-badge">v3</span>
-      </a>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v12h12"/><path d="M6 12V9M9 12V7M12 12V5"/></svg>
-        Historical Data API
-      </a>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9h3l2-5 3 10 2-5h4"/></svg>
-        Streaming API
-        <span class="sidebar-badge beta">WS</span>
-      </a>
-
-      <div class="sidebar-section-title">Торговля</div>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2v14M5 6l4-4 4 4M5 12l4 4 4-4"/></svg>
-        Trading API
-      </a>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M7 8l2 2 4-4"/></svg>
-        FIX Gateway
-      </a>
-
-      <div class="sidebar-section-title">Инструменты</div>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h12v12H3z"/><path d="M3 7h12M7 7v8"/></svg>
-        Sandbox
-        <span class="sidebar-badge new">NEW</span>
-      </a>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3v4l3 2"/><circle cx="9" cy="9" r="7"/></svg>
-        SDK & Библиотеки
-      </a>
-      <a href="#" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="7"/><path d="M9 6v6M6 9h6"/></svg>
-        Changelog
-      </a>
-
-      <div class="sidebar-divider"></div>
-      <a href="index.html" class="sidebar-item">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4L6 9l6 5"/></svg>
-        Назад на платформу
-      </a>
-    </nav>
-  </aside>
-
   <!-- MAIN -->
   <main class="main">
 
@@ -852,5 +715,6 @@ function copyCode() {
 }
 </script>
 
+<script src="header.js"></script>
 </body>
 </html>
