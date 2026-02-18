@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход — MOEX Цифровая Платформа</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #fff; color: #1a1a1a; font-size: 14px; line-height: 1.5; overflow: hidden; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+
+/* ===== LAYOUT ===== */
+.login-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== LEFT PANEL ===== */
+.login-left {
+  width: 280px;
+  min-width: 280px;
+  background: #CC0000;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Декоративные элементы вместо фото */
+.login-left-decor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.login-left-decor::before {
+  content: '';
+  position: absolute;
+  top: 120px;
+  left: -20px;
+  width: 160px;
+  height: 160px;
+  background: rgba(0,0,0,0.15);
+  transform: rotate(15deg);
+}
+.login-left-decor::after {
+  content: '';
+  position: absolute;
+  top: 100px;
+  left: 40px;
+  width: 120px;
+  height: 400px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+}
+.login-left-decor-2 {
+  position: absolute;
+  top: 150px;
+  left: 100px;
+  width: 100px;
+  height: 350px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 4px;
+  z-index: 1;
+}
+.login-left-decor-3 {
+  position: absolute;
+  top: 200px;
+  left: 160px;
+  width: 80px;
+  height: 300px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px;
+  z-index: 1;
+}
+/* Градиент сверху для читаемости логотипа */
+.login-left-gradient-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(180deg, #CC0000 0%, transparent 100%);
+  z-index: 2;
+}
+/* Градиент снизу для читаемости копирайта */
+.login-left-gradient-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(0deg, #CC0000 0%, transparent 100%);
+  z-index: 2;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 20px;
+  position: relative;
+  z-index: 3;
+}
+.login-logo-icon {
+  display: flex;
+  align-items: center;
+}
+.login-logo-text {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.login-left-footer {
+  margin-top: auto;
+  padding: 20px;
+  position: relative;
+  z-index: 3;
+}
+.login-socials {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.login-social-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s;
+}
+.login-social-btn:hover { opacity: 0.8; }
+.login-social-btn svg { width: 18px; height: 18px; }
+.login-copyright {
+  font-size: 10px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.4;
+}
+
+/* ===== RIGHT PANEL ===== */
+.login-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #fff;
+}
+.login-lang {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  padding: 6px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.login-lang:hover { background: #f5f5f5; }
+
+/* ===== FORM ===== */
+.login-form-wrap {
+  width: 100%;
+  max-width: 380px;
+  padding: 0 20px;
+}
+.login-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Error message */
+.login-error {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fff5f5;
+  border: 1px solid #ffe0e0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
+.login-error.visible { display: flex; }
+.login-error-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #CC0000;
+}
+
+/* Input fields */
+.login-field {
+  position: relative;
+  margin-bottom: 16px;
+}
+.login-field label {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-size: 12px;
+  color: #999;
+  pointer-events: none;
+  transition: all 0.2s;
+}
+.login-field label .required {
+  color: #CC0000;
+  margin-left: 2px;
+}
+.login-field input {
+  width: 100%;
+  padding: 28px 12px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a1a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.login-field input:focus {
+  border-color: #999;
+}
+.login-field-password {
+  position: relative;
+}
+.login-toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.15s;
+}
+.login-toggle-password:hover { color: #666; }
+.login-toggle-password svg { width: 20px; height: 20px; }
+
+/* Forgot password */
+.login-forgot {
+  display: inline-block;
+  font-size: 13px;
+  color: #7B61FF;
+  margin-bottom: 20px;
+  transition: opacity 0.15s;
+}
+.login-forgot:hover { opacity: 0.7; }
+
+/* Submit button */
+.login-submit {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f0f0f0;
+  color: #999;
+  margin-bottom: 20px;
+}
+.login-submit.active {
+  background: #CC0000;
+  color: #fff;
+}
+.login-submit.active:hover {
+  background: #b30000;
+}
+
+/* Register link */
+.login-register {
+  font-size: 13px;
+  color: #333;
+}
+.login-register a {
+  color: #7B61FF;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+.login-register a:hover { opacity: 0.7; }
+
+/* ===== ESIA / Госуслуги ===== */
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+}
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e5e5;
+}
+.login-divider span {
+  font-size: 12px;
+  color: #999;
+  font-weight: 500;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.esia-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid #0065B1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #0065B1;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.esia-btn:hover {
+  background: #F0F7FF;
+  border-color: #004E8C;
+  color: #004E8C;
+}
+.esia-btn:active {
+  background: #E0EFFF;
+}
+.esia-btn svg {
+  flex-shrink: 0;
+}
+.esia-btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+.esia-btn-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.esia-btn-sub {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .login-left { display: none; }
+  .login-right { padding: 20px; }
+}
+
+@media (max-width: 480px) {
+  .login-title { font-size: 22px; }
+  .login-form-wrap { padding: 0 12px; }
+  .login-lang { top: 12px; right: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="login-layout">
+
+  <!-- LEFT PANEL -->
+  <div class="login-left">
+    <div class="login-left-decor"></div>
+    <div class="login-left-decor-2"></div>
+    <div class="login-left-decor-3"></div>
+    <div class="login-left-gradient-top"></div>
+    <div class="login-left-gradient-bottom"></div>
+
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg width="52" height="28" viewBox="0 0 52 28" fill="none">
+          <rect x="0" y="0" width="52" height="28" rx="4" fill="rgba(255,255,255,0.2)"/>
+          <text x="4" y="20" font-size="16" font-weight="800" fill="#fff" font-family="Inter,sans-serif">MOEX</text>
+        </svg>
+      </div>
+      <div class="login-logo-text">МОСКОВСКАЯ<br>БИРЖА</div>
+    </div>
+
+    <div class="login-left-footer">
+      <div class="login-socials">
+        <a href="#" class="login-social-btn" title="Telegram">
+          <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.28-.02-.12.03-2.02 1.28-5.69 3.77-.54.37-1.03.55-1.47.54-.48-.01-1.4-.27-2.09-.49-.84-.28-1.51-.42-1.45-.89.03-.25.38-.5 1.04-.76 4.09-1.78 6.82-2.96 8.18-3.52 3.9-1.62 4.7-1.9 5.23-1.91.12 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .37z"/></svg>
+        </a>
+        <a href="#" class="login-social-btn" title="VK">
+          <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.92 13.56h-1.46c-.55 0-.72-.45-1.7-1.44-.86-.82-1.22-.93-1.43-.93-.3 0-.38.08-.38.48v1.32c0 .34-.11.55-1 .55-1.48 0-3.12-.9-4.27-2.56C4.21 10.7 3.76 9 3.76 8.7c0-.21.08-.4.48-.4h1.46c.36 0 .5.16.63.54.7 2.02 1.87 3.79 2.35 3.79.18 0 .26-.08.26-.54V10.4c-.06-.9-.53-.97-.53-1.29 0-.16.13-.32.35-.32h2.3c.3 0 .4.16.4.52v2.82c0 .3.13.4.22.4.18 0 .33-.1.66-.44 1.02-1.14 1.75-2.9 1.75-2.9.1-.21.27-.4.63-.4h1.46c.44 0 .54.23.44.52-.18.87-1.93 3.3-1.93 3.3-.15.25-.21.36 0 .64.15.2.64.64.97 1.03.61.7 1.07 1.3 1.2 1.7.13.4-.08.6-.48.6z"/></svg>
+        </a>
+      </div>
+      <div class="login-copyright">
+        &copy; Московская Биржа, 2011 – 2026. Все права на<br>
+        информацию и материалы, размещенные на настоящем<br>
+        сайте, защищены в соответствии с законодательством.
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="login-right">
+    <a href="#" class="login-lang">RU</a>
+
+    <div class="login-form-wrap">
+      <h1 class="login-title">Войти на цифровую<br>платформу</h1>
+
+      <!-- Error -->
+      <div class="login-error" id="loginError">
+        <svg class="login-error-icon" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="9" stroke="#CC0000" stroke-width="1.5"/>
+          <path d="M10 6v5" stroke="#CC0000" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="10" cy="14" r="0.75" fill="#CC0000"/>
+        </svg>
+        <span>Неверная почта или пароль. Проверьте данные</span>
+      </div>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="login-field">
+          <label for="email">Электронная почта<span class="required">*</span></label>
+          <input type="text" id="email" name="email" required>
+        </div>
+
+        <div class="login-field login-field-password">
+          <label for="password">Пароль<span class="required">*</span></label>
+          <input type="password" id="password" name="password" required>
+          <button type="button" class="login-toggle-password" id="togglePassword" tabindex="-1">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M1 10s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/>
+              <circle cx="10" cy="10" r="3"/>
+            </svg>
+          </button>
+        </div>
+
+        <a href="#" class="login-forgot">Забыли пароль?</a>
+
+        <button type="submit" class="login-submit" id="submitBtn">Войти</button>
+      </form>
+
+      <div class="login-register">
+        Ещё не зарегистрированы? <a href="#">Зарегистрироваться</a>
+      </div>
+
+      <!-- Разделитель -->
+      <div class="login-divider"><span>или</span></div>
+
+      <!-- Кнопка входа через Госуслуги (ЕСИА) -->
+      <a href="esia-auth.html" class="esia-btn" id="esiaBtn">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Госуслуги shield icon -->
+          <rect width="28" height="28" rx="6" fill="#0065B1"/>
+          <path d="M14 4L6 8v4c0 5.55 3.42 10.74 8 12 4.58-1.26 8-6.45 8-12V8l-8-4z" fill="#fff" opacity="0.9"/>
+          <path d="M12.5 16.5l-2.5-2.5 1.06-1.06L12.5 14.38l4.44-4.44L18 11l-5.5 5.5z" fill="#0065B1"/>
+        </svg>
+        <span class="esia-btn-text">
+          <span class="esia-btn-label">Войти через Госуслуги</span>
+          <span class="esia-btn-sub">ЕСИА — единая система идентификации</span>
+        </span>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const submitBtn = document.getElementById('submitBtn');
+const loginError = document.getElementById('loginError');
+const togglePassword = document.getElementById('togglePassword');
+const loginForm = document.getElementById('loginForm');
+
+// Toggle button active state
+function updateSubmitState() {
+  if (emailInput.value.trim() && passwordInput.value.trim()) {
+    submitBtn.classList.add('active');
+  } else {
+    submitBtn.classList.remove('active');
+  }
+}
+emailInput.addEventListener('input', () => { loginError.classList.remove('visible'); updateSubmitState(); });
+passwordInput.addEventListener('input', () => { loginError.classList.remove('visible'); updateSubmitState(); });
+
+// Toggle password visibility
+togglePassword.addEventListener('click', () => {
+  const type = passwordInput.type === 'password' ? 'text' : 'password';
+  passwordInput.type = type;
+});
+
+// Form submit
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (email === '12345' && password === '12345') {
+    window.location.href = 'index.html';
+  } else {
+    loginError.classList.add('visible');
+  }
+});
+</script>
+
+</body>
+</html>

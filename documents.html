@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подать документ — MOEX Цифровая Платформа</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ===== HEADER ===== */
+.header { display: flex; align-items: center; height: 56px; background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+.header-logo { display: flex; align-items: center; gap: 8px; margin-right: 24px; }
+.header-logo-icon { width: 40px; height: 28px; display: flex; align-items: center; }
+.header-logo-icon svg { width: 100%; height: 100%; }
+.header-logo-text { font-size: 10px; font-weight: 700; line-height: 1.2; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.02em; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.header-icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #333; transition: background 0.15s; }
+.header-icon-btn:hover { background: #f5f5f5; }
+.header-lang { font-size: 13px; font-weight: 500; color: #666; padding: 6px 10px; border: 1px solid #e5e5e5; border-radius: 8px; margin-right: 8px; }
+.header-notif-btn { position: relative; }
+.header-notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: #cc0000; border-radius: 50%; border: 1.5px solid #fff; }
+.header-user { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-left: 4px; }
+.header-user:hover { background: #f5f5f5; }
+.header-user svg { width: 20px; height: 20px; color: #666; }
+.header-user-info { display: flex; flex-direction: column; }
+.header-user-name { font-weight: 600; font-size: 13px; }
+.header-user-org { font-size: 11px; color: #999; }
+
+/* ===== LAYOUT ===== */
+.layout { display: flex; min-height: calc(100vh - 56px); }
+
+/* ===== SIDEBAR ===== */
+.sidebar { width: 180px; min-width: 180px; background: #fff; border-right: 1px solid #e5e5e5; padding: 16px 0; display: flex; flex-direction: column; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; font-weight: 500; color: #333; transition: background 0.15s; }
+.sidebar-item:hover { background: #f9f9f9; }
+.sidebar-item.active { color: #1a1a1a; font-weight: 600; }
+.sidebar-item svg { width: 18px; height: 18px; color: #666; flex-shrink: 0; }
+.sidebar-collapse { margin-top: auto; padding: 12px 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #666; }
+.sidebar-collapse:hover { background: #f9f9f9; }
+.sidebar-collapse svg { width: 18px; height: 18px; }
+
+/* ===== MAIN ===== */
+.main { flex: 1; padding: 20px 28px 40px; overflow-y: auto; max-width: 1200px; }
+
+/* ===== BREADCRUMBS ===== */
+.breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #999; margin-bottom: 24px; }
+.breadcrumbs a { color: #CC0000; transition: opacity 0.15s; }
+.breadcrumbs a:hover { opacity: 0.7; }
+.breadcrumbs-sep { color: #ccc; }
+
+/* ===== PAGE HEADER ===== */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.page-title { font-size: 24px; font-weight: 700; color: #1a1a1a; }
+.page-links { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.page-link { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #333; transition: color 0.15s; text-decoration: underline; text-underline-offset: 2px; }
+.page-link:hover { color: #CC0000; }
+.page-link svg { width: 14px; height: 14px; color: #999; flex-shrink: 0; }
+
+/* ===== TABS ===== */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid #e5e5e5; margin-bottom: 24px; }
+.tab { padding: 12px 24px; font-size: 14px; font-weight: 500; color: #666; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+.tab:hover { color: #333; }
+.tab.active { color: #CC0000; border-bottom-color: #CC0000; font-weight: 600; }
+.tab-content { display: none; }
+.tab-content.visible { display: block; }
+
+/* ===== FORM ===== */
+.form-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 28px; }
+.form-row { margin-bottom: 20px; }
+.form-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.form-label { display: block; font-size: 12px; color: #999; margin-bottom: 6px; }
+.form-label .req { color: #CC0000; margin-left: 2px; }
+.form-select { width: 100%; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; color: #333; background: #fff; outline: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; transition: border-color 0.15s; }
+.form-select:focus { border-color: #999; }
+.form-input { width: 100%; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; color: #333; background: #fff; outline: none; transition: border-color 0.15s; }
+.form-input:focus { border-color: #999; }
+.form-textarea { width: 100%; padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; color: #333; background: #fff; outline: none; resize: vertical; min-height: 100px; transition: border-color 0.15s; }
+.form-textarea:focus { border-color: #999; }
+
+/* Drop zone */
+.drop-zone { border: 2px dashed #e0e0e0; border-radius: 12px; padding: 32px; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: all 0.2s; margin-bottom: 20px; }
+.drop-zone:hover { border-color: #CC0000; background: #fff8f8; }
+.drop-zone.dragover { border-color: #CC0000; background: #fff0f0; }
+.drop-zone-text { font-size: 14px; color: #999; }
+.drop-zone-icon { color: #ccc; }
+.drop-zone-icon svg { width: 24px; height: 24px; }
+
+/* Form warnings */
+.form-warnings { background: #fffaf0; border-left: 3px solid #e8a838; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 24px; }
+.form-warning { font-size: 13px; color: #8a6d3b; line-height: 1.6; }
+
+/* Form buttons */
+.form-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary { padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: inherit; background: #CC0000; color: #fff; transition: background 0.15s; cursor: pointer; border: none; }
+.btn-primary:hover { background: #b30000; }
+.btn-primary:disabled { background: #e0e0e0; color: #999; cursor: default; }
+.btn-outline { padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: inherit; background: #fff; color: #333; border: 1px solid #e0e0e0; transition: all 0.15s; cursor: pointer; }
+.btn-outline:hover { border-color: #ccc; background: #f9f9f9; }
+.btn-outline:disabled { opacity: 0.4; cursor: default; }
+
+/* ===== ARCHIVE FILTERS ===== */
+.filters-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+.filters-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.filters-actions { display: flex; justify-content: flex-end; gap: 12px; }
+.btn-dark { padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; background: #1a1a1a; color: #fff; transition: background 0.15s; cursor: pointer; border: none; }
+.btn-dark:hover { background: #333; }
+.btn-light { padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; background: #fff; color: #333; border: 1px solid #e0e0e0; transition: all 0.15s; cursor: pointer; }
+.btn-light:hover { border-color: #ccc; background: #f9f9f9; }
+
+/* ===== TABLE ===== */
+.table-wrap { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; overflow: hidden; }
+.table-scroll { overflow-x: auto; }
+.doc-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+.doc-table thead { background: #fafafa; }
+.doc-table th { padding: 14px 16px; font-size: 12px; font-weight: 700; color: #333; text-align: left; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid #e5e5e5; white-space: nowrap; }
+.doc-table td { padding: 14px 16px; font-size: 13px; color: #333; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+.doc-table tbody tr:hover { background: #fafafa; }
+.table-empty { text-align: center; color: #999; padding: 40px 16px; }
+.status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+.status-refused { background: #fff0f0; color: #CC0000; }
+.status-rejected { background: #fff5e6; color: #CC8800; }
+.file-link { color: #CC0000; text-decoration: underline; text-underline-offset: 2px; }
+.file-link:hover { opacity: 0.7; }
+.table-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid #f0f0f0; flex-wrap: wrap; gap: 12px; }
+.pagination { display: flex; align-items: center; gap: 4px; }
+.pagination-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 13px; color: #999; border: 1px solid #e5e5e5; background: #fff; transition: all 0.15s; cursor: pointer; }
+.pagination-btn:hover { border-color: #ccc; color: #333; }
+.pagination-btn.disabled { opacity: 0.4; cursor: default; }
+.pagination-info { font-size: 13px; color: #666; margin: 0 8px; }
+.pagination-select { padding: 6px 10px; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 13px; font-family: inherit; color: #333; background: #fff; cursor: pointer; outline: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .filters-grid { grid-template-columns: 1fr 1fr; }
+  .form-row-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .header { padding: 0 16px; }
+  .main { padding: 16px; max-width: 100%; }
+  .filters-grid { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; }
+  .page-links { align-items: flex-start; }
+  .tab { padding: 10px 16px; font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .header { height: 48px; padding: 0 12px; }
+  .header-logo-text { display: none; }
+  .layout { min-height: calc(100vh - 48px); }
+  .main { padding: 12px; }
+  .page-title { font-size: 20px; }
+  .form-card { padding: 18px; }
+  .form-actions { flex-direction: column; }
+  .btn-primary, .btn-outline { width: 100%; text-align: center; }
+  .tab { padding: 8px 12px; font-size: 12px; }
+}
+
+/* scrollbar */
+.main::-webkit-scrollbar { width: 6px; }
+.main::-webkit-scrollbar-track { background: transparent; }
+.main::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+.main::-webkit-scrollbar-thumb:hover { background: #ccc; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="header-logo">
+    <div class="header-logo-text">ЦИФРОВАЯ<br>ПЛАТФОРМА</div>
+  </a>
+  <div class="header-right">
+    <a href="#" class="header-icon-btn" title="Поиск">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M12 12l4 4"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn" title="Поддержка">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10V8a6 6 0 0112 0v2"/><path d="M1 11v2a2 2 0 002 2h1v-6H3a2 2 0 00-2 2zM17 11v2a2 2 0 01-2 2h-1v-6h1a2 2 0 012 2z"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn" title="Корзина">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1h2.5l1.2 2M4.7 3h12L14 11H5.5z"/><circle cx="7" cy="15" r="1.5" fill="currentColor"/><circle cx="13" cy="15" r="1.5" fill="currentColor"/></svg>
+    </a>
+    <a href="#" class="header-icon-btn header-notif-btn" title="Уведомления">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 6.5a4.5 4.5 0 10-9 0c0 5-2 6.5-2 6.5h13s-2-1.5-2-6.5M10.3 15a1.5 1.5 0 01-2.6 0"/></svg>
+      <span class="header-notif-dot"></span>
+    </a>
+    <a href="#" class="header-lang">RU</a>
+    <a href="#" class="header-user">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="4"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>
+      <div class="header-user-info">
+        <span class="header-user-name">Иванов И.И.</span>
+        <span class="header-user-org">ОАО «Газпром»</span>
+      </div>
+    </a>
+    <a href="login.html" class="header-icon-btn" title="Выйти">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 2H3a1 1 0 00-1 1v12a1 1 0 001 1h3.5"/><path d="M12 12.5l4-3.5-4-3.5"/><path d="M16 9H7"/></svg>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l7-5 7 5v8a1 1 0 01-1 1H3a1 1 0 01-1-1V7z"/><path d="M7 16V10h4v6"/></svg>
+        Главная
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>
+        Услуги и сервисы
+      </a>
+      <a href="#" class="sidebar-item active">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6M6 12h3"/></svg>
+        Документы
+      </a>
+      <a href="#" class="sidebar-item">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6"/></svg>
+        Финансовые документы
+      </a>
+    </nav>
+    <a href="#" class="sidebar-collapse">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4L6 9l6 5"/></svg>
+      Свернуть
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumbs">
+      <a href="index.html">Главная</a>
+      <span class="breadcrumbs-sep">/</span>
+      <span>Подать документ</span>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1 class="page-title">Отправка документов</h1>
+      <div class="page-links">
+        <a href="#" class="page-link">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 2h8a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M5 6h4M5 8h4"/></svg>
+          Формирование и отправка документов
+        </a>
+        <a href="#" class="page-link">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v6M4 4l3 3 3-3"/><path d="M2 9v3a1 1 0 001 1h8a1 1 0 001-1V9"/></svg>
+          Настройка рабочего места для ЭП
+        </a>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('send')">Отправить документ</div>
+      <div class="tab" onclick="switchTab('archive')">Архив документов</div>
+    </div>
+
+    <!-- TAB 1: SEND -->
+    <div class="tab-content visible" id="tab-send">
+      <div class="form-card">
+        <div class="form-row">
+          <label class="form-label">Отправить документ в<span class="req">*</span></label>
+          <select class="form-select">
+            <option>Московская Биржа</option>
+            <option>НРД</option>
+            <option>НКЦ</option>
+          </select>
+        </div>
+
+        <div class="form-row-grid">
+          <div>
+            <label class="form-label">Тема обращения</label>
+            <select class="form-select">
+              <option value="">Выберите</option>
+              <option>Заявление о подключении к WEB API</option>
+              <option>Учредительные документы</option>
+              <option>Анкета юридического лица</option>
+              <option>Иное обращение</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Тип документа<span class="req">*</span></label>
+            <select class="form-select">
+              <option value="">Выберите</option>
+              <option>Заявление о подключении к WEB API</option>
+              <option>Учредительные документы юридического лица</option>
+              <option>Анкета юридического лица</option>
+              <option>Отчётность XBRL</option>
+              <option>Иной документ</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Текст сообщения</label>
+          <textarea class="form-textarea" placeholder="Введите текст сообщения..."></textarea>
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-zone-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+          </div>
+          <span class="drop-zone-text">Перенесите файлы в эту область или нажмите для выбора</span>
+          <input type="file" id="fileInput" style="display:none" multiple>
+        </div>
+
+        <div class="form-warnings">
+          <div class="form-warning">1. Внимание! Отправляемый файл не должен превышать 8 Мб</div>
+          <div class="form-warning">2. Наименование файла не должно превышать 80 символов</div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-primary" disabled>Подписать и отправить документ</button>
+          <button class="btn-outline" disabled>Отправить документ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ARCHIVE -->
+    <div class="tab-content" id="tab-archive">
+      <!-- Filters -->
+      <div class="filters-card">
+        <div class="filters-grid">
+          <div>
+            <label class="form-label">По организации</label>
+            <select class="form-select">
+              <option>Московская Биржа</option>
+              <option>НРД</option>
+              <option>НКЦ</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">По дате с</label>
+            <input type="date" class="form-input">
+          </div>
+          <div>
+            <label class="form-label">По дате по</label>
+            <input type="date" class="form-input">
+          </div>
+          <div>
+            <label class="form-label">По типу</label>
+            <select class="form-select">
+              <option value="">Выберите или начните ввод</option>
+              <option>Заявление о подключении к WEB API</option>
+              <option>Учредительные документы</option>
+              <option>Иной документ</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">По заголовку сообщения</label>
+            <input type="text" class="form-input" placeholder="Введите текст заголовка">
+          </div>
+          <div>
+            <label class="form-label">По отправителю</label>
+            <select class="form-select">
+              <option value="">Выберите или начните ввод</option>
+              <option>webmaster@micex.com</option>
+              <option>techsupport@moex.com</option>
+            </select>
+          </div>
+        </div>
+        <div class="filters-actions">
+          <button class="btn-light">Очистить</button>
+          <button class="btn-dark">Найти</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Дата отправки</th>
+                <th>Номер документа</th>
+                <th>Тип документа</th>
+                <th>Отправитель</th>
+                <th>Файл</th>
+                <th>Статус</th>
+                <th>Комментарий</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>05.02.2026<br><span style="color:#999">18:13</span></td>
+                <td>ЛКУ_345695</td>
+                <td>Заявление о подключении к WEB API</td>
+                <td>webmaster@micex.com</td>
+                <td>—</td>
+                <td><span class="status-badge status-refused">Отказ</span></td>
+                <td style="font-size:12px;color:#666;">Требуется ручной разбор</td>
+              </tr>
+              <tr>
+                <td>03.02.2026<br><span style="color:#999">18:40</span></td>
+                <td>ЛКУ_345153</td>
+                <td>Учредительные документы юридического лица</td>
+                <td>webmaster@micex.com</td>
+                <td>—</td>
+                <td><span class="status-badge status-refused">Отказ</span></td>
+                <td style="font-size:12px;color:#666;">Полномочия не подтверждены</td>
+              </tr>
+              <tr>
+                <td>03.02.2026<br><span style="color:#999">17:14</span></td>
+                <td>ЛКУ_345113</td>
+                <td>Иной документ</td>
+                <td>webmaster@micex.com</td>
+                <td><a href="#" class="file-link">Doc2.doc</a></td>
+                <td><span class="status-badge status-refused">Отказ</span></td>
+                <td style="font-size:12px;color:#666;">Требуется ручной разбор</td>
+              </tr>
+              <tr>
+                <td>30.01.2026<br><span style="color:#999">13:26</span></td>
+                <td>—</td>
+                <td>Отчётность XBRL</td>
+                <td>techsupport@moex.com</td>
+                <td>—</td>
+                <td><span class="status-badge status-rejected">Отклонен</span></td>
+                <td style="font-size:12px;color:#666;">Ошибка при получении статуса расшифровки</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="pagination">
+            <button class="pagination-btn disabled">«</button>
+            <button class="pagination-btn disabled">‹</button>
+            <span class="pagination-info">1 по 4 из 4</span>
+            <button class="pagination-btn disabled">›</button>
+            <button class="pagination-btn disabled">»</button>
+          </div>
+          <select class="pagination-select"><option>15</option><option>30</option><option>50</option></select>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('visible'));
+
+  if (tab === 'send') {
+    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.getElementById('tab-send').classList.add('visible');
+  } else {
+    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.getElementById('tab-archive').classList.add('visible');
+  }
+}
+
+// Drop zone
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+
+// Auto-open archive from hash
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.location.hash === '#archive') switchTab('archive');
+});
+</script>
+
+</body>
+</html>
