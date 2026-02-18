@@ -4,12 +4,6 @@
   // ===== HEADER =====
   var headerHTML = '<header class="header">' +
     '<a href="index.html" class="header-logo">' +
-      '<div class="header-logo-icon">' +
-        '<svg viewBox="0 0 80 28" fill="none">' +
-          '<rect x="0" y="0" width="28" height="28" rx="4" fill="#CC0000"/>' +
-          '<text x="4" y="19" font-size="14" font-weight="800" fill="#fff" font-family="Inter,sans-serif">M</text>' +
-        '</svg>' +
-      '</div>' +
       '<div class="header-logo-text">ЦИФРОВАЯ<br>ПЛАТФОРМА</div>' +
     '</a>' +
     '<a href="#" class="header-company">' +
@@ -64,7 +58,8 @@
     'documents.html': 'documents.html',
     'api-portal.html': 'api-portal.html',
     'certificates.html': 'index.html',
-    'reg-clients.html': 'index.html'
+    'reg-clients.html': 'index.html',
+    'listing.html': 'index.html'
   };
 
   var activePage = pageToSidebar[currentPage] || currentPage;
@@ -91,13 +86,76 @@
   '</a>';
   sidebarHTML += '</aside>';
 
+  // ===== SERVICES DROPDOWN =====
+  var servicesItems = [
+    { title: '\u041B\u0438\u0441\u0442\u0438\u043D\u0433 \u0438 \u0431\u0438\u0440\u0436\u0435\u0432\u044B\u0435 \u043E\u0431\u043B\u0438\u0433\u0430\u0446\u0438\u0438', desc: '\u0410\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0430\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u0438 \u0438 \u043A\u043E\u043D\u043A\u0443\u0440\u0435\u043D\u0442\u043D\u043E\u0439 \u043F\u043E\u0437\u0438\u0446\u0438\u0438 \u043D\u0430 \u0444\u043E\u043D\u0434\u043E\u0432\u043E\u043C \u0440\u044B\u043D\u043A\u0435', href: 'listing.html' },
+    { title: 'Compliance Tool', desc: '\u0410\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0430\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u0438 \u0438 \u043A\u043E\u043D\u043A\u0443\u0440\u0435\u043D\u0442\u043D\u043E\u0439 \u043F\u043E\u0437\u0438\u0446\u0438\u0438 \u043D\u0430 \u0444\u043E\u043D\u0434\u043E\u0432\u043E\u043C \u0440\u044B\u043D\u043A\u0435', href: '#' },
+    { title: '\u0411\u0443\u043A\u0431\u0438\u043B\u0434\u0435\u0440', desc: '\u0410\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0430\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u0438 \u0438 \u043A\u043E\u043D\u043A\u0443\u0440\u0435\u043D\u0442\u043D\u043E\u0439 \u043F\u043E\u0437\u0438\u0446\u0438\u0438 \u043D\u0430 \u0444\u043E\u043D\u0434\u043E\u0432\u043E\u043C \u0440\u044B\u043D\u043A\u0435', href: '#' },
+    { title: '\u0411\u0430\u043D\u043A \u043A\u043B\u0438\u0435\u043D\u0442', desc: '\u0410\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430 \u043A\u043B\u0438\u0435\u043D\u0442\u0441\u043A\u043E\u0439 \u0430\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u0438 \u0438 \u043A\u043E\u043D\u043A\u0443\u0440\u0435\u043D\u0442\u043D\u043E\u0439 \u043F\u043E\u0437\u0438\u0446\u0438\u0438 \u043D\u0430 \u0444\u043E\u043D\u0434\u043E\u0432\u043E\u043C \u0440\u044B\u043D\u043A\u0435', href: '#' }
+  ];
+
+  var arrowSvg = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l5 5-5 5"/><path d="M3 8h10"/></svg>';
+  var cardIconSvg = '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>';
+
+  var dropdownHTML = '<div class="services-dropdown-overlay" id="servicesOverlay"></div>' +
+    '<div class="services-dropdown" id="servicesDropdown"><div class="services-dropdown-grid">';
+  for (var d = 0; d < servicesItems.length; d++) {
+    var si = servicesItems[d];
+    dropdownHTML += '<a href="' + (si.href || '#') + '" class="services-dropdown-card">' +
+      '<div class="services-dropdown-card-icon">' + cardIconSvg + '</div>' +
+      '<div class="services-dropdown-card-body">' +
+        '<div class="services-dropdown-card-header">' +
+          '<span class="services-dropdown-card-title">' + si.title + '</span>' +
+          '<span class="services-dropdown-card-arrow">' + arrowSvg + '</span>' +
+        '</div>' +
+        '<div class="services-dropdown-card-desc">' + si.desc + '</div>' +
+      '</div>' +
+    '</a>';
+  }
+  dropdownHTML += '</div></div>';
+
   // ===== INJECT =====
   // Insert header at the beginning of body
   document.body.insertAdjacentHTML('afterbegin', headerHTML);
+
+  // Insert services dropdown right after header
+  var headerEl = document.querySelector('.header');
+  if (headerEl) {
+    headerEl.insertAdjacentHTML('afterend', dropdownHTML);
+  }
 
   // Find .layout and insert sidebar as first child
   var layout = document.querySelector('.layout');
   if (layout) {
     layout.insertAdjacentHTML('afterbegin', sidebarHTML);
+  }
+
+  // ===== SERVICES DROPDOWN TOGGLE =====
+  var servicesBtn = document.querySelector('.header-services-btn');
+  var dropdown = document.getElementById('servicesDropdown');
+  var overlay = document.getElementById('servicesOverlay');
+
+  function toggleServices(e) {
+    if (e) e.preventDefault();
+    var isOpen = dropdown.classList.contains('open');
+    if (isOpen) {
+      dropdown.classList.remove('open');
+      overlay.classList.remove('open');
+      servicesBtn.classList.remove('active');
+    } else {
+      dropdown.classList.add('open');
+      overlay.classList.add('open');
+      servicesBtn.classList.add('active');
+    }
+  }
+
+  if (servicesBtn && dropdown && overlay) {
+    servicesBtn.addEventListener('click', toggleServices);
+    overlay.addEventListener('click', toggleServices);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+        toggleServices();
+      }
+    });
   }
 })();
