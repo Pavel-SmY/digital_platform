@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Товарные аукционы НТБ — MOEX Цифровая Платформа</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ===== WIZARD LAYOUT ===== */
+.wizard-layout { display: flex; min-height: 100vh; }
+
+/* ===== LEFT PANEL ===== */
+.wizard-sidebar { width: 320px; min-width: 320px; background: #1a1a1a; color: #fff; padding: 32px; display: flex; flex-direction: column; }
+.wizard-sidebar-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+.wizard-sidebar-logo-text { font-size: 10px; font-weight: 700; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.02em; color: #fff; }
+.wizard-sidebar-title { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 32px; line-height: 1.4; }
+
+/* Steps */
+.wizard-steps { display: flex; flex-direction: column; gap: 0; }
+.wizard-step { display: flex; align-items: flex-start; gap: 14px; padding: 0; position: relative; }
+.wizard-step-indicator { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.wizard-step-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4); background: transparent; transition: all 0.3s; }
+.wizard-step.active .wizard-step-dot { border-color: #4caf50; background: #4caf50; color: #fff; }
+.wizard-step.completed .wizard-step-dot { border-color: #4caf50; background: #4caf50; color: #fff; }
+.wizard-step-line { width: 2px; height: 32px; background: rgba(255,255,255,0.15); margin: 6px 0; }
+.wizard-step.completed .wizard-step-line { background: #4caf50; }
+.wizard-step:last-child .wizard-step-line { display: none; }
+.wizard-step-content { padding-top: 3px; }
+.wizard-step-label { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.4); transition: color 0.3s; }
+.wizard-step.active .wizard-step-label { color: #fff; font-weight: 600; }
+.wizard-step.completed .wizard-step-label { color: rgba(255,255,255,0.7); }
+
+/* Sidebar footer */
+.wizard-sidebar-footer { margin-top: auto; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
+.wizard-sidebar-hint { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; margin-bottom: 16px; }
+.wizard-sidebar-hint a { color: #CC0000; }
+.wizard-sidebar-hint a:hover { text-decoration: underline; }
+.wizard-sidebar-socials { display: flex; gap: 12px; margin-bottom: 12px; }
+.wizard-sidebar-social { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: background 0.15s; }
+.wizard-sidebar-social:hover { background: rgba(255,255,255,0.2); }
+.wizard-sidebar-social svg { width: 16px; height: 16px; }
+.wizard-sidebar-email { font-size: 13px; color: #CC0000; margin-bottom: 16px; display: block; }
+.wizard-sidebar-email:hover { text-decoration: underline; }
+.wizard-sidebar-copy { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.5; }
+
+/* ===== MAIN CONTENT ===== */
+.wizard-main { flex: 1; display: flex; flex-direction: column; position: relative; }
+.wizard-main-close { position: absolute; top: 24px; right: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: #666; cursor: pointer; transition: all 0.15s; z-index: 10; }
+.wizard-main-close:hover { background: #f0f0f0; color: #333; }
+.wizard-main-close svg { width: 24px; height: 24px; }
+.wizard-content { flex: 1; padding: 48px 64px 48px; max-width: 800px; overflow-y: auto; }
+.wizard-content h1 { font-size: 28px; font-weight: 800; color: #1a1a1a; margin-bottom: 28px; text-transform: uppercase; letter-spacing: -0.01em; }
+
+/* ===== ALERT ===== */
+.wizard-alert { display: flex; align-items: flex-start; gap: 12px; padding: 16px 20px; background: #fff8f0; border: 1px solid #ffe0b2; border-radius: 12px; margin-bottom: 28px; }
+.wizard-alert svg { width: 20px; height: 20px; color: #e65100; flex-shrink: 0; margin-top: 1px; }
+.wizard-alert-text { font-size: 13px; color: #333; line-height: 1.6; }
+.wizard-alert-text a { color: #CC0000; font-weight: 500; }
+.wizard-alert-text a:hover { text-decoration: underline; }
+
+/* ===== SIGNATURE CARDS ===== */
+.sig-card { border: 1px solid #e5e5e5; border-radius: 14px; padding: 24px; margin-bottom: 16px; cursor: pointer; transition: all 0.2s; position: relative; }
+.sig-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.sig-card.selected { border-color: #1a1a1a; box-shadow: 0 0 0 1px #1a1a1a; }
+.sig-card-radio { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.sig-card-radio-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ccc; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s; }
+.sig-card.selected .sig-card-radio-dot { border-color: #CC0000; }
+.sig-card.selected .sig-card-radio-dot::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #CC0000; }
+.sig-card-radio-label { font-size: 13px; font-weight: 500; color: #666; }
+.sig-card-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.sig-card-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 12px; }
+.sig-card-note { font-size: 13px; color: #333; line-height: 1.5; }
+.sig-card-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #CC0000; font-weight: 500; margin-top: 8px; }
+.sig-card-link:hover { text-decoration: underline; }
+.sig-card-link svg { width: 14px; height: 14px; }
+
+/* ===== CERTIFICATE LIST ===== */
+.cert-refresh { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+.cert-refresh-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 13px; font-weight: 500; color: #333; background: #fff; transition: all 0.15s; }
+.cert-refresh-btn:hover { border-color: #ccc; background: #f9f9f9; }
+.cert-card { border: 1px solid #e5e5e5; border-radius: 14px; padding: 20px 24px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
+.cert-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.cert-card.selected { border-color: #1a1a1a; box-shadow: 0 0 0 1px #1a1a1a; }
+.cert-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.cert-card-radio { display: flex; align-items: center; gap: 10px; }
+.cert-card-radio-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ccc; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s; }
+.cert-card.selected .cert-card-radio-dot { border-color: #CC0000; }
+.cert-card.selected .cert-card-radio-dot::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #CC0000; }
+.cert-card-radio-text { font-size: 13px; font-weight: 500; color: #666; }
+.cert-card-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #e8f5e9; color: #2e7d32; }
+.cert-card-name { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.cert-card-details { font-size: 13px; color: #666; line-height: 1.7; }
+.cert-card-details span { color: #333; }
+
+/* ===== FORM — Step 2 ===== */
+.form-section { margin-bottom: 28px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-row.single { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 12px; font-weight: 500; color: #999; }
+.form-label .required { color: #CC0000; }
+.form-input, .form-textarea, .form-select { padding: 12px 14px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 14px; font-family: inherit; color: #333; outline: none; transition: border-color 0.15s; background: #fff; }
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: #1a1a1a; }
+.form-input::placeholder { color: #bbb; }
+.form-input:read-only { background: #f9f9f9; color: #666; }
+.form-textarea { resize: vertical; min-height: 72px; }
+.form-select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23999' stroke-width='1.5'%3E%3Cpath d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.form-checkbox-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.form-checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #CC0000; flex-shrink: 0; }
+.form-checkbox-row label { font-size: 13px; color: #333; }
+.form-checkbox-desc { font-size: 12px; color: #666; margin-top: -12px; margin-bottom: 16px; margin-left: 28px; }
+
+/* Dynamic fields (phone/email) */
+.dynamic-field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.dynamic-field-row .form-input { flex: 1; }
+.dynamic-field-btn { padding: 8px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 12px; font-weight: 500; color: #333; background: #fff; transition: all 0.15s; white-space: nowrap; }
+.dynamic-field-btn:hover { border-color: #ccc; background: #f9f9f9; }
+.dynamic-field-btn.remove { color: #CC0000; border-color: #fdd; }
+.dynamic-field-btn.remove:hover { background: #fff5f5; }
+
+/* Radio group */
+.radio-group { display: flex; gap: 20px; margin-bottom: 4px; }
+.radio-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.radio-item input[type="radio"] { width: 18px; height: 18px; accent-color: #CC0000; }
+.radio-item label { font-size: 14px; color: #333; cursor: pointer; }
+
+/* Identifiers section */
+.form-section-title { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.form-section-subtitle { font-size: 13px; color: #666; margin-bottom: 16px; }
+.id-field-label { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; }
+
+/* ===== DOCUMENTS — Step 3 ===== */
+.docs-section { margin-bottom: 32px; }
+.docs-section-title { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.docs-section-title .required { color: #CC0000; }
+.docs-section-desc { font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.5; }
+.doc-upload-group { margin-bottom: 20px; }
+.doc-upload-label { font-size: 14px; font-weight: 500; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.doc-upload-label .tooltip-icon { width: 16px; height: 16px; color: #999; cursor: help; }
+.doc-upload-area { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border: 1px dashed #d0d0d0; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+.doc-upload-area:hover { border-color: #CC0000; background: #fffaf8; }
+.doc-upload-area svg { width: 20px; height: 20px; color: #999; flex-shrink: 0; }
+.doc-upload-area-text { font-size: 13px; color: #999; }
+.doc-upload-area-text a { color: #CC0000; font-weight: 500; }
+.doc-upload-area-text a:hover { text-decoration: underline; }
+
+/* Uploaded file */
+.doc-file { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f9f9f9; border: 1px solid #e5e5e5; border-radius: 10px; }
+.doc-file-icon { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; background: #e8e8e8; color: #666; flex-shrink: 0; }
+.doc-file-icon.pdf { background: #fce4ec; color: #c62828; }
+.doc-file-icon.xls { background: #e8f5e9; color: #2e7d32; }
+.doc-file-name { flex: 1; font-size: 13px; font-weight: 500; color: #333; }
+.doc-file-actions { display: flex; gap: 4px; }
+.doc-file-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; transition: all 0.15s; }
+.doc-file-btn:hover { background: #f0f0f0; color: #333; }
+.doc-file-btn.delete:hover { background: #fff0f0; color: #CC0000; }
+.doc-file-btn svg { width: 16px; height: 16px; }
+
+/* Exchange docs */
+.exchange-doc { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid #e5e5e5; border-radius: 10px; margin-bottom: 10px; background: #fff; }
+.exchange-doc-icon { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; background: #fce4ec; color: #c62828; }
+.exchange-doc-name { flex: 1; font-size: 13px; font-weight: 500; color: #333; }
+.exchange-doc-download { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; transition: all 0.15s; }
+.exchange-doc-download:hover { background: #f0f0f0; color: #333; }
+.exchange-doc-download svg { width: 18px; height: 18px; }
+
+/* ===== SIGNING MODAL ===== */
+.signing-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; justify-content: center; align-items: center; }
+.signing-overlay.visible { display: flex; }
+.signing-modal { background: #fff; border-radius: 16px; padding: 32px 40px; text-align: center; min-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: modalIn 0.25s ease; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.signing-modal h3 { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px; }
+.signing-progress { width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+.signing-progress-bar { height: 100%; background: linear-gradient(90deg, #3366CC, #5588ee); border-radius: 4px; transition: width 0.3s ease; width: 0%; }
+.signing-percent { font-size: 14px; font-weight: 600; color: #333; }
+
+/* ===== FOOTER BUTTONS ===== */
+.wizard-footer { padding: 20px 64px; border-top: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+.wizard-footer-left { display: flex; gap: 12px; }
+.wizard-footer-right { display: flex; gap: 12px; }
+.btn-back { padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 500; color: #666; background: #fff; border: 1px solid #e0e0e0; transition: all 0.15s; }
+.btn-back:hover { border-color: #ccc; background: #f9f9f9; color: #333; }
+.btn-home { padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 500; color: #666; background: #fff; border: 1px solid #e0e0e0; transition: all 0.15s; }
+.btn-home:hover { border-color: #ccc; background: #f9f9f9; color: #333; }
+.btn-next { padding: 12px 32px; border-radius: 10px; font-size: 14px; font-weight: 600; color: #fff; background: #1a1a1a; border: none; transition: background 0.15s; }
+.btn-next:hover { background: #333; }
+.btn-sign { padding: 12px 32px; border-radius: 10px; font-size: 14px; font-weight: 600; color: #fff; background: #1a1a1a; border: none; transition: background 0.15s; }
+.btn-sign:hover { background: #333; }
+
+/* ===== STEP VISIBILITY ===== */
+.wizard-step-page { display: none; }
+.wizard-step-page.active { display: block; }
+
+/* ===== SCROLLBAR ===== */
+.wizard-content::-webkit-scrollbar { width: 6px; }
+.wizard-content::-webkit-scrollbar-track { background: transparent; }
+.wizard-content::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+.wizard-content::-webkit-scrollbar-thumb:hover { background: #ccc; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .wizard-sidebar { width: 260px; min-width: 260px; padding: 24px; }
+  .wizard-content { padding: 36px 40px; }
+  .wizard-footer { padding: 16px 40px; }
+}
+@media (max-width: 768px) {
+  .wizard-layout { flex-direction: column; }
+  .wizard-sidebar { width: 100%; min-width: 100%; padding: 20px 24px; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .wizard-sidebar-title { display: none; }
+  .wizard-sidebar-footer { display: none; }
+  .wizard-steps { flex-direction: row; gap: 16px; }
+  .wizard-step-line { display: none; }
+  .wizard-content { padding: 24px 20px; }
+  .wizard-footer { padding: 16px 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .wizard-content h1 { font-size: 22px; }
+}
+@media (max-width: 480px) {
+  .wizard-sidebar { padding: 16px; }
+  .wizard-content { padding: 20px 16px; }
+  .wizard-footer { padding: 12px 16px; flex-direction: column; gap: 12px; }
+  .wizard-footer-left, .wizard-footer-right { width: 100%; }
+  .wizard-footer-right { justify-content: flex-end; }
+  .btn-next, .btn-sign, .btn-back, .btn-home { width: 100%; text-align: center; }
+  .sig-card { padding: 16px; }
+  .cert-card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="wizard-layout">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="wizard-sidebar">
+    <div class="wizard-sidebar-logo">
+      <svg width="48" height="32" viewBox="0 0 48 32" fill="none"><rect x="1" y="1" width="46" height="30" rx="4" stroke="#fff" stroke-width="2"/><text x="6" y="18" font-family="Inter" font-size="9" font-weight="800" fill="#fff">MOEX</text><text x="6" y="26" font-family="Inter" font-size="5" font-weight="600" fill="rgba(255,255,255,0.6)">МОСКОВСКАЯ</text></svg>
+      <div class="wizard-sidebar-logo-text">МОСКОВСКАЯ<br>БИРЖА</div>
+    </div>
+    <div class="wizard-sidebar-title">Как получить доступ к спот-рынку НТБ</div>
+
+    <div class="wizard-steps">
+      <div class="wizard-step active" id="step-ind-1">
+        <div class="wizard-step-indicator">
+          <div class="wizard-step-dot" id="step-dot-1">1</div>
+          <div class="wizard-step-line"></div>
+        </div>
+        <div class="wizard-step-content">
+          <div class="wizard-step-label">Выбор электронной подписи</div>
+        </div>
+      </div>
+      <div class="wizard-step" id="step-ind-2">
+        <div class="wizard-step-indicator">
+          <div class="wizard-step-dot" id="step-dot-2">2</div>
+          <div class="wizard-step-line"></div>
+        </div>
+        <div class="wizard-step-content">
+          <div class="wizard-step-label">Данные заявителя</div>
+        </div>
+      </div>
+      <div class="wizard-step" id="step-ind-3">
+        <div class="wizard-step-indicator">
+          <div class="wizard-step-dot" id="step-dot-3">3</div>
+        </div>
+        <div class="wizard-step-content">
+          <div class="wizard-step-label">Документы заявителя</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-sidebar-footer">
+      <div class="wizard-sidebar-hint">Если планируете использовать цифровую подпись, проверьте нас тройку рабочего стола</div>
+      <div class="wizard-sidebar-socials">
+        <a href="#" class="wizard-sidebar-social" title="Telegram"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.95 2.53L11.93 13.5c-.15.67-.54.83-1.1.52l-3.03-2.23-1.46 1.41c-.16.16-.3.3-.61.3l.22-3.06L11.4 5.5c.23-.2-.05-.32-.35-.12L4.3 10.1l-2.95-.92c-.64-.2-.65-.64.13-.95l11.52-4.44c.54-.2 1.01.13.83.95z"/></svg></a>
+        <a href="#" class="wizard-sidebar-social" title="ВКонтакте"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8.67 12.33c-4.33 0-6.8-2.97-6.9-7.9h2.17c.07 3.6 1.66 5.13 2.92 5.45V4.43h2.04v3.11c1.24-.13 2.54-1.55 2.98-3.11h2.04c-.34 1.92-1.77 3.34-2.78 3.93 1.01.48 2.64 1.72 3.26 4h-2.25c-.48-1.5-1.68-2.66-3.25-2.82v2.82H8.67z"/></svg></a>
+      </div>
+      <a href="mailto:NTB@namex.org" class="wizard-sidebar-email">NTB@namex.org</a>
+      <div class="wizard-sidebar-copy">&copy; Московская Биржа, 2011 – 2024. Все права на информацию и материалы, размещенные на настоящем сайте, защищены в соответствии с законодательством.</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="wizard-main">
+    <a href="index.html" class="wizard-main-close" title="Закрыть">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </a>
+
+    <!-- STEP 1: Signature Selection -->
+    <div class="wizard-content">
+
+      <!-- Step 1a: Choose signature type -->
+      <div class="wizard-step-page active" id="step-1a">
+        <h1>Выбор электронной подписи</h1>
+
+        <div class="wizard-alert">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M10 6v4M10 13v.01"/></svg>
+          <div class="wizard-alert-text">
+            Процесс регистрации возможен только при наличии УКЭП ЕИО (единоличного исполнительного органа) или ИП.<br>
+            В случае отсутствия УКЭП ЕИО или ИП вам необходимо связаться с Управлением продвижения продуктов <a href="mailto:NTB@namex.org">NTB@namex.org</a>
+          </div>
+        </div>
+
+        <div class="sig-card selected" onclick="selectSignature(this, 'ukep')">
+          <div class="sig-card-radio">
+            <div class="sig-card-radio-dot"></div>
+            <span class="sig-card-radio-label">Выбрать</span>
+          </div>
+          <div class="sig-card-title">УКЭП</div>
+          <div class="sig-card-desc">Усиленная квалифицированная цифровая подпись</div>
+          <div class="sig-card-note">Чтобы использовать УКЭП, подтвердите личность и получите сертификат</div>
+          <a href="#" class="sig-card-link">
+            Как получить и использовать УКЭП
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10L10 4"/><path d="M4 4h6v6"/></svg>
+          </a>
+        </div>
+
+        <div class="sig-card" onclick="selectSignature(this, 'unep')">
+          <div class="sig-card-radio">
+            <div class="sig-card-radio-dot"></div>
+            <span class="sig-card-radio-label">Выбрать</span>
+          </div>
+          <div class="sig-card-title">УНЭП</div>
+          <div class="sig-card-desc">Усиленная неквалифицированная электронная подпись, выданная <a href="#" style="color:#CC0000;">удостоверяющим центром Московской Биржи</a></div>
+          <div class="sig-card-note">Чтобы использовать УНЭП, подтвердите личность и получите сертификат</div>
+        </div>
+      </div>
+
+      <!-- Step 1b: Choose certificate -->
+      <div class="wizard-step-page" id="step-1b">
+        <h1>Выбор электронной подписи</h1>
+
+        <div class="cert-refresh">
+          <button class="cert-refresh-btn" onclick="refreshCerts()">Обновить список</button>
+        </div>
+
+        <div class="cert-card selected" onclick="selectCert(this)">
+          <div class="cert-card-header">
+            <div class="cert-card-radio">
+              <div class="cert-card-radio-dot"></div>
+              <span class="cert-card-radio-text">Выбрать</span>
+            </div>
+            <span class="cert-card-badge">Активен</span>
+          </div>
+          <div class="cert-card-name">АО "НК-Инжиниринг"</div>
+          <div class="cert-card-details">
+            ИНН организации: <span>1651077855</span>, &nbsp;ОГРН: <span>1027739298564</span><br>
+            Действует до: <span>14.09.2024</span><br>
+            Директор: <span>Иванов Иван</span>, &nbsp;ИНН <span>1651077855</span>
+          </div>
+        </div>
+
+        <div class="cert-card" onclick="selectCert(this)">
+          <div class="cert-card-header">
+            <div class="cert-card-radio">
+              <div class="cert-card-radio-dot"></div>
+              <span class="cert-card-radio-text">Выбрать</span>
+            </div>
+            <span class="cert-card-badge">Активен</span>
+          </div>
+          <div class="cert-card-name">ИП Иванов Иван Иванович</div>
+          <div class="cert-card-details">
+            ИНН организации: <span>1651077855</span>, &nbsp;ОГРНИП: <span>116169011107689</span><br>
+            Действует до: <span>14.09.2024</span><br>
+            Директор: <span>Иванов Иван</span>, &nbsp;ИНН <span>1651077855</span>
+          </div>
+        </div>
+
+        <div class="cert-card" onclick="selectCert(this)">
+          <div class="cert-card-header">
+            <div class="cert-card-radio">
+              <div class="cert-card-radio-dot"></div>
+              <span class="cert-card-radio-text">Выбрать</span>
+            </div>
+            <span class="cert-card-badge">Активен</span>
+          </div>
+          <div class="cert-card-name">Иванов Иван Иванович</div>
+          <div class="cert-card-details">
+            СНИЛС: <span>1027739298564</span><br>
+            Действует до: <span>14.09.2024</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Applicant Data -->
+      <div class="wizard-step-page" id="step-2">
+        <h1>Данные заявителя</h1>
+
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Полное наименование организации или ИП<span class="required">*</span></label>
+              <input type="text" class="form-input" value='АКЦИОНЕРНОЕ ОБЩЕСТВО "НАЦИОНАЛЬНАЯ ИНЖИНИРИНГОВАЯ ...' readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">ИНН<span class="required">*</span></label>
+              <input type="text" class="form-input" value="1651077855" readonly>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">ОГРН<span class="required">*</span></label>
+              <input type="text" class="form-input" value="116169011076" readonly>
+            </div>
+            <div class="form-group" style="grid-column: span 1;"></div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Местонахождение<span class="required">*</span></label>
+              <textarea class="form-textarea" rows="2">142116, Московская обл, г.о. Подольск, г Подольск, ул Лобачева, д. 13, этаж/офис 4/417</textarea>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Почтовый адрес для направления корреспонденции<span class="required">*</span></label>
+              <textarea class="form-textarea" rows="2" id="postalAddress" placeholder="Введите адрес"></textarea>
+            </div>
+          </div>
+
+          <div class="form-checkbox-row">
+            <input type="checkbox" id="sameAddress" onchange="toggleSameAddress()">
+            <label for="sameAddress">Совпадает с адресом местонахождения</label>
+          </div>
+
+          <div class="form-checkbox-row">
+            <input type="checkbox" id="managingOrg">
+            <label for="managingOrg">Управляющая организация</label>
+          </div>
+          <div class="form-checkbox-desc">Отметьте в случае передачи полномочий единоличного исполнительного органа (ЕИО) управляющей организации</div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">ФИО подписанта<span class="required">*</span></label>
+              <input type="text" class="form-input" value="Иванов Иван Иванович">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Должность подписанта<span class="required">*</span></label>
+              <input type="text" class="form-input" value="Генеральный директор">
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Основание полномочий подписанта (например, Устав)<span class="required">*</span></label>
+              <input type="text" class="form-input" value="Устав">
+            </div>
+          </div>
+        </div>
+
+        <!-- Phones -->
+        <div class="form-section">
+          <div id="phones-container">
+            <div class="dynamic-field-row">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Контактный телефон<span class="required">*</span></label>
+                <input type="tel" class="form-input" value="+7 (999) 123-45-67">
+              </div>
+              <button class="dynamic-field-btn remove" onclick="removeField(this)" style="margin-top:22px;">Удалить</button>
+              <button class="dynamic-field-btn" onclick="addPhone()" style="margin-top:22px;">Добавить</button>
+            </div>
+          </div>
+
+          <div id="emails-container">
+            <div class="dynamic-field-row">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Электронная почта<span class="required">*</span></label>
+                <input type="email" class="form-input" value="ivanov@inginiring.ru">
+              </div>
+              <button class="dynamic-field-btn remove" onclick="removeField(this)" style="margin-top:22px;">Удалить</button>
+              <button class="dynamic-field-btn" onclick="addEmail()" style="margin-top:22px;">Добавить</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- NDS / Category -->
+        <div class="form-section">
+          <div style="margin-bottom: 16px;">
+            <div class="form-label" style="margin-bottom: 8px;">Организация является плательщиком НДС</div>
+            <div class="radio-group">
+              <label class="radio-item"><input type="radio" name="nds" value="yes" checked><span>Да</span></label>
+              <label class="radio-item"><input type="radio" name="nds" value="no"><span>Нет</span></label>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <div class="form-label" style="margin-bottom: 8px; font-size: 14px; font-weight: 700; color: #1a1a1a;">Категория участия</div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <label class="radio-item"><input type="radio" name="category" value="participant"><span>Участник аукционов-резидент</span></label>
+              <label class="radio-item"><input type="radio" name="category" value="customer"><span>Заказчик аукционов-резидент</span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Identifiers -->
+        <div class="form-section">
+          <div class="form-section-title">Доступы к идентификаторам на товарных аукционах</div>
+          <div class="form-section-subtitle">Укажите ФИО лиц, уполномоченных использовать идентификатор от имени Заявителя</div>
+
+          <div style="margin-bottom: 16px;">
+            <div class="id-field-label">Торговый идентификатор</div>
+            <input type="text" class="form-input" style="width:100%;" placeholder="ФИО лица, уполномоченного использовать идентификатор от имени Заявителя">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div class="id-field-label">Просмотровый идентификатор №1</div>
+            <input type="text" class="form-input" style="width:100%;" placeholder="ФИО лица, уполномоченного использовать идентификатор от имени Заявителя">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div class="id-field-label">Просмотровый идентификатор №2</div>
+            <input type="text" class="form-input" style="width:100%;" placeholder="ФИО лица, уполномоченного использовать идентификатор от имени Заявителя">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Documents -->
+      <div class="wizard-step-page" id="step-3">
+        <h1>Документы заявителя</h1>
+
+        <!-- Upload documents -->
+        <div class="docs-section">
+          <div class="docs-section-title">Документы Заявителя <span class="required">*</span></div>
+          <div class="docs-section-desc">Отсканируйте и загрузите документы в формате: .xls, .pdf, .doc, .docx, .rtf, .odf. размером не больше 20Mb</div>
+
+          <div class="doc-upload-group">
+            <div class="doc-upload-label">Устав в действующей редакции с отметкой регистрирующего органа (с изменениями и дополнениями, при наличии)</div>
+            <div class="doc-upload-area" id="upload-ustav" onclick="simulateUpload('ustav', 'Устав.pdf', 'pdf')">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 14V4"/><path d="M6 8l4-4 4 4"/><path d="M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2"/></svg>
+              <div class="doc-upload-area-text"><a>Выберите файл</a> на устройстве или перетяните</div>
+            </div>
+            <div id="file-ustav" style="display:none;"></div>
+          </div>
+
+          <div class="doc-upload-group">
+            <div class="doc-upload-label">
+              Паспорт ЕИО (2-3 страница + прописка)
+              <svg class="tooltip-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 11V8M8 5.5v0"/></svg>
+            </div>
+            <div class="doc-upload-area" id="upload-passport" onclick="simulateUpload('passport', 'Паспорт.pdf', 'pdf')">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 14V4"/><path d="M6 8l4-4 4 4"/><path d="M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2"/></svg>
+              <div class="doc-upload-area-text"><a>Выберите файл</a> на устройстве или перетяните</div>
+            </div>
+            <div id="file-passport" style="display:none;"></div>
+          </div>
+
+          <div class="doc-upload-group">
+            <div class="doc-upload-label">Бухгалтерский баланс и Отчет о финансовых результатах (за последний отчетный год/период)</div>
+            <div class="doc-upload-area" id="upload-balance" onclick="simulateUpload('balance', 'Бухгалтерская отчетность.xlx', 'xls')">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 14V4"/><path d="M6 8l4-4 4 4"/><path d="M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2"/></svg>
+              <div class="doc-upload-area-text"><a>Выберите файл</a> на устройстве или перетяните</div>
+            </div>
+            <div id="file-balance" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- Exchange documents -->
+        <div class="docs-section">
+          <div class="docs-section-title">Документы Биржи <span class="required">*</span></div>
+          <div class="docs-section-desc">Вы можете скачать и ознакомиться с документами перед подписанием</div>
+
+          <div class="exchange-doc">
+            <span class="exchange-doc-icon">PDF</span>
+            <span class="exchange-doc-name">Анкета лица, являющегося резидентом.pdf</span>
+            <a href="#" class="exchange-doc-download" title="Скачать"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3v9"/><path d="M5 9l4 4 4-4"/><path d="M2 14h14"/></svg></a>
+          </div>
+          <div class="exchange-doc">
+            <span class="exchange-doc-icon">PDF</span>
+            <span class="exchange-doc-name">Договор СЭД.pdf</span>
+            <a href="#" class="exchange-doc-download" title="Скачать"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3v9"/><path d="M5 9l4 4 4-4"/><path d="M2 14h14"/></svg></a>
+          </div>
+          <div class="exchange-doc">
+            <span class="exchange-doc-icon">PDF</span>
+            <span class="exchange-doc-name">Договор об оказании услуг по проведению организованных ...</span>
+            <a href="#" class="exchange-doc-download" title="Скачать"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3v9"/><path d="M5 9l4 4 4-4"/><path d="M2 14h14"/></svg></a>
+          </div>
+          <div class="exchange-doc">
+            <span class="exchange-doc-icon">PDF</span>
+            <span class="exchange-doc-name">Заявление о предоставлении допуска к участию в ...</span>
+            <a href="#" class="exchange-doc-download" title="Скачать"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3v9"/><path d="M5 9l4 4 4-4"/><path d="M2 14h14"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="wizard-footer">
+      <div class="wizard-footer-left">
+        <button class="btn-back" id="btnBack" style="display:none;" onclick="goBack()">Назад</button>
+      </div>
+      <div class="wizard-footer-right">
+        <button class="btn-home" id="btnHome" style="display:none;" onclick="window.location.href='index.html'">Перейти на Главную</button>
+        <button class="btn-next" id="btnNext" onclick="goNext()">Продолжить</button>
+        <button class="btn-sign" id="btnSign" style="display:none;" onclick="signAndSend()">Подписать ЭП и отправить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNING MODAL -->
+<div class="signing-overlay" id="signingOverlay">
+  <div class="signing-modal">
+    <h3>Подписание и отправка</h3>
+    <div class="signing-progress"><div class="signing-progress-bar" id="signingBar"></div></div>
+    <div class="signing-percent" id="signingPercent">0%</div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let currentStep = '1a'; // '1a', '1b', '2', '3'
+let selectedSignature = 'ukep';
+
+// ===== SIGNATURE SELECTION =====
+function selectSignature(card, type) {
+  document.querySelectorAll('.sig-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedSignature = type;
+}
+
+// ===== CERTIFICATE SELECTION =====
+function selectCert(card) {
+  document.querySelectorAll('.cert-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+}
+
+function refreshCerts() {
+  // Simulate refresh
+  const btn = document.querySelector('.cert-refresh-btn');
+  btn.textContent = 'Обновление...';
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = 'Обновить список'; btn.disabled = false; }, 1000);
+}
+
+// ===== NAVIGATION =====
+function goNext() {
+  if (currentStep === '1a') {
+    showStep('1b');
+  } else if (currentStep === '1b') {
+    showStep('2');
+  } else if (currentStep === '2') {
+    showStep('3');
+  }
+}
+
+function goBack() {
+  if (currentStep === '1b') {
+    showStep('1a');
+  } else if (currentStep === '2') {
+    showStep('1b');
+  } else if (currentStep === '3') {
+    showStep('2');
+  }
+}
+
+function showStep(step) {
+  currentStep = step;
+
+  // Hide all pages
+  document.querySelectorAll('.wizard-step-page').forEach(p => p.classList.remove('active'));
+
+  // Show target page
+  const pageMap = { '1a': 'step-1a', '1b': 'step-1b', '2': 'step-2', '3': 'step-3' };
+  document.getElementById(pageMap[step]).classList.add('active');
+
+  // Update sidebar indicators
+  const stepNum = step === '1a' || step === '1b' ? 1 : parseInt(step);
+  updateSidebarSteps(stepNum);
+
+  // Update footer buttons
+  updateFooterButtons();
+
+  // Scroll content to top
+  document.querySelector('.wizard-content').scrollTop = 0;
+}
+
+function updateSidebarSteps(activeStep) {
+  for (let i = 1; i <= 3; i++) {
+    const stepEl = document.getElementById('step-ind-' + i);
+    const dotEl = document.getElementById('step-dot-' + i);
+    stepEl.classList.remove('active', 'completed');
+
+    if (i < activeStep) {
+      stepEl.classList.add('completed');
+      dotEl.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2"><path d="M3 7l3 3 5-5"/></svg>';
+    } else if (i === activeStep) {
+      stepEl.classList.add('active');
+      dotEl.textContent = i;
+    } else {
+      dotEl.textContent = i;
+    }
+  }
+}
+
+function updateFooterButtons() {
+  const btnBack = document.getElementById('btnBack');
+  const btnNext = document.getElementById('btnNext');
+  const btnSign = document.getElementById('btnSign');
+  const btnHome = document.getElementById('btnHome');
+
+  btnBack.style.display = currentStep === '1a' ? 'none' : '';
+  btnHome.style.display = 'none';
+
+  if (currentStep === '3') {
+    btnNext.style.display = 'none';
+    btnSign.style.display = '';
+    btnHome.style.display = '';
+  } else {
+    btnNext.style.display = '';
+    btnSign.style.display = 'none';
+  }
+}
+
+// ===== FORM HELPERS =====
+function toggleSameAddress() {
+  const cb = document.getElementById('sameAddress');
+  const field = document.getElementById('postalAddress');
+  if (cb.checked) {
+    const locationField = document.querySelector('#step-2 .form-textarea');
+    field.value = locationField.value;
+    field.readOnly = true;
+    field.style.background = '#f9f9f9';
+  } else {
+    field.readOnly = false;
+    field.style.background = '#fff';
+  }
+}
+
+function addPhone() {
+  const container = document.getElementById('phones-container');
+  const row = document.createElement('div');
+  row.className = 'dynamic-field-row';
+  row.innerHTML = '<div class="form-group" style="flex:1;"><label class="form-label">Контактный телефон<span class="required">*</span></label><input type="tel" class="form-input" placeholder="+7 (___) ___-__-__"></div><button class="dynamic-field-btn remove" onclick="removeField(this)" style="margin-top:22px;">Удалить</button><button class="dynamic-field-btn" onclick="addPhone()" style="margin-top:22px;">Добавить</button>';
+  container.appendChild(row);
+}
+
+function addEmail() {
+  const container = document.getElementById('emails-container');
+  const row = document.createElement('div');
+  row.className = 'dynamic-field-row';
+  row.innerHTML = '<div class="form-group" style="flex:1;"><label class="form-label">Электронная почта<span class="required">*</span></label><input type="email" class="form-input" placeholder="email@example.com"></div><button class="dynamic-field-btn remove" onclick="removeField(this)" style="margin-top:22px;">Удалить</button><button class="dynamic-field-btn" onclick="addEmail()" style="margin-top:22px;">Добавить</button>';
+  container.appendChild(row);
+}
+
+function removeField(btn) {
+  const row = btn.closest('.dynamic-field-row');
+  const container = row.parentNode;
+  if (container.children.length > 1) {
+    row.remove();
+  }
+}
+
+// ===== FILE UPLOAD SIMULATION =====
+function simulateUpload(id, filename, ext) {
+  const uploadArea = document.getElementById('upload-' + id);
+  const fileContainer = document.getElementById('file-' + id);
+
+  uploadArea.style.display = 'none';
+  fileContainer.style.display = 'block';
+  fileContainer.innerHTML = '<div class="doc-file"><span class="doc-file-icon ' + ext + '">' + ext.toUpperCase() + '</span><span class="doc-file-name">' + filename + '</span><div class="doc-file-actions"><a href="#" class="doc-file-btn" title="Скачать"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 3v7"/><path d="M5 8l3 3 3-3"/><path d="M2 12h12"/></svg></a><button class="doc-file-btn delete" title="Удалить" onclick="removeUpload(\'' + id + '\')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 5h10M6 5V4a1 1 0 011-1h2a1 1 0 011 1v1M12 5v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5"/></svg></button></div></div>';
+}
+
+function removeUpload(id) {
+  const uploadArea = document.getElementById('upload-' + id);
+  const fileContainer = document.getElementById('file-' + id);
+  uploadArea.style.display = 'flex';
+  fileContainer.style.display = 'none';
+  fileContainer.innerHTML = '';
+}
+
+// ===== SIGN AND SEND =====
+function signAndSend() {
+  const overlay = document.getElementById('signingOverlay');
+  const bar = document.getElementById('signingBar');
+  const percent = document.getElementById('signingPercent');
+
+  overlay.classList.add('visible');
+  let progress = 0;
+
+  const interval = setInterval(() => {
+    progress += Math.random() * 15 + 5;
+    if (progress >= 99) {
+      progress = 99;
+      clearInterval(interval);
+      setTimeout(() => {
+        bar.style.width = '100%';
+        percent.textContent = '100%';
+        setTimeout(() => {
+          overlay.classList.remove('visible');
+          bar.style.width = '0%';
+          percent.textContent = '0%';
+          alert('Документы успешно подписаны и отправлены!');
+          window.location.href = 'index.html';
+        }, 500);
+      }, 800);
+    }
+    bar.style.width = Math.round(progress) + '%';
+    percent.textContent = Math.round(progress) + '%';
+  }, 300);
+}
+
+// Init
+updateFooterButtons();
+</script>
+</body>
+</html>
