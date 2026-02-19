@@ -10,9 +10,9 @@
       'ОАО \u00AB\u0413\u0430\u0437\u043F\u0440\u043E\u043C\u00BB' +
       '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>' +
     '</a>' +
-    '<a href="#" class="header-services-btn">' +
+    '<a href="#" class="header-services-btn" id="headerServicesBtn">' +
       '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>' +
-      ' \u0423\u0441\u043B\u0443\u0433\u0438' +
+      '<span class="header-services-btn-text">\u0423\u0441\u043B\u0443\u0433\u0438</span>' +
     '</a>' +
     '<div class="header-right">' +
       '<a href="#" class="header-lang">RU</a>' +
@@ -157,5 +157,19 @@
         toggleServices();
       }
     });
+  }
+
+  // ===== SERVICE SELECTION (remember choice in Услуги button) =====
+  var servicesBtnText = servicesBtn ? servicesBtn.querySelector('.header-services-btn-text') : null;
+
+  // Map pages to their service names
+  var pageToService = {
+    'listing.html': '\u041B\u0438\u0441\u0442\u0438\u043D\u0433 \u0438 \u0431\u0438\u0440\u0436\u0435\u0432\u044B\u0435 \u043E\u0431\u043B\u0438\u0433\u0430\u0446\u0438\u0438'
+  };
+
+  // Auto-select if current page is a service page
+  if (pageToService[currentPage] && servicesBtn && servicesBtnText) {
+    servicesBtnText.textContent = pageToService[currentPage];
+    servicesBtn.classList.add('selected');
   }
 })();

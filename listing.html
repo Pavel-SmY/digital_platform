@@ -12,711 +12,596 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; col
 a { text-decoration: none; color: inherit; cursor: pointer; }
 button { cursor: pointer; font-family: inherit; border: none; background: none; }
 
-/* ===== OVERRIDE MAIN SIDEBAR ===== */
+/* ===== hide global sidebar, use own ===== */
 .sidebar { display: none !important; }
+.main { flex: 1; padding: 0; overflow-y: auto; }
 
-/* ===== PAGE LAYOUT ===== */
-.page-layout { display: flex; flex: 1; }
-.page-sidebar { width: 200px; min-width: 200px; background: #fff; border-right: 1px solid #e5e5e5; padding: 20px 0; display: flex; flex-direction: column; }
-.page-sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
-.page-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; font-weight: 500; color: #333; transition: background 0.15s; position: relative; }
-.page-sidebar-item:hover { background: #f9f9f9; }
-.page-sidebar-item.active { color: #1a1a1a; font-weight: 600; background: #f5f5f5; }
-.page-sidebar-item svg { width: 18px; height: 18px; color: #666; flex-shrink: 0; }
-.page-sidebar-item .badge { background: #CC0000; color: #fff; font-size: 10px; font-weight: 600; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 9px; padding: 0 5px; margin-left: auto; }
+/* ===== page wrapper ===== */
+.page-wrap { display: flex; min-height: calc(100vh - 56px); }
 
-/* ===== MAIN CONTENT ===== */
-.main { flex: 1; padding: 24px 32px 40px; overflow-y: auto; max-width: 1100px; }
+/* ===== LEFT SIDEBAR ===== */
+.ls { width: 200px; min-width: 200px; background: #fff; border-right: 1px solid #e5e5e5; padding: 12px 0; display: flex; flex-direction: column; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; }
+.ls a { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 13px; font-weight: 500; color: #555; transition: background .15s; white-space: nowrap; }
+.ls a:hover { background: #f5f5f5; }
+.ls a.active { color: #1a1a1a; font-weight: 600; }
+.ls a svg { width: 18px; height: 18px; color: #888; flex-shrink: 0; }
+.ls a.active svg { color: #555; }
+.ls .ls-badge { margin-left: auto; background: #CC0000; color: #fff; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 9px; padding: 0 5px; }
 
-/* ===== PAGE HEADER ===== */
-.page-header { margin-bottom: 20px; }
-.page-header-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
-.page-header h1 { font-size: 24px; font-weight: 800; color: #1a1a1a; }
-.page-header-link { font-size: 13px; color: #CC0000; font-weight: 500; display: flex; align-items: center; gap: 4px; }
-.page-header-link:hover { text-decoration: underline; }
-.page-header-actions { display: flex; gap: 8px; }
-.btn-outline { padding: 8px 20px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; background: #fff; transition: all 0.15s; }
-.btn-outline:hover { border-color: #ccc; background: #f9f9f9; }
-.btn-primary { padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #fff; background: #CC0000; border: none; transition: background 0.15s; }
-.btn-primary:hover { background: #b30000; }
+/* ===== CONTENT ===== */
+.ct { flex: 1; padding: 28px 36px 48px; min-width: 0; }
 
-/* ===== TABS ===== */
-.page-tabs { display: flex; gap: 0; border-bottom: 1px solid #e5e5e5; margin-bottom: 24px; }
-.page-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; color: #666; border-bottom: 2px solid transparent; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
-.page-tab:hover { color: #333; }
-.page-tab.active { color: #1a1a1a; font-weight: 600; border-bottom-color: #CC0000; }
-.page-tab .tab-badge { background: #f0f0f0; color: #333; font-size: 11px; font-weight: 600; min-width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 10px; padding: 0 6px; }
-.page-tab .tab-badge.red { background: #CC0000; color: #fff; }
+/* --- page head --- */
+.ph { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.ph h1 { font-size: 24px; font-weight: 800; line-height: 1.25; }
+.ph-sub { font-size: 13px; color: #1565c0; font-weight: 500; margin-bottom: 20px; display: inline-block; }
+.ph-sub:hover { text-decoration: underline; }
+.ph-btns { display: flex; gap: 8px; flex-shrink: 0; }
+.btn-o { padding: 8px 20px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; background: #fff; }
+.btn-o:hover { border-color: #ccc; background: #f9f9f9; }
+.btn-r { padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #fff; background: #1a1a1a; }
+.btn-r:hover { background: #333; }
 
-/* ===== INDEX SECTION ===== */
-.index-section { margin-bottom: 20px; }
-.index-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-.index-label { font-size: 13px; color: #333; }
-.index-value { font-size: 13px; font-weight: 700; color: #CC0000; }
-.index-info { width: 16px; height: 16px; color: #999; cursor: help; }
-.index-sub { font-size: 12px; color: #999; }
+/* --- tabs --- */
+.tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.tabs a { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-size: 13px; font-weight: 500; color: #333; border: 1px solid #e5e5e5; border-radius: 12px; background: #fff; transition: box-shadow .15s, border-color .15s; }
+.tabs a:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.tabs .tb { background: #f0f0f0; color: #333; font-size: 12px; font-weight: 600; min-width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; padding: 0 8px; flex-shrink: 0; }
+.tabs .tb.red { background: #CC0000; color: #fff; }
 
-/* ===== CAPITALIZATION ===== */
-.cap-section { display: flex; align-items: flex-start; gap: 32px; margin-bottom: 28px; padding: 20px 0; border-top: 1px solid #f0f0f0; }
-.cap-block {}
-.cap-label { font-size: 12px; color: #999; margin-bottom: 4px; }
-.cap-value { font-size: 22px; font-weight: 700; color: #1a1a1a; }
-.cap-charts { display: flex; gap: 20px; flex: 1; }
-.cap-chart-item { text-align: center; }
-.cap-chart-label { font-size: 11px; color: #999; margin-bottom: 4px; }
-.cap-chart-value { font-size: 12px; font-weight: 600; }
-.cap-chart-value.positive { color: #4caf50; }
-.cap-chart-value.negative { color: #CC0000; }
-.cap-chart-bar { width: 80px; height: 32px; background: #f5f5f5; border-radius: 4px; position: relative; overflow: hidden; margin: 0 auto 4px; }
-.cap-chart-fill { position: absolute; bottom: 0; left: 0; right: 0; border-radius: 4px; }
-.cap-chart-fill.green { background: linear-gradient(180deg, rgba(76,175,80,0.3), rgba(76,175,80,0.1)); height: 60%; }
-.cap-chart-fill.red { background: linear-gradient(180deg, rgba(204,0,0,0.3), rgba(204,0,0,0.1)); height: 40%; }
-.data-hint { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: 14px 18px; margin-left: auto; }
-.data-hint-title { font-size: 13px; font-weight: 600; color: #CC0000; margin-bottom: 2px; }
-.data-hint-desc { font-size: 12px; color: #666; }
+/* --- index --- */
+.idx { margin-bottom: 16px; }
+.idx-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.idx-row b { color: #CC0000; }
+.idx-row svg { width: 15px; height: 15px; color: #bbb; }
+.idx-sub { font-size: 12px; color: #999; }
 
-/* ===== LISTING SERVICES ===== */
-.listing-services { margin-bottom: 32px; }
-.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-.section-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
-.section-arrow { display: inline-flex; align-items: center; color: #1a1a1a; }
-.section-arrow svg { width: 18px; height: 18px; }
-.service-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-.service-filter { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; background: #fff; transition: all 0.15s; }
-.service-filter:hover { border-color: #ccc; }
-.service-filter.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-.service-filter svg { width: 16px; height: 16px; }
+/* --- capitalization --- */
+.cap { display: flex; align-items: center; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+.cap-main { margin-right: 8px; }
+.cap-label { font-size: 12px; color: #999; margin-bottom: 2px; }
+.cap-val { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.cap-chart { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.cap-chart-label { font-size: 11px; color: #999; }
+.cap-spark { width: 72px; height: 28px; border-radius: 4px; overflow: hidden; position: relative; }
+.cap-spark svg { width: 100%; height: 100%; }
+.cap-pct { font-size: 12px; font-weight: 600; }
+.cap-pct.g { color: #22a352; }
+.cap-pct.r { color: #CC0000; }
+.cap-data { margin-left: auto; border: 1px solid #e5e5e5; border-radius: 10px; padding: 14px 20px; background: #fff; display: flex; align-items: center; gap: 12px; }
+.cap-data:hover { border-color: #ccc; box-shadow: 0 2px 6px rgba(0,0,0,.04); }
+.cap-data b { font-size: 13px; font-weight: 600; color: #1a1a1a; display: block; margin-bottom: 1px; }
+.cap-data span { font-size: 12px; color: #1565c0; font-weight: 500; }
+.cap-data .cap-data-arr { color: #bbb; display: flex; }
+.cap-data .cap-data-arr svg { width: 16px; height: 16px; }
 
-/* ===== APPLICATIONS TABLE ===== */
-.applications-section { margin-bottom: 32px; }
-.app-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.app-table thead { border-bottom: 1px solid #e5e5e5; }
-.app-table th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 500; color: #999; }
-.app-table td { padding: 12px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
-.app-table tbody tr:hover { background: #fafafa; }
-.app-table-num { display: flex; align-items: center; gap: 6px; }
-.app-table-num .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.app-table-num .dot.red { background: #CC0000; }
-.app-table-num .dot.gray { background: #ccc; }
-.status-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; }
-.status-badge.accepted { background: #e8f5e9; color: #2e7d32; }
-.status-badge.review { background: #fff3e0; color: #e65100; }
-.status-badge.rejected { background: #fce4ec; color: #c62828; }
-.status-badge.progress { background: #e3f2fd; color: #1565c0; }
-.status-badge.removed { background: #f5f5f5; color: #999; }
-.app-link { color: #CC0000; font-weight: 500; }
-.app-link:hover { text-decoration: underline; }
+/* --- section --- */
+.sec-h { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
+.sec-h h2 { font-size: 18px; font-weight: 700; }
+.sec-h .arr { color: #1a1a1a; display: inline-flex; }
+.sec-h .arr svg { width: 18px; height: 18px; }
 
-/* ===== SECURITIES SECTION ===== */
-.securities-section { margin-bottom: 32px; }
-.securities-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.securities-header-left { display: flex; align-items: center; gap: 8px; }
-.securities-header-right { display: flex; align-items: center; gap: 8px; }
-.icon-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid #e5e5e5; background: #fff; color: #666; transition: all 0.15s; }
-.icon-btn:hover { border-color: #ccc; color: #333; }
-.icon-btn svg { width: 16px; height: 16px; }
-.btn-new-issue { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; background: #fff; }
-.btn-new-issue:hover { border-color: #ccc; background: #f9f9f9; }
-.btn-new-issue svg { width: 14px; height: 14px; }
-.sec-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-.sec-tab { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: #666; background: #f5f5f5; transition: all 0.15s; }
-.sec-tab:hover { background: #eee; }
-.sec-tab.active { background: #1a1a1a; color: #fff; }
-.sec-view-toggle { display: flex; gap: 4px; }
-.sec-view-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #f5f5f5; color: #999; transition: all 0.15s; }
-.sec-view-btn:hover { background: #eee; }
-.sec-view-btn.active { background: #1a1a1a; color: #fff; }
-.sec-view-btn svg { width: 16px; height: 16px; }
+/* --- listing services --- */
+.ls-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.lf { display: flex; align-items: center; gap: 8px; padding: 10px 18px; border: 1px solid #e5e5e5; border-radius: 10px; font-size: 13px; font-weight: 500; color: #333; background: #fff; transition: box-shadow .15s, border-color .15s; }
+.lf:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
 
-/* ===== SECURITY CARDS ===== */
-.sec-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-.sec-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px; transition: box-shadow 0.15s, border-color 0.15s; }
-.sec-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.sec-card.highlighted { border-color: #CC0000; border-width: 2px; }
-.sec-card.yellow-highlight { border-color: #ff9800; border-width: 2px; }
-.sec-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.sec-card-title { font-size: 14px; font-weight: 600; color: #1a1a1a; display: flex; align-items: center; gap: 6px; }
-.sec-card-title .arrow { color: #1a1a1a; }
-.sec-card-title .arrow svg { width: 14px; height: 14px; }
-.sec-card-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-.sec-badge { padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; }
-.sec-badge.green { background: #e8f5e9; color: #2e7d32; }
-.sec-badge.blue { background: #e3f2fd; color: #1565c0; }
-.sec-badge.gray { background: #f0f0f0; color: #666; }
-.sec-badge.orange { background: #fff3e0; color: #e65100; }
-.sec-card-isin { font-size: 12px; color: #666; margin-bottom: 12px; }
-.sec-card-isin span { color: #333; font-weight: 500; }
-.sec-card-level { font-size: 12px; color: #666; margin-bottom: 12px; }
-.sec-card-details { display: flex; flex-direction: column; gap: 6px; }
-.sec-detail { display: flex; justify-content: space-between; font-size: 13px; }
-.sec-detail-label { color: #999; }
-.sec-detail-value { color: #333; font-weight: 500; }
-.sec-card-actions { margin-top: 14px; display: flex; gap: 8px; }
-.sec-card-btn { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 12px; font-weight: 500; color: #333; background: #fff; transition: all 0.15s; }
-.sec-card-btn:hover { border-color: #ccc; background: #f9f9f9; }
-.sec-more-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; background: #fff; }
-.sec-more-btn:hover { border-color: #ccc; background: #f9f9f9; }
+/* --- applications table --- */
+.at-wrap { margin-bottom: 32px; overflow-x: auto; }
+.at { width: 100%; border-collapse: collapse; }
+.at th { text-align: left; padding: 8px 10px; font-size: 11px; font-weight: 500; color: #aaa; border-bottom: 1px solid #e5e5e5; white-space: nowrap; }
+.at td { padding: 10px 10px; font-size: 13px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+.at tbody tr:hover { background: #fafafa; }
+.at .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.at .dot-r { background: #CC0000; }
+.at .dot-g { background: #ccc; }
+.sb { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+.sb-ok { background: #e8f5e9; color: #2e7d32; }
+.sb-rev { background: #fff3e0; color: #e65100; }
+.sb-doc { background: #e3f2fd; color: #1565c0; }
+.sb-no { background: #fce4ec; color: #c62828; }
+.sb-rm { background: #f5f5f5; color: #999; }
+.at-link { color: #333; }
 
-/* ===== PROGRAMS ===== */
-.programs-section { margin-bottom: 32px; }
-.programs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.program-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
-.program-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: background 0.15s; }
-.program-header:hover { background: #fafafa; }
-.program-header-left { display: flex; flex-direction: column; gap: 4px; }
-.program-name { font-size: 15px; font-weight: 600; color: #1a1a1a; }
-.program-meta { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; color: #666; align-items: center; }
-.program-meta .badge { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; background: #e8f5e9; color: #2e7d32; }
-.program-chevron { color: #999; transition: transform 0.2s; }
-.program-chevron svg { width: 18px; height: 18px; }
-.program-chevron.open { transform: rotate(180deg); }
-.program-body { padding: 0 20px 20px; display: none; }
-.program-body.open { display: block; }
-.program-stats { display: flex; gap: 32px; margin-bottom: 16px; }
-.program-stat-label { font-size: 12px; color: #999; margin-bottom: 2px; }
-.program-stat-value { font-size: 16px; font-weight: 700; color: #1a1a1a; }
-.program-bonds { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.program-bond-card { border: 2px solid #CC0000; border-radius: 12px; padding: 18px; background: #fff; }
-.program-bond-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; line-height: 1.4; }
-.program-bond-badges { display: flex; gap: 6px; margin-bottom: 12px; }
-.program-bond-details { display: flex; flex-direction: column; gap: 6px; }
-.program-bond-btn { margin-top: 14px; padding: 8px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 12px; font-weight: 500; color: #333; background: #fff; display: inline-block; }
-.program-bond-btn:hover { border-color: #ccc; background: #f9f9f9; }
+/* --- securities --- */
+.sec-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.sec-top-l { display: flex; align-items: center; gap: 8px; }
+.sec-top-r { display: flex; align-items: center; gap: 8px; }
+.ib { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid #e5e5e5; background: #fff; color: #888; }
+.ib:hover { border-color: #ccc; color: #333; }
+.ib svg { width: 16px; height: 16px; }
+.btn-dd { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; background: #fff; }
+.btn-dd:hover { border-color: #ccc; background: #f9f9f9; }
+.btn-dd svg { width: 14px; height: 14px; }
 
-/* ===== NEWS ===== */
-.news-section { margin-bottom: 32px; }
-.news-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.news-header-right a { font-size: 13px; color: #CC0000; font-weight: 500; }
-.news-header-right a:hover { text-decoration: underline; }
-.news-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-.news-tab { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: #666; background: #f5f5f5; transition: all 0.15s; }
-.news-tab:hover { background: #eee; }
-.news-tab.active { background: #1a1a1a; color: #fff; }
-.news-item { padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
-.news-item:last-child { border-bottom: none; }
-.news-item-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; background: #f0f0f0; color: #666; margin-bottom: 6px; }
-.news-item-title { font-size: 14px; font-weight: 500; color: #333; line-height: 1.5; margin-bottom: 4px; }
-.news-item-date { font-size: 12px; color: #999; }
+.pills { display: flex; gap: 6px; }
+.pill { padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: #888; background: #f0f0f0; }
+.pill:hover { background: #e8e8e8; }
+.pill.on { background: #1a1a1a; color: #fff; }
 
-/* ===== SCROLLBAR ===== */
-.main::-webkit-scrollbar { width: 6px; }
-.main::-webkit-scrollbar-track { background: transparent; }
-.main::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
-.main::-webkit-scrollbar-thumb:hover { background: #ccc; }
+.sec-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.vt { display: flex; gap: 4px; }
+.vt button { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #f0f0f0; color: #999; }
+.vt button:hover { background: #e8e8e8; }
+.vt button.on { background: #1a1a1a; color: #fff; }
+.vt button svg { width: 16px; height: 16px; }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .main { padding: 20px; }
-  .sec-cards-grid { grid-template-columns: 1fr; }
-  .program-bonds { grid-template-columns: 1fr; }
-  .cap-section { flex-wrap: wrap; gap: 16px; }
-}
-@media (max-width: 768px) {
-  .page-sidebar { display: none; }
-  .main { padding: 16px; max-width: 100%; }
-  .page-header-top { flex-direction: column; gap: 12px; }
-  .page-header-actions { width: 100%; }
-  .page-tabs { overflow-x: auto; }
-  .service-filters { overflow-x: auto; flex-wrap: nowrap; }
-  .app-table { font-size: 12px; }
-  .app-table th, .app-table td { padding: 8px 6px; }
-}
-@media (max-width: 480px) {
-  .main { padding: 12px; }
-  .page-header h1 { font-size: 20px; }
-  .sec-cards-grid { grid-template-columns: 1fr; }
-  .cap-section { flex-direction: column; }
-}
+/* --- security cards --- */
+.sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.sc { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 20px; }
+.sc:hover { box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+.sc-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+.sc-title .go { color: #1a1a1a; display: inline-flex; }
+.sc-title .go svg { width: 16px; height: 16px; }
+.sc-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.badge-s { padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; }
+.badge-s.green { background: #e8f5e9; color: #2e7d32; }
+.badge-s.blue { background: #e3f2fd; color: #1565c0; }
+.badge-s.gray { background: #f0f0f0; color: #888; }
+.badge-s.orange { background: #fff3e0; color: #e65100; }
+.sc-rows { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.sc-row { display: flex; justify-content: space-between; }
+.sc-row dt { color: #aaa; }
+.sc-row dd { color: #333; font-weight: 500; text-align: right; }
+.sc-foot { margin-top: 14px; }
+.sc-btn { padding: 7px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 12px; font-weight: 500; color: #333; background: #fff; }
+.sc-btn:hover { border-color: #ccc; background: #f9f9f9; }
+.more-btn { margin-top: 4px; display: inline-flex; padding: 8px 18px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; background: #fff; margin-bottom: 32px; }
+.more-btn:hover { border-color: #ccc; background: #f9f9f9; }
+
+/* --- programs --- */
+.prg-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.prg { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; margin-bottom: 8px; }
+.prg-hd { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.prg-hd:hover { background: #fafafa; border-radius: 12px; }
+.prg-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.prg-meta { font-size: 12px; color: #888; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.prg-meta .tag { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #e8f5e9; color: #2e7d32; }
+.prg-chev { color: #bbb; transition: transform .2s; }
+.prg-chev svg { width: 18px; height: 18px; }
+.prg-chev.open { transform: rotate(180deg); }
+.prg-bd { padding: 0 20px 20px; display: none; }
+.prg-bd.open { display: block; }
+.prg-stats { display: flex; gap: 40px; margin-bottom: 18px; }
+.prg-st-label { font-size: 12px; color: #aaa; margin-bottom: 2px; }
+.prg-st-val { font-size: 16px; font-weight: 700; }
+.prg-bonds { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pb { border: 1px solid #e5e5e5; border-radius: 14px; padding: 20px; background: #fff; }
+.pb-title { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 8px; }
+.pb .sc-badges { margin-bottom: 10px; }
+.pb .sc-rows { font-size: 13px; }
+.pb-btn { margin-top: 14px; padding: 8px 18px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 12px; font-weight: 500; color: #333; background: #fff; display: inline-block; }
+.pb-btn:hover { border-color: #ccc; background: #f9f9f9; }
+
+/* --- news --- */
+.nw-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.nw-top-r a { font-size: 13px; color: #CC0000; font-weight: 500; }
+.nw-top-r a:hover { text-decoration: underline; }
+.nw-pills { display: flex; gap: 6px; margin-bottom: 14px; }
+.ni { padding: 16px 0; border-bottom: 1px solid #f0f0f0; }
+.ni:last-child { border-bottom: none; }
+.ni-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; background: #f0f0f0; color: #888; margin-bottom: 6px; }
+.ni-title { font-size: 14px; color: #333; line-height: 1.5; margin-bottom: 4px; }
+.ni-date { font-size: 12px; color: #aaa; text-align: right; }
+.ni-row { display: flex; justify-content: space-between; gap: 24px; }
+
+/* --- scrollbar --- */
+.ct::-webkit-scrollbar { width: 6px; }
+.ct::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+/* --- responsive --- */
+@media(max-width:1024px) { .sc-grid,.prg-bonds { grid-template-columns:1fr; } .cap { gap:16px; } }
+@media(max-width:768px) { .ls { display:none; } .ct { padding:20px 16px 32px; } .ph { flex-direction:column; gap:12px; } .tabs { overflow-x:auto; } }
+@media(max-width:480px) { .ct { padding:16px 12px 24px; } .ph h1 { font-size:20px; } .cap-val { font-size:18px; } }
 </style>
 </head>
 <body>
 
 <div class="layout">
   <main class="main">
-    <div class="page-layout">
+    <div class="page-wrap">
 
-      <!-- PAGE SIDEBAR -->
-      <aside class="page-sidebar">
-        <nav class="page-sidebar-nav">
-          <a href="#" class="page-sidebar-item active">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l7-5 7 5v8a1 1 0 01-1 1H3a1 1 0 01-1-1V7z"/><path d="M7 16V10h4v6"/></svg>
-            Главная
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h14v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/><path d="M6 1v4M12 1v4"/></svg>
-            Ценные бумаги
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6M6 12h3"/></svg>
-            Документы
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>
-            Услуги
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h12v12H3z"/><path d="M3 7h12M7 7v8"/></svg>
-            Регистрация БО
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13l4-4 3 3 5-5"/><path d="M11 7h3v3"/></svg>
-            Торги
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9a6 6 0 1112 0 6 6 0 01-12 0z"/><path d="M9 6v3h2"/></svg>
-            Коммерческие облигации
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M7 8l2 2 4-4"/></svg>
-            Контроль требований
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="7"/><path d="M9 6v.01M9 8v4"/></svg>
-            Нарушения
-            <span class="badge">3</span>
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h4"/></svg>
-            Отчеты
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h14v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/><path d="M2 4l7 5 7-5"/></svg>
-            Новости
-          </a>
-          <a href="#" class="page-sidebar-item">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="7" r="4"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>
-            Доступы
-          </a>
-        </nav>
+      <!-- ===== LEFT SIDEBAR ===== -->
+      <aside class="ls">
+        <a href="#" class="active">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l7-5 7 5v8a1 1 0 01-1 1H3a1 1 0 01-1-1V7z"/><path d="M7 16V10h4v6"/></svg>
+          Главная
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h4"/></svg>
+          Ценные бумаги
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h6M6 12h3"/></svg>
+          Документы
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 6h6M6 9h6M6 12h4"/></svg>
+          Услуги
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h12v12H3z"/><path d="M3 7h12M7 7v8"/></svg>
+          Регистрация БО
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13l4-4 3 3 5-5"/><path d="M11 7h3v3"/></svg>
+          Торги
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="6"/><path d="M9 6v3l2 1"/></svg>
+          Коммерческие облигации
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M7 8l2 2 4-4"/></svg>
+          Контроль требований
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="7"/><path d="M9 6v.01M9 8v4"/></svg>
+          Нарушения
+          <span class="ls-badge">3</span>
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M6 6h6M6 9h4"/></svg>
+          Отчеты
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h14v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/><path d="M2 4l7 5 7-5"/></svg>
+          Новости
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="7" r="4"/><path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>
+          Доступы
+        </a>
       </aside>
 
-      <!-- PAGE CONTENT -->
-      <div class="page-content" style="flex:1; padding: 24px 32px 40px; overflow-y: auto;">
+      <!-- ===== CONTENT ===== -->
+      <div class="ct">
 
-        <!-- PAGE HEADER -->
-        <div class="page-header">
-          <div class="page-header-top">
-            <div>
-              <h1>ОАО «Газпром»</h1>
-              <a href="#" class="page-header-link">Информация об организации</a>
-            </div>
-            <div class="page-header-actions">
-              <button class="btn-outline">Уведомить Биржу</button>
-              <button class="btn-primary">Заказать услугу</button>
-            </div>
+        <!-- PAGE HEAD -->
+        <div class="ph">
+          <h1>ОАО «Газпром»</h1>
+          <div class="ph-btns">
+            <button class="btn-o">Уведомить Биржу</button>
+            <button class="btn-r">Заказать услугу</button>
           </div>
         </div>
+        <a href="#" class="ph-sub">Информация об организации</a>
 
         <!-- TABS -->
-        <div class="page-tabs">
-          <a href="#" class="page-tab active">Документы на подписание <span class="tab-badge">6</span></a>
-          <a href="#" class="page-tab">Запросы по услугам эмитента <span class="tab-badge">7</span></a>
-          <a href="#" class="page-tab">Нарушения <span class="tab-badge red">4</span></a>
+        <div class="tabs">
+          <a href="#">Документы на подписание <span class="tb">6</span></a>
+          <a href="#">Запросы по услугам эмитента <span class="tb">7</span></a>
+          <a href="#">Нарушения <span class="tb red">4</span></a>
         </div>
 
         <!-- INDEX -->
-        <div class="index-section">
-          <div class="index-row">
-            <span class="index-label">Индекс нарушений</span>
-            <span class="index-value">13%</span>
-            <svg class="index-info" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 11V8M8 5.5v0"/></svg>
+        <div class="idx">
+          <div class="idx-row">
+            <span>Индекс нарушений</span>
+            <b>13%</b>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 11V8M8 5.5v0"/></svg>
           </div>
-          <div class="index-sub">За последний торговый день квартала (28.07.2025) 2%</div>
+          <div class="idx-sub">За последний торговый день квартала (28.07.2025) 2%</div>
         </div>
 
         <!-- CAPITALIZATION -->
-        <div class="cap-section">
-          <div class="cap-block">
+        <div class="cap">
+          <div class="cap-main">
             <div class="cap-label">Капитализация</div>
-            <div class="cap-value">200 000 283 RUB</div>
+            <div class="cap-val">200 000 283 RUB</div>
           </div>
-          <div class="cap-charts">
-            <div class="cap-chart-item">
-              <div class="cap-chart-label">За день</div>
-              <div class="cap-chart-bar"><div class="cap-chart-fill green"></div></div>
-              <div class="cap-chart-value positive">+1.9%</div>
-            </div>
-            <div class="cap-chart-item">
-              <div class="cap-chart-label">За неделю</div>
-              <div class="cap-chart-bar"><div class="cap-chart-fill green"></div></div>
-              <div class="cap-chart-value positive">+1.5%</div>
-            </div>
-            <div class="cap-chart-item">
-              <div class="cap-chart-label">За месяц</div>
-              <div class="cap-chart-bar"><div class="cap-chart-fill green"></div></div>
-              <div class="cap-chart-value positive">+1.5%</div>
-            </div>
-            <div class="cap-chart-item">
-              <div class="cap-chart-label">За год</div>
-              <div class="cap-chart-bar"><div class="cap-chart-fill red"></div></div>
-              <div class="cap-chart-value negative">-20.7%</div>
-            </div>
+
+          <div class="cap-chart">
+            <div class="cap-chart-label">За день</div>
+            <div class="cap-spark"><svg viewBox="0 0 72 28" fill="none"><path d="M0 20 Q18 8 36 14 T72 6" stroke="#22a352" stroke-width="1.5" fill="none"/><path d="M0 20 Q18 8 36 14 T72 6 V28 H0Z" fill="rgba(34,163,82,.08)"/></svg></div>
+            <div class="cap-pct g">+1.9%</div>
           </div>
-          <div class="data-hint">
-            <div class="data-hint-title">Справки DATA для эмитентов</div>
-            <div class="data-hint-desc">Перейти</div>
+          <div class="cap-chart">
+            <div class="cap-chart-label">За неделю</div>
+            <div class="cap-spark"><svg viewBox="0 0 72 28" fill="none"><path d="M0 18 Q18 10 36 12 T72 8" stroke="#22a352" stroke-width="1.5" fill="none"/><path d="M0 18 Q18 10 36 12 T72 8 V28 H0Z" fill="rgba(34,163,82,.08)"/></svg></div>
+            <div class="cap-pct g">+1.5%</div>
           </div>
+          <div class="cap-chart">
+            <div class="cap-chart-label">За месяц</div>
+            <div class="cap-spark"><svg viewBox="0 0 72 28" fill="none"><path d="M0 22 Q18 12 36 16 T72 10" stroke="#22a352" stroke-width="1.5" fill="none"/><path d="M0 22 Q18 12 36 16 T72 10 V28 H0Z" fill="rgba(34,163,82,.08)"/></svg></div>
+            <div class="cap-pct g">+1.5%</div>
+          </div>
+          <div class="cap-chart">
+            <div class="cap-chart-label">За год</div>
+            <div class="cap-spark"><svg viewBox="0 0 72 28" fill="none"><path d="M0 6 Q18 14 36 18 T72 22" stroke="#CC0000" stroke-width="1.5" fill="none"/><path d="M0 6 Q18 14 36 18 T72 22 V28 H0Z" fill="rgba(204,0,0,.06)"/></svg></div>
+            <div class="cap-pct r">-20.7%</div>
+          </div>
+
+          <a href="#" class="cap-data">
+            <div>
+              <b>Справки DATA для эмитентов</b>
+              <span>Перейти</span>
+            </div>
+            <span class="cap-data-arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></span>
+          </a>
         </div>
 
         <!-- УСЛУГИ ЛИСТИНГА -->
-        <div class="listing-services">
-          <div class="section-header">
-            <span class="section-title">Услуги листинга</span>
-            <span class="section-arrow"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg></span>
+        <div style="margin-bottom: 28px;">
+          <div class="sec-h">
+            <h2>Услуги листинга</h2>
+            <span class="arr"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg></span>
           </div>
-          <div class="service-filters">
-            <button class="service-filter active">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 4h12M4 8h8M6 12h4"/></svg>
-              Биржевые облигации
-            </button>
-            <button class="service-filter" onclick="this.classList.toggle('active')">Включение в список</button>
-            <button class="service-filter" onclick="this.classList.toggle('active')">Начало торгов</button>
-            <button class="service-filter" onclick="this.classList.toggle('active')">Прочие услуги</button>
+          <div class="ls-filters">
+            <button class="lf">Биржевые облигации</button>
+            <button class="lf">Включение в список</button>
+            <button class="lf">Начало торгов</button>
+            <button class="lf">Прочие услуги</button>
           </div>
         </div>
 
         <!-- ЗАЯВЛЕНИЯ НА УСЛУГИ -->
-        <div class="applications-section">
-          <div class="section-header">
-            <span class="section-title">Заявления на услуги</span>
-          </div>
-          <div style="overflow-x: auto;">
-            <table class="app-table">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Номер</th>
-                  <th>Тип услуги</th>
-                  <th>Информация</th>
-                  <th>Статус</th>
-                  <th>Инициатор</th>
-                  <th>Дата заявления</th>
-                  <th>Срок исп.</th>
-                  <th>Дата исп.</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="app-table-num"><span class="dot gray"></span></span></td>
-                  <td>123456</td>
-                  <td>Включение в список</td>
-                  <td>03</td>
-                  <td><span class="status-badge accepted">Принято</span></td>
-                  <td>dmitri.maxpor@moex.com</td>
-                  <td>28.06.2024</td>
-                  <td></td>
-                  <td><a href="#" class="app-link">Основной текст Основно...</a></td>
-                </tr>
-                <tr>
-                  <td><span class="app-table-num"><span class="dot gray"></span></span></td>
-                  <td>123456</td>
-                  <td>Регистрация програм...</td>
-                  <td>123</td>
-                  <td><span class="status-badge review">На рассмотрении</span></td>
-                  <td>dmitri.maxpor@moex.com</td>
-                  <td>28.06.2024</td>
-                  <td>01.07.2024</td>
-                  <td><a href="#" class="app-link">Основной текст Основно...</a></td>
-                </tr>
-                <tr>
-                  <td><span class="app-table-num"><span class="dot gray"></span></span></td>
-                  <td>123456</td>
-                  <td>Регистрация програм...</td>
-                  <td>123</td>
-                  <td><span class="status-badge progress">Биржевые документы</span></td>
-                  <td>dmitri.maxpor@moex.com</td>
-                  <td>28.06.2024</td>
-                  <td></td>
-                  <td><a href="#" class="app-link">Основной текст Основно...</a></td>
-                </tr>
-                <tr>
-                  <td><span class="app-table-num"><span class="dot red"></span></span></td>
-                  <td>123456</td>
-                  <td>Регистрация програм...</td>
-                  <td>123</td>
-                  <td><span class="status-badge rejected">Отказано</span></td>
-                  <td></td>
-                  <td>28.06.2024</td>
-                  <td></td>
-                  <td><a href="#" class="app-link">Основной техноошибки текс...</a></td>
-                </tr>
-                <tr>
-                  <td><span class="app-table-num"><span class="dot gray"></span></span></td>
-                  <td>123456</td>
-                  <td>Регистрация програм...</td>
-                  <td>123</td>
-                  <td><span class="status-badge removed">Услуга отменена</span></td>
-                  <td>dmitri.maxpor@moex.com</td>
-                  <td>28.06.2024</td>
-                  <td></td>
-                  <td><a href="#" class="app-link">Основной текст Основной тек...</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="sec-h"><h2>Заявления на услуги</h2></div>
+        <div class="at-wrap">
+          <table class="at">
+            <thead><tr>
+              <th></th><th>Номер</th><th>Тип услуги</th><th>Информация</th><th>Статус</th><th>Инициатор</th><th>Дата заявления</th><th>Срок исп.</th><th>Дата исп.</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="dot dot-g"></span></td>
+                <td>123456</td><td>Включение в список</td><td>03</td>
+                <td><span class="sb sb-ok">Принято</span></td>
+                <td>dmitri.maxpor@moex.com</td><td>28.06.2024</td><td></td>
+                <td class="at-link">Основной текст Основно...</td>
+              </tr>
+              <tr>
+                <td><span class="dot dot-g"></span></td>
+                <td>123456</td><td>Регистрация програм...</td><td>123</td>
+                <td><span class="sb sb-rev">На рассмотрении</span></td>
+                <td>dmitri.maxpor@moex.com</td><td>28.06.2024</td><td>01.07.2024</td>
+                <td class="at-link">Основной текст Основно...</td>
+              </tr>
+              <tr>
+                <td><span class="dot dot-g"></span></td>
+                <td>123456</td><td>Регистрация програм...</td><td>123</td>
+                <td><span class="sb sb-doc">Биржевые документы</span></td>
+                <td>dmitri.maxpor@moex.com</td><td>28.06.2024</td><td></td>
+                <td class="at-link">Основной текст Основно...</td>
+              </tr>
+              <tr>
+                <td><span class="dot dot-r"></span></td>
+                <td>123456</td><td>Регистрация програм...</td><td>123</td>
+                <td><span class="sb sb-no">Отказано</span></td>
+                <td></td><td>28.06.2024</td><td></td>
+                <td class="at-link">Основной техноошибки текс...</td>
+              </tr>
+              <tr>
+                <td><span class="dot dot-g"></span></td>
+                <td>123456</td><td>Регистрация програм...</td><td>123</td>
+                <td><span class="sb sb-rm">Услуга отменена</span></td>
+                <td>dmitri.maxpor@moex.com</td><td>28.06.2024</td><td></td>
+                <td class="at-link">Основной текст Основной тек...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <!-- ЦЕННЫЕ БУМАГИ -->
-        <div class="securities-section">
-          <div class="securities-header">
-            <div class="securities-header-left">
-              <span class="section-title">Ценные бумаги</span>
-              <button class="icon-btn"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="1"/><circle cx="8" cy="3" r="1"/><circle cx="8" cy="13" r="1"/></svg></button>
+        <div style="margin-bottom:32px;">
+          <div class="sec-top">
+            <div class="sec-top-l">
+              <h2 style="font-size:18px;font-weight:700;">Ценные бумаги</h2>
+              <button class="ib"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg></button>
             </div>
-            <div class="securities-header-right">
-              <button class="btn-new-issue">
-                Новый выпуск
-                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5l3 3 3-3"/></svg>
-              </button>
+            <div class="sec-top-r">
+              <button class="btn-dd">Новый выпуск <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5l3 3 3-3"/></svg></button>
             </div>
           </div>
 
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-            <div class="sec-tabs">
-              <button class="sec-tab active">Все</button>
-              <button class="sec-tab">Акции</button>
-              <button class="sec-tab">Облигации</button>
-              <button class="sec-tab">ПИФы</button>
+          <div class="sec-bar">
+            <div class="pills">
+              <button class="pill on">Все</button>
+              <button class="pill">Акции</button>
+              <button class="pill">Облигации</button>
+              <button class="pill">ПИФы</button>
             </div>
-            <div class="sec-view-toggle">
-              <button class="sec-view-btn active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></button>
-              <button class="sec-view-btn"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
-            </div>
-          </div>
-
-          <!-- BONDS ROW 1 -->
-          <div class="sec-cards-grid">
-            <div class="sec-card highlighted">
-              <div class="sec-card-header">
-                <div class="sec-card-title">Биржевые облигации 002P-SBER49 <span class="arrow"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l5 5-5 5"/></svg></span></div>
-              </div>
-              <div class="sec-card-badges">
-                <span class="sec-badge green">В процессе листинга</span>
-                <span class="sec-badge gray">RU000A1054R0</span>
-                <span class="sec-badge gray">1 уровень</span>
-              </div>
-              <div class="sec-card-details">
-                <div class="sec-detail"><span class="sec-detail-label">Объем выпуска</span><span class="sec-detail-value">12 000 000 RUB</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Регистрационный номер</span><span class="sec-detail-value">4B02-02-00354-B-003P</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Дата погашения</span><span class="sec-detail-value">01.07.2024</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сегмент облигаций устойчивого развития</span></div>
-              </div>
-            </div>
-            <div class="sec-card highlighted">
-              <div class="sec-card-header">
-                <div class="sec-card-title">Биржевые облигации 002P-SBER49 <span class="arrow"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l5 5-5 5"/></svg></span></div>
-              </div>
-              <div class="sec-card-badges">
-                <span class="sec-badge blue">В процессе листинга</span>
-                <span class="sec-badge gray">RU000A1054R0</span>
-                <span class="sec-badge gray">1 уровень</span>
-              </div>
-              <div class="sec-card-details">
-                <div class="sec-detail"><span class="sec-detail-label">Объем выпуска</span><span class="sec-detail-value">12 000 000 RUB</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Регистрационный номер</span><span class="sec-detail-value">4B02-02-00354-B-003P</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Дата погашения</span><span class="sec-detail-value">01.07.2024</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сегмент облигаций устойчивого развития</span></div>
-              </div>
+            <div class="vt">
+              <button class="on"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></button>
+              <button><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
             </div>
           </div>
 
-          <!-- BONDS ROW 2 -->
-          <div class="sec-cards-grid">
-            <div class="sec-card highlighted">
-              <div class="sec-card-header">
-                <div class="sec-card-title">Биржевые облигации 002P-SBER29 <span class="arrow"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l5 5-5 5"/></svg></span></div>
+          <!-- row 1 -->
+          <div class="sc-grid">
+            <div class="sc">
+              <div class="sc-title">Биржевые облигации 002P-SBER49 <span class="go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></span></div>
+              <div class="sc-badges">
+                <span class="badge-s green">В процессе листинга</span>
+                <span class="badge-s gray">RU000A1054R0</span>
+                <span class="badge-s gray">1 уровень</span>
               </div>
-              <div class="sec-card-badges">
-                <span class="sec-badge blue">В процессе</span>
-                <span class="sec-badge gray">RU000A1054R0</span>
-                <span class="sec-badge gray">1 уровень</span>
-              </div>
-              <div class="sec-card-details">
-                <div class="sec-detail"><span class="sec-detail-label">Объем выпуска</span><span class="sec-detail-value">12 000 000 RUB</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Регистрационный номер</span><span class="sec-detail-value">4B02-02-00354-B-003P</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Дата погашения</span><span class="sec-detail-value">01.07.2024</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сегмент облигаций устойчивого развития</span></div>
-              </div>
-              <div class="sec-card-actions">
-                <button class="sec-card-btn">Уведомить о завершении размещения</button>
-              </div>
+              <dl class="sc-rows">
+                <div class="sc-row"><dt>Объем выпуска</dt><dd>12 000 000 RUB</dd></div>
+                <div class="sc-row"><dt>Регистрационный номер</dt><dd>4B02-02-00354-B-003P</dd></div>
+                <div class="sc-row"><dt>Дата погашения</dt><dd>01.07.2024</dd></div>
+                <div class="sc-row"><dt>Сектор</dt><dd>Сегмент облигаций устойчивого развития</dd></div>
+              </dl>
             </div>
-            <div class="sec-card highlighted">
-              <div class="sec-card-header">
-                <div class="sec-card-title">Биржевые облигации 002P-SBER30 <span class="arrow"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l5 5-5 5"/></svg></span></div>
+            <div class="sc">
+              <div class="sc-title">Биржевые облигации 002P-SBER49 <span class="go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></span></div>
+              <div class="sc-badges">
+                <span class="badge-s blue">В процессе листинга</span>
+                <span class="badge-s gray">RU000A1054R0</span>
+                <span class="badge-s gray">1 уровень</span>
               </div>
-              <div class="sec-card-badges">
-                <span class="sec-badge orange">6 субвыпусков</span>
-                <span class="sec-badge gray">RU000A1054R0</span>
-                <span class="sec-badge gray">1 уровень</span>
-              </div>
-              <div class="sec-card-details">
-                <div class="sec-detail"><span class="sec-detail-label">Объем в обращении</span><span class="sec-detail-value">12 000 000 RUB</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Величина ближайшего купона</span><span class="sec-detail-value">10%</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Регистрационный номер</span><span class="sec-detail-value">4B02-02-00354-B-003P</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Дата погашения</span><span class="sec-detail-value">01.07.2024</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сегмент облигаций устойчивого развития</span></div>
-              </div>
-              <div class="sec-card-actions">
-                <button class="sec-card-btn">Изменить уровень листинга</button>
-              </div>
+              <dl class="sc-rows">
+                <div class="sc-row"><dt>Объем выпуска</dt><dd>12 000 000 RUB</dd></div>
+                <div class="sc-row"><dt>Регистрационный номер</dt><dd>4B02-02-00354-B-003P</dd></div>
+                <div class="sc-row"><dt>Дата погашения</dt><dd>01.07.2024</dd></div>
+                <div class="sc-row"><dt>Сектор</dt><dd>Сегмент облигаций устойчивого развития</dd></div>
+              </dl>
             </div>
           </div>
 
-          <!-- STOCKS ROW -->
-          <div class="sec-cards-grid">
-            <div class="sec-card yellow-highlight">
-              <div class="sec-card-header">
-                <div class="sec-card-title">Акция привилегированная <span class="arrow"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l5 5-5 5"/></svg></span></div>
+          <!-- row 2 -->
+          <div class="sc-grid">
+            <div class="sc">
+              <div class="sc-title">Биржевые облигации 002P-SBER29 <span class="go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></span></div>
+              <div class="sc-badges">
+                <span class="badge-s blue">В процессе</span>
+                <span class="badge-s gray">RU000A1054R0</span>
+                <span class="badge-s gray">1 уровень</span>
               </div>
-              <div class="sec-card-badges">
-                <span class="sec-badge blue">В обращении</span>
-                <span class="sec-badge gray">SBERP</span>
-                <span class="sec-badge gray">1 уровень</span>
-              </div>
-              <div class="sec-card-details">
-                <div class="sec-detail"><span class="sec-detail-label">Free float</span><span class="sec-detail-value">7%</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сектор рынка инноваций и инвестиций</span></div>
-              </div>
-              <div class="sec-card-actions">
-                <button class="sec-card-btn">Изменить уровень листинга</button>
-              </div>
+              <dl class="sc-rows">
+                <div class="sc-row"><dt>Объем выпуска</dt><dd>12 000 000 RUB</dd></div>
+                <div class="sc-row"><dt>Регистрационный номер</dt><dd>4B02-02-00354-B-003P</dd></div>
+                <div class="sc-row"><dt>Дата погашения</dt><dd>01.07.2024</dd></div>
+                <div class="sc-row"><dt>Сектор</dt><dd>Сегмент облигаций устойчивого развития</dd></div>
+              </dl>
+              <div class="sc-foot"><button class="sc-btn">Уведомить о завершении размещения</button></div>
             </div>
-            <div class="sec-card yellow-highlight">
-              <div class="sec-card-header">
-                <div class="sec-card-title">Акция обыкновенная <span class="arrow"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l5 5-5 5"/></svg></span></div>
+            <div class="sc">
+              <div class="sc-title">Биржевые облигации 002P-SBER30 <span class="go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></span></div>
+              <div class="sc-badges">
+                <span class="badge-s orange">6 субвыпусков</span>
+                <span class="badge-s gray">RU000A1054R0</span>
+                <span class="badge-s gray">1 уровень</span>
               </div>
-              <div class="sec-card-badges">
-                <span class="sec-badge blue">В обращении</span>
-                <span class="sec-badge gray">SBER</span>
-                <span class="sec-badge gray">1 уровень</span>
-              </div>
-              <div class="sec-card-details">
-                <div class="sec-detail"><span class="sec-detail-label">Free float</span><span class="sec-detail-value">7%</span></div>
-                <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сектор рынка инноваций и инвестиций</span></div>
-              </div>
-              <div class="sec-card-actions">
-                <button class="sec-card-btn">Изменить уровень листинга</button>
-              </div>
+              <dl class="sc-rows">
+                <div class="sc-row"><dt>Объем в обращении</dt><dd>12 000 000 RUB</dd></div>
+                <div class="sc-row"><dt>Величина ближайшего купона</dt><dd>10%</dd></div>
+                <div class="sc-row"><dt>Регистрационный номер</dt><dd>4B02-02-00354-B-003P</dd></div>
+                <div class="sc-row"><dt>Дата погашения</dt><dd>01.07.2024</dd></div>
+                <div class="sc-row"><dt>Сектор</dt><dd>Сегмент облигаций устойчивого развития</dd></div>
+              </dl>
+              <div class="sc-foot"><button class="sc-btn">Изменить уровень листинга</button></div>
             </div>
           </div>
 
-          <button class="sec-more-btn">Ещё 10</button>
+          <!-- row 3 -->
+          <div class="sc-grid">
+            <div class="sc">
+              <div class="sc-title">Акция привилегированная <span class="go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></span></div>
+              <div class="sc-badges">
+                <span class="badge-s blue">В обращении</span>
+                <span class="badge-s gray">SBERP</span>
+                <span class="badge-s gray">1 уровень</span>
+              </div>
+              <dl class="sc-rows">
+                <div class="sc-row"><dt>Free float</dt><dd>7%</dd></div>
+                <div class="sc-row"><dt>Сектор</dt><dd>Сектор рынка инноваций и инвестиций</dd></div>
+              </dl>
+              <div class="sc-foot"><button class="sc-btn">Изменить уровень листинга</button></div>
+            </div>
+            <div class="sc">
+              <div class="sc-title">Акция обыкновенная <span class="go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></span></div>
+              <div class="sc-badges">
+                <span class="badge-s blue">В обращении</span>
+                <span class="badge-s gray">SBER</span>
+                <span class="badge-s gray">1 уровень</span>
+              </div>
+              <dl class="sc-rows">
+                <div class="sc-row"><dt>Free float</dt><dd>7%</dd></div>
+                <div class="sc-row"><dt>Сектор</dt><dd>Сектор рынка инноваций и инвестиций</dd></div>
+              </dl>
+              <div class="sc-foot"><button class="sc-btn">Изменить уровень листинга</button></div>
+            </div>
+          </div>
+
+          <button class="more-btn">Ещё 10</button>
         </div>
 
         <!-- ПРОГРАММЫ -->
-        <div class="programs-section">
-          <div class="programs-header">
-            <div class="section-header" style="margin-bottom:0;">
-              <span class="section-title">Программы</span>
-              <span class="section-arrow"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg></span>
+        <div style="margin-bottom:32px;">
+          <div class="prg-top">
+            <div class="sec-h" style="margin-bottom:0;">
+              <h2>Программы</h2>
+              <span class="arr"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg></span>
             </div>
-            <button class="btn-outline">Зарегистрировать программу</button>
+            <button class="btn-o">Зарегистрировать программу</button>
           </div>
 
-          <!-- Program 1 -->
-          <div class="program-card">
-            <div class="program-header" onclick="toggleProgram(this)">
-              <div class="program-header-left">
-                <div class="program-name">Программа 001P</div>
-                <div class="program-meta">
-                  <span class="badge">Активна</span>
+          <!-- prg 1 closed -->
+          <div class="prg">
+            <div class="prg-hd" onclick="togglePrg(this)">
+              <div>
+                <div class="prg-name">Программа 001P</div>
+                <div class="prg-meta">
+                  <span class="tag">Активна</span>
                   Дата регистрации 01.07.2024 &nbsp; Срок действия <b>Бессрочно</b> &nbsp; Дата окончания прогнозная 01.07.2024
                 </div>
               </div>
-              <span class="program-chevron"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7l4 4 4-4"/></svg></span>
+              <span class="prg-chev"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7l4 4 4-4"/></svg></span>
             </div>
-            <div class="program-body">
-              <div class="program-stats">
-                <div>
-                  <div class="program-stat-label">Остаток по программе</div>
-                  <div class="program-stat-value">100 000 240 ₽</div>
-                </div>
-                <div>
-                  <div class="program-stat-label">Общий объём программы</div>
-                  <div class="program-stat-value">1 000 000 000 ₽</div>
-                </div>
+            <div class="prg-bd">
+              <div class="prg-stats">
+                <div><div class="prg-st-label">Остаток по программе</div><div class="prg-st-val">100 000 240 ₽</div></div>
+                <div><div class="prg-st-label">Общий объём программы</div><div class="prg-st-val">1 000 000 000 ₽</div></div>
               </div>
             </div>
           </div>
 
-          <!-- Program 2 -->
-          <div class="program-card">
-            <div class="program-header" onclick="toggleProgram(this)">
-              <div class="program-header-left">
-                <div class="program-name">Программа 001P</div>
-                <div class="program-meta">
-                  <span class="badge">Активна</span>
+          <!-- prg 2 closed -->
+          <div class="prg">
+            <div class="prg-hd" onclick="togglePrg(this)">
+              <div>
+                <div class="prg-name">Программа 001P</div>
+                <div class="prg-meta">
+                  <span class="tag">Активна</span>
                   Дата регистрации 01.07.2024 &nbsp; Срок действия 01.07.2024 &nbsp; Дата окончания прогнозная 01.07.2024
                 </div>
               </div>
-              <span class="program-chevron"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7l4 4 4-4"/></svg></span>
+              <span class="prg-chev"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7l4 4 4-4"/></svg></span>
             </div>
-            <div class="program-body">
-              <div class="program-stats">
-                <div>
-                  <div class="program-stat-label">Остаток по программе</div>
-                  <div class="program-stat-value">100 000 240 ₽</div>
-                </div>
-                <div>
-                  <div class="program-stat-label">Общий объём программы</div>
-                  <div class="program-stat-value">1 000 000 000 ₽</div>
-                </div>
+            <div class="prg-bd">
+              <div class="prg-stats">
+                <div><div class="prg-st-label">Остаток по программе</div><div class="prg-st-val">100 000 240 ₽</div></div>
+                <div><div class="prg-st-label">Общий объём программы</div><div class="prg-st-val">1 000 000 000 ₽</div></div>
               </div>
             </div>
           </div>
 
-          <!-- Program 3 (open with bonds) -->
-          <div class="program-card">
-            <div class="program-header" onclick="toggleProgram(this)">
-              <div class="program-header-left">
-                <div class="program-name">Программа 001P</div>
-                <div class="program-meta">
-                  <span class="badge">Активна</span>
+          <!-- prg 3 open with bonds -->
+          <div class="prg">
+            <div class="prg-hd" onclick="togglePrg(this)">
+              <div>
+                <div class="prg-name">Программа 001P</div>
+                <div class="prg-meta">
+                  <span class="tag">Активна</span>
                   Дата регистрации 01.07.2024 &nbsp; Срок действия 01.07.2024 &nbsp; Дата окончания прогнозная 01.07.2024
                 </div>
               </div>
-              <span class="program-chevron open"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7l4 4 4-4"/></svg></span>
+              <span class="prg-chev open"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 7l4 4 4-4"/></svg></span>
             </div>
-            <div class="program-body open">
-              <div class="program-stats">
-                <div>
-                  <div class="program-stat-label">Остаток по программе</div>
-                  <div class="program-stat-value">100 000 240 ₽</div>
-                </div>
-                <div>
-                  <div class="program-stat-label">Общий объём программы</div>
-                  <div class="program-stat-value">1 000 000 000 ₽</div>
-                </div>
+            <div class="prg-bd open">
+              <div class="prg-stats">
+                <div><div class="prg-st-label">Остаток по программе</div><div class="prg-st-val">100 000 240 ₽</div></div>
+                <div><div class="prg-st-label">Общий объём программы</div><div class="prg-st-val">1 000 000 000 ₽</div></div>
               </div>
-              <div class="program-bonds">
-                <div class="program-bond-card">
-                  <div class="program-bond-title">Биржевые облигации процентные неконвертируемые бездокументарные серии 002P-SBER49</div>
-                  <div class="program-bond-badges">
-                    <span class="sec-badge blue">Листинг пройден</span>
-                    <span class="sec-badge gray">1 уровень</span>
+              <div class="prg-bonds">
+                <div class="pb">
+                  <div class="pb-title">Биржевые облигации процентные неконвертируемые бездокументарные серии 002P-SBER49</div>
+                  <div class="sc-badges">
+                    <span class="badge-s blue">Листинг пройден</span>
+                    <span class="badge-s gray">1 уровень</span>
                   </div>
-                  <div class="program-bond-details">
-                    <div class="sec-detail"><span class="sec-detail-label">Объём выпуска</span><span class="sec-detail-value">12 000 000 RUB</span></div>
-                    <div class="sec-detail"><span class="sec-detail-label">Регистрационный номер</span><span class="sec-detail-value">12345</span></div>
-                    <div class="sec-detail"><span class="sec-detail-label">Дата погашения</span><span class="sec-detail-value">01.07.2024</span></div>
-                    <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сегмент облигаций устойчивого развития</span></div>
-                  </div>
-                  <button class="program-bond-btn">Выйти на торги</button>
+                  <dl class="sc-rows">
+                    <div class="sc-row"><dt>Объём выпуска</dt><dd>12 000 000 RUB</dd></div>
+                    <div class="sc-row"><dt>Регистрационный номер</dt><dd>12345</dd></div>
+                    <div class="sc-row"><dt>Дата погашения</dt><dd>01.07.2024</dd></div>
+                    <div class="sc-row"><dt>Сектор</dt><dd>Сегмент облигаций устойчивого развития</dd></div>
+                  </dl>
+                  <button class="pb-btn">Выйти на торги</button>
                 </div>
-                <div class="program-bond-card">
-                  <div class="program-bond-title">Биржевые облигации процентные неконвертируемые бездокументарные серии 002P-SBER50</div>
-                  <div class="program-bond-badges">
-                    <span class="sec-badge blue">Листинг пройден</span>
-                    <span class="sec-badge gray">1 уровень</span>
+                <div class="pb">
+                  <div class="pb-title">Биржевые облигации процентные неконвертируемые бездокументарные серии 002P-SBER50</div>
+                  <div class="sc-badges">
+                    <span class="badge-s blue">Листинг пройден</span>
+                    <span class="badge-s gray">1 уровень</span>
                   </div>
-                  <div class="program-bond-details">
-                    <div class="sec-detail"><span class="sec-detail-label">Объём выпуска</span><span class="sec-detail-value">12 000 000 RUB</span></div>
-                    <div class="sec-detail"><span class="sec-detail-label">Регистрационный номер</span><span class="sec-detail-value">12345</span></div>
-                    <div class="sec-detail"><span class="sec-detail-label">Дата погашения</span><span class="sec-detail-value">Бессрочно</span></div>
-                    <div class="sec-detail"><span class="sec-detail-label">Сектор</span><span class="sec-detail-value">Сегмент облигаций устойчивого развития</span></div>
-                  </div>
-                  <button class="program-bond-btn">Выйти на торги</button>
+                  <dl class="sc-rows">
+                    <div class="sc-row"><dt>Объём выпуска</dt><dd>12 000 000 RUB</dd></div>
+                    <div class="sc-row"><dt>Регистрационный номер</dt><dd>12345</dd></div>
+                    <div class="sc-row"><dt>Дата погашения</dt><dd>Бессрочно</dd></div>
+                    <div class="sc-row"><dt>Сектор</dt><dd>Сегмент облигаций устойчивого развития</dd></div>
+                  </dl>
+                  <button class="pb-btn">Выйти на торги</button>
                 </div>
               </div>
             </div>
@@ -724,86 +609,82 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
         </div>
 
         <!-- НОВОСТИ ПО ЭМИТЕНТУ -->
-        <div class="news-section">
-          <div class="news-header">
-            <div class="section-header" style="margin-bottom:0;">
-              <span class="section-title">Новости по эмитенту</span>
-              <span class="section-arrow"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg></span>
+        <div style="margin-bottom:32px;">
+          <div class="nw-top">
+            <div class="sec-h" style="margin-bottom:0;">
+              <h2>Новости по эмитенту</h2>
+              <span class="arr"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4l6 5-6 5"/></svg></span>
             </div>
-            <div class="news-header-right">
-              <a href="#">Все новости листинга</a>
-            </div>
+            <div class="nw-top-r"><a href="#">Все новости листинга</a></div>
           </div>
 
-          <div class="news-tabs">
-            <button class="news-tab active">Opt</button>
-            <button class="news-tab">Option</button>
-            <button class="news-tab">Option</button>
-            <button class="news-tab">Option</button>
-            <button class="news-tab">Option</button>
+          <div class="nw-pills">
+            <button class="pill on">Opt</button>
+            <button class="pill">Option</button>
+            <button class="pill">Option</button>
+            <button class="pill">Option</button>
+            <button class="pill">Option</button>
           </div>
 
-          <div>
-            <div class="news-item">
-              <span class="news-item-badge">Изменения</span>
-              <div class="news-item-title">О внесении изменений в Список ценных бумаг, допущенных к торгам</div>
-              <div class="news-item-date">Сегодня 18:20</div>
+          <div class="ni">
+            <div class="ni-row">
+              <div>
+                <span class="ni-tag">Изменения</span>
+                <div class="ni-title">О внесении изменений в Список ценных бумаг, допущенных к торгам</div>
+              </div>
+              <div class="ni-date">Сегодня 18:20</div>
             </div>
-            <div class="news-item">
-              <span class="news-item-badge">Биржевые облигации</span>
-              <div class="news-item-title">О регистрации выпуска биржевых облигаций, о включении его в Список ценных бумаг, допущенных к торгам, и о присвоении указанным биржевым облигациям регистрационного номера</div>
-              <div class="news-item-date">Вчера 18:20</div>
+          </div>
+          <div class="ni">
+            <div class="ni-row">
+              <div>
+                <span class="ni-tag">Биржевые облигации</span>
+                <div class="ni-title">О регистрации выпуска биржевых облигаций, о включении его в Список ценных бумаг, допущенных к торгам, и о присвоении указанным биржевым облигациям регистрационного номера</div>
+              </div>
+              <div class="ni-date">Вчера 18:20</div>
             </div>
-            <div class="news-item">
-              <span class="news-item-badge">Начало торгов</span>
-              <div class="news-item-title">О начале торгов ценными бумагами 14 августа 2025 года</div>
-              <div class="news-item-date">13.08.2025 19:20</div>
+          </div>
+          <div class="ni">
+            <div class="ni-row">
+              <div>
+                <span class="ni-tag">Начало торгов</span>
+                <div class="ni-title">О начале торгов ценными бумагами 14 августа 2025 года</div>
+              </div>
+              <div class="ni-date">13.08.2025 19:20</div>
             </div>
-            <div class="news-item">
-              <span class="news-item-badge">Биржевые облигации</span>
-              <div class="news-item-title">Итоги выпуска биржевых облигаций</div>
-              <div class="news-item-date">13.08.2025 18:20</div>
+          </div>
+          <div class="ni">
+            <div class="ni-row">
+              <div>
+                <span class="ni-tag">Биржевые облигации</span>
+                <div class="ni-title">Итоги выпуска биржевых облигаций</div>
+              </div>
+              <div class="ni-date">13.08.2025 18:20</div>
             </div>
-            <div class="news-item">
-              <span class="news-item-badge">Начало торгов</span>
-              <div class="news-item-title">О начале торгов ценными бумагами 14 августа 2025 года</div>
-              <div class="news-item-date">13.08.2025 19:20</div>
+          </div>
+          <div class="ni">
+            <div class="ni-row">
+              <div>
+                <span class="ni-tag">Начало торгов</span>
+                <div class="ni-title">О начале торгов ценными бумагами 14 августа 2025 года</div>
+              </div>
+              <div class="ni-date">13.08.2025 19:20</div>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
+      </div><!-- /ct -->
+    </div><!-- /page-wrap -->
   </main>
 </div>
 
 <script src="header.js"></script>
 <script>
-// Add breadcrumb tab in header after company selector
-(function() {
-  var companyEl = document.querySelector('.header-company');
-  if (companyEl) {
-    var breadcrumb = document.createElement('a');
-    breadcrumb.href = 'listing.html';
-    breadcrumb.className = 'header-company';
-    breadcrumb.style.cssText = 'border-color:#CC0000; color:#CC0000; font-weight:600; background:#fff0f0;';
-    breadcrumb.innerHTML = 'Листинг и биржевые облигации' +
-      '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>';
-    companyEl.insertAdjacentElement('afterend', breadcrumb);
-  }
-})();
-
-// Program accordion toggle
-function toggleProgram(header) {
-  var body = header.nextElementSibling;
-  var chevron = header.querySelector('.program-chevron');
-  if (body.classList.contains('open')) {
-    body.classList.remove('open');
-    chevron.classList.remove('open');
-  } else {
-    body.classList.add('open');
-    chevron.classList.add('open');
-  }
+function togglePrg(hd) {
+  var bd = hd.nextElementSibling;
+  var ch = hd.querySelector('.prg-chev');
+  bd.classList.toggle('open');
+  ch.classList.toggle('open');
 }
 </script>
 </body>
