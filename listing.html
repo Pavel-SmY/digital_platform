@@ -779,20 +779,6 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 
 <script src="header.js"></script>
 <script>
-// Add breadcrumb tab in header after company selector
-(function() {
-  var companyEl = document.querySelector('.header-company');
-  if (companyEl) {
-    var breadcrumb = document.createElement('a');
-    breadcrumb.href = 'listing.html';
-    breadcrumb.className = 'header-company';
-    breadcrumb.style.cssText = 'border-color:#CC0000; color:#CC0000; font-weight:600; background:#fff0f0;';
-    breadcrumb.innerHTML = 'Листинг и биржевые облигации' +
-      '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>';
-    companyEl.insertAdjacentElement('afterend', breadcrumb);
-  }
-})();
-
 // Program accordion toggle
 function toggleProgram(header) {
   var body = header.nextElementSibling;
